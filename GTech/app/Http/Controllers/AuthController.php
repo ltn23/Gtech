@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Service\AuthService;
-use Exception;
 use Illuminate\Routing\Controller as BaseController;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends BaseController
 {
@@ -22,5 +21,16 @@ class AuthController extends BaseController
         $validatedData = $request->validated();
         $response = $this->authService->login($validatedData);
         return Response($response, 200);
+    }
+    public function register(RegisterRequest $request): Response
+    {
+        $validatedData = $request->validated();
+        $response = $this->authService->register($validatedData);
+
+        if ($response['token']) {
+            return Response($response, 201);
+        } else {
+            return Response(['message' => 'Registration failed'], 400);
+        }
     }
 }
