@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('123123'), // Mã hóa mật khẩu
             'role' => 'admin',
         ]);
-
+        
         User::factory()->create([
             'name' => 'Regular Customer',
             'email' => 'customer@gtech.com',
