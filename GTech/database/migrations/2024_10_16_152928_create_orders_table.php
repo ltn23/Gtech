@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users'); // Reference to users table
-            $table->dateTime('order_date');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->dateTime('order_date') ->useCurrent();
             $table->string('status')->default('pending');
             $table->decimal('total_price', 8, 2);
             $table->timestamps();

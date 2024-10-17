@@ -38,7 +38,7 @@ class AuthService
 
     public function register($data)
     {
-        $user = User::create([
+        $user = User::create(attributes: [
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password'], [1]),

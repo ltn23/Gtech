@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Order_item;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
-class OrderItemController
+class OrderItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $order_Items = Order_Item::with('product', 'order')->get();
+        return response()->json($order_Items);
     }
 
     /**
@@ -28,15 +30,20 @@ class OrderItemController
      */
     public function store(Request $request)
     {
-        //
+        $order_Item = Order_Item::create($request->all());
+        return response()->json($order_Item, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Order_item $order_item)
+    public function show($id)
     {
-        //
+        $order_Item = Order_Item::with('product', 'order')->find($id);
+        if (!$order_Item) {
+            return response()->json(['message' => 'OrderItem not found'], 404);
+        }
+        return response()->json($order_Item);
     }
 
     /**
@@ -50,16 +57,28 @@ class OrderItemController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order_item $order_item)
+    public function update(Request $request, $id)
     {
-        //
+        $order_Item = Order_Item::find($id);
+        if (!$order_Item) {
+            return response()->json(['message' => 'OrderItem not found'], 404);
+        }
+
+        $order_Item->update($request->all());
+        return response()->json($order_Item);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Order_item $order_item)
+    public function destroy($id)
     {
-        //
+        $order_Item = Order_Item::find($id);
+        if (!$order_Item) {
+            return response()->json(['message' => 'OrderItem not found'], 404);
+        }
+
+        $order_Item->delete();
+        return response()->json(['message' => 'OrderItem deleted']);
     }
 }
