@@ -12,10 +12,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
+
 Route::group(['prefix' => 'auth'], function ($request) {
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+
+
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
+    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+});
+
 
 Route::group(['prefix' => 'categories'], function () {
     Route::get('', [CategoryController::class, 'index']);

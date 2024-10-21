@@ -17,9 +17,30 @@ function Login() {
     } else {
       setShow(false);
     }
+    
+  const queryParams = new URLSearchParams(location.search);
+  const token = queryParams.get('token');
+  const role = queryParams.get('role');
+  const error = queryParams.get('error');
+
+  if (error) {
+    setErrorMessage(error);
+  }
+
+  if (token) {
+    // Lưu token và role vào localStorage
+    localStorage.setItem("token", token);
+    localStorage.setItem("isLoggedIn", true);
+    localStorage.setItem("role", role);
+
+    // Điều hướng tới trang home sau khi đăng nhập thành công
+    window.location.href = "/home";
+  }
   }, [location]);
 
   const handleClose = () => setShow(false);
+
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,6 +72,11 @@ function Login() {
       setErrorMessage("There was an error logging in. Please try again.");
       console.error("There was an error logging in!", error);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    // Đưa người dùng đến trang đăng nhập của Google
+    window.location.href = "http://localhost:8000/api/auth/google";
   };
 
   return (
@@ -86,6 +112,11 @@ function Login() {
           <Button variant="primary" type="submit">
             Login
           </Button>
+           <div className="mt-3">
+          <Button variant="danger" onClick={handleGoogleLogin}>
+            Login with Google
+          </Button>
+        </div>
         </Form>
       </Modal.Body>
       <Modal.Footer>

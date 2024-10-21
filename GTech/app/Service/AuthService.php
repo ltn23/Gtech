@@ -6,6 +6,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
+
 
 class AuthService
 {
@@ -64,4 +66,41 @@ class AuthService
             'role' => $user->role,
         ];
     }
+// Đăng nhập qua Google
+public function handleGoogleLogin()
+{
+    return Socialite::driver('google')->redirect();
+}
+
+// Callback sau khi Google đăng nhập thành công
+public function handleGoogleCallback()
+{
+    // Lấy thông tin người dùng từ Google
+    $googleUser = Socialite::driver('google')->user();
+
+    // Kiểm tra xem người dùng đã tồn tại chưa
+    $user = User::where('email', $googleUser->getEmail())->first();
+
+    if (!$user) {
+        // Nếu người dùng chưa tồn tại, tạo mới với vai trò customer
+        $user = User::create([
+            'name' => $googleUser->getName(),
+            'email' => $googleUser->getEmail(),
+            'password' => bcrypt(uniqid()), // Tạo mật khẩu ngẫu nhiên
+            'role' => 'customer', // Gán vai trò customer
+        ]);
+    }
+
+    // Tạo token để đăng nhập
+    $token = $user->createToken($user->name)->plainTextToken;
+
+    return [
+        'message' => 'Google Login successful',
+        'token' => $token,
+        'name' => $user->name,
+        'email' => $user->email,
+        'role' => $user->role,
+    ];
+}
+    
 }

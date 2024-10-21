@@ -5,17 +5,17 @@ const Sidebar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [role, setRole] = useState("");
     useEffect(() => {
-      // Get isLoggedIn status from local storage
-      const loggedInStatus = localStorage.getItem("isLoggedIn");
-      const userRole = localStorage.getItem("role");
-      if (loggedInStatus === "true") {
-        setIsLoggedIn(true);
-        setRole(userRole);
-      } else {
-        setIsLoggedIn(false);
-        setRole("");
-      }
-    }, []);
+        const loggedInStatus = localStorage.getItem("isLoggedIn");
+        const userRole = localStorage.getItem("role");
+      
+        if (loggedInStatus === "true") {
+          setIsLoggedIn(true);
+          setRole(userRole);
+        } else {
+          setIsLoggedIn(false);
+          setRole("");
+        }
+      }, []);
 
     
     const menuItems = {
