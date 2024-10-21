@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Modal, Button, Form } from "react-bootstrap";
 import axios from "axios";
+import "./Register.css";
 
 function Register() {
   const location = useLocation();
@@ -49,7 +50,7 @@ function Register() {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Register</Modal.Title>
+        <Modal.Title className="register-title">Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {error && <p className="text-danger">{error}</p>}
@@ -62,6 +63,7 @@ function Register() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -72,6 +74,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -82,6 +85,7 @@ function Register() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
           <Form.Group
@@ -95,9 +99,10 @@ function Register() {
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" className="primary-register">
             Register
           </Button>
         </Form>

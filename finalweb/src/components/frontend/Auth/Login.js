@@ -3,7 +3,8 @@ import Navbar from "../../../layouts/frontend/Navbar";
 import { useLocation } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
-import './Login.css';
+import "./Login.css";
+import { SiGoogle } from "react-icons/si";
 
 function Login() {
   const location = useLocation();
@@ -17,30 +18,28 @@ function Login() {
     } else {
       setShow(false);
     }
-    
-  const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get('token');
-  const role = queryParams.get('role');
-  const error = queryParams.get('error');
 
-  if (error) {
-    setErrorMessage(error);
-  }
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get("token");
+    const role = queryParams.get("role");
+    const error = queryParams.get("error");
 
-  if (token) {
-    // Lưu token và role vào localStorage
-    localStorage.setItem("token", token);
-    localStorage.setItem("isLoggedIn", true);
-    localStorage.setItem("role", role);
+    if (error) {
+      setErrorMessage(error);
+    }
 
-    // Điều hướng tới trang home sau khi đăng nhập thành công
-    window.location.href = "/home";
-  }
+    if (token) {
+      // Lưu token và role vào localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("isLoggedIn", true);
+      localStorage.setItem("role", role);
+
+      // Điều hướng tới trang home sau khi đăng nhập thành công
+      window.location.href = "/home";
+    }
   }, [location]);
 
   const handleClose = () => setShow(false);
-
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -86,6 +85,15 @@ function Login() {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleLogin}>
+        <div className="mt-3">
+            <button
+              type="button"
+              className="google-login-button"
+              onClick={handleGoogleLogin}
+            >
+              <SiGoogle className="google-icon" /> Sign in with Google
+            </button>
+          </div>
           {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email ID</Form.Label>
@@ -112,15 +120,15 @@ function Login() {
           <Button variant="primary" type="submit">
             Login
           </Button>
-           <div className="mt-3">
-          <Button variant="danger" onClick={handleGoogleLogin}>
-            Login with Google
-          </Button>
-        </div>
+          
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="outline-danger" onClick={handleClose} className="outline-danger">
+        <Button
+          variant="outline-danger"
+          onClick={handleClose}
+          className="outline-danger"
+        >
           Cancel
         </Button>
       </Modal.Footer>
