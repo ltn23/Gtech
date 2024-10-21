@@ -3,6 +3,7 @@ import Navbar from "../../../layouts/frontend/Navbar";
 import { useLocation } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
+import './Login.css';
 
 function Login() {
   const location = useLocation();
@@ -53,7 +54,7 @@ function Login() {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered>
+    <Modal show={show} onHide={handleClose} centered className="login-modal">
       <Modal.Header closeButton>
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
@@ -68,6 +69,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -78,6 +80,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="input-field"
             />
           </Form.Group>
           <Button variant="primary" type="submit">
@@ -86,7 +89,7 @@ function Login() {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
+        <Button variant="outline-danger" onClick={handleClose} className="outline-danger">
           Cancel
         </Button>
       </Modal.Footer>

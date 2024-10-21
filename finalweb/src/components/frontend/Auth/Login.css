@@ -1,0 +1,61 @@
+.login-modal {
+    background-color: #f8f9fa; /* Màu nền cho modal */
+    border-radius: 10px; /* Bo góc cho modal */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng cho modal */
+}
+
+.input-field {
+    border-radius: 5px; /* Bo góc cho input */
+    transition: border 0.3s, background-color 0.3s; /* Gom transition vào một dòng */
+    background-color: #fff; /* Màu nền mặc định */
+}
+
+.input-field:focus {
+    border-color: #007bff; /* Màu border khi input được focus */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Hiệu ứng đổ bóng khi focus */
+    background-color: #e9ecef;
+}
+
+.primary {
+    background-color: #007bff; /* Màu nền cho nút đăng nhập */
+    border: none; /* Xóa border mặc định */
+}
+
+.primary:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+}
+
+button {
+    transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho nút */
+    background-color: #dc3545;
+    color: white; 
+}
+
+button:hover {
+    transform: translateY(-2px); /* Đẩy nút lên khi hover */
+}
+
+button:active {
+    transform: translateY(0); /* Trở về vị trí ban đầu khi nhấn */
+}
+
+button.outline-danger {
+    color: #dc3545;
+    border: 2px solid #dc3545; /* Màu viền cho nút */
+}
+
+button.outline-danger:hover {
+    background-color: #dc3545; /* Màu nền khi hover */
+    color: white;
+}
+
+/* Hiệu ứng cho modal */
+.modal.show {
+    opacity: 1; /* Hiển thị modal */
+    transform: translateY(0); /* Trở về vị trí ban đầu */
+}
+
+.modal.fade .modal-dialog {
+    transform: translate(0, -30px);
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
