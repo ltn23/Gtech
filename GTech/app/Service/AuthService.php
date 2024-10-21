@@ -14,27 +14,36 @@ class AuthService
         $user = User::query()
             ->where('email', '=', $data['email'])
             ->first();
-        if (!$user || !Hash::check($data['password'], $user->password)) {
+
+        // In ra giá trị của $user để kiểm tra
+        if (!$user) {
             return [
-                'message' => 'Wrong username or password',
+                'message' => 'User does not exist',
                 'token' => null,
             ];
         }
+
+        if (!Hash::check($data['password'], $user->password)) {
+            return [
+                'message' => 'Wrong password',
+                'token' => null,
+            ];
+        }
+
+        // Nếu tìm thấy user và mật khẩu đúng, tiếp tục xử lý
         $userName = $user->name;
         $userEmail = $user->email;
         $token =  $user->createToken($userName, [$user], Carbon::tomorrow())->plainTextToken;
 
-        //    $a = '9|4uHT5dU7j0ycTxOr5c4VTC3Ivy8y6QlsprGtr4H7c8b529aa';
-        //    $token = PersonalAccessToken::find($a);
-        //    $user = $token->tokenable; 
         return [
-            'messsage' => 'Logged in successfully',
+            'message' => 'Logged in successfully',
             'token' =>  $token,
             'name' =>  $userName,
             'email' =>  $userEmail,
             'role' => $user->role
         ];
     }
+
 
     public function register($data)
     {

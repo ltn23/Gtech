@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../layouts/frontend/Navbar";
 import { useLocation } from "react-router-dom";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 
 function Login() {
@@ -9,6 +9,7 @@ function Login() {
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (location.pathname === "/login") {
       setShow(true);
@@ -19,7 +20,8 @@ function Login() {
 
   const handleClose = () => setShow(false);
 
-  const Login = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
     try {
@@ -30,20 +32,22 @@ function Login() {
           password,
         }
       );
-      if(response.status === 200){
+
+      if (response.status === 200 && response.data.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("role", response.data.role);
 
-        console.log(response.data.messsage);
-        window.location.href = "home"
+        console.log(response.data.message);
+        window.location.href = "home";
+      } else {
+        // Hiển thị lỗi từ server
+        setErrorMessage(response.data.message || "Invalid credentials");
+        // alert(response.data.message);
+        // console.error(response.data.message);
       }
-      else{
-        console.error(response.data.message);
-      }
-      // Lưu token vào localStorage hoặc state
-
     } catch (error) {
+      setErrorMessage("There was an error logging in. Please try again.");
       console.error("There was an error logging in!", error);
     }
   };
@@ -54,7 +58,8 @@ function Login() {
         <Modal.Title>Login</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form onSubmit={handleLogin}>
+          {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email ID</Form.Label>
             <Form.Control
@@ -75,7 +80,7 @@ function Login() {
               required
             />
           </Form.Group>
-          <Button variant="primary" onClick={Login}>
+          <Button variant="primary" type="submit">
             Login
           </Button>
         </Form>
