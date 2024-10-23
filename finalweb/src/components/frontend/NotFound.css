@@ -1,0 +1,29 @@
+
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f8f9fa; /* Màu nền nhẹ */
+  }
+  
+  .not-found-container h1 {
+    font-size: 5rem;
+    margin: 0;
+  }
+  
+  .not-found-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .not-found-container p {
+    margin-bottom: 20px;
+  }
+  
+  .not-found-container .btn {
+    text-decoration: none;
+  }
+  

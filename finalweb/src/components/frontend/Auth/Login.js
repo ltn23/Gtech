@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../layouts/frontend/Navbar";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./Login.css";
