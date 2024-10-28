@@ -53,7 +53,7 @@ public function handleGoogleCallback()
 
         // Chuyển hướng người dùng về giao diện đăng nhập, kèm theo token và thông tin cần thiết
         return redirect()->to("http://localhost:3000/login?token=$token&role={$user->role}");
-
+        
     } catch (\Exception $e) {
         return redirect()->to("http://localhost:3000/login?error=Google login failed: " . $e->getMessage());
     }

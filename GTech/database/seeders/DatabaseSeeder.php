@@ -6,10 +6,10 @@ use App\Models\User;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Order;
-use App\Models\Order_item;
+use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Review;
-use App\Models\Shopping_cart;
+use App\Models\ShoppingCart;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($orderItems as $item) {
-            Order_Item::create($item);
+            OrderItem::create($item);
         }
 
         $payments = [
@@ -108,7 +108,7 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($cartItems as $item) {
-            Shopping_Cart::create($item);
+            ShoppingCart::create($item);
         }
     
     }

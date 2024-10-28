@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Modal, Button, Form } from "react-bootstrap";
+import { useLocation, useNavigate  } from "react-router-dom";
+import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./Register.css";
 
 function Register() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
@@ -12,6 +13,8 @@ function Register() {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     if (location.pathname === "/register") {
@@ -25,9 +28,18 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log();
+    setError("");
+    setSuccessMessage("");
+    setIsLoading(true);
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+    // console.log();
     if (!(password === passwordConfirmation)) {
+      setIsLoading(false);
       setError("Password confirm does not match ...");
+      return;
     } else {
       try {
         const response = await axios.post(
@@ -39,10 +51,20 @@ function Register() {
           }
         );
         console.log(response.data.message);
-        handleClose();
+        // handleClose();
+        setIsLoading(false);
+        setSuccessMessage("Registration successful! Redirecting to login...");
+        setTimeout(() => {
+          navigate("/login"); // Điều hướng sau khi đăng ký thành công
+        }, 2000);
       } catch (error) {
-        console.error("There was an error registering!", error);
-        setError("Registration failed. Please try again.");
+        // console.error("There was an error registering!", error);
+        // setError("Registration failed. Please try again.");
+        if (error.response && error.response.data) {
+          setError(error.response.data.message); // Hiển thị thông báo lỗi cụ thể từ server
+        } else {
+          setError("Registration failed. Please try again.");
+        }
       }
     }
   };
@@ -53,7 +75,8 @@ function Register() {
         <Modal.Title className="register-title">Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error && <p className="text-danger">{error}</p>}
+      {error && <Alert variant="danger">{error}</Alert>}
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Full Name</Form.Label>
@@ -102,8 +125,12 @@ function Register() {
               className="input-field"
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="primary-register">
-            Register
+          <Button variant="primary" type="submit" className="primary-register" disabled={isLoading}>
+            {isLoading ? (
+              <Spinner animation="border" size="sm" /> // Hiển thị spinner khi đang xử lý
+            ) : (
+              "Register"
+            )}
           </Button>
         </Form>
       </Modal.Body>

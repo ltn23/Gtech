@@ -11,9 +11,18 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->get();
+        $query = Product::with('category');
+
+        // Check if a category ID is provided
+        if ($request->has('category')) {
+            $query->where('category_id', $request->input('category'));
+        }
+
+        // Get the products based on the query
+        $products = $query->get();
+
         return response()->json($products);
     }
 

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../../layouts/frontend/Navbar";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, useNavigate  } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./Login.css";
 import { SiGoogle } from "react-icons/si";
 
 function Login() {
+  const navigate = useNavigate();
   const location = useLocation();
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
@@ -35,9 +35,9 @@ function Login() {
       localStorage.setItem("role", role);
 
       // Điều hướng tới trang home sau khi đăng nhập thành công
-      window.location.href = "/home";
+      navigate("/home");
     }
-  }, [location]);
+  }, [location, navigate]);
 
   const handleClose = () => setShow(false);
 

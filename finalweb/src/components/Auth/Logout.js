@@ -1,12 +1,15 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Logout() {
+  const navigate = useNavigate();
   useEffect(() => {
     localStorage.clear();
     console.log("All localStorage data has been removed");
-    window.location.href = "/home";
-    // window.location.href = "/login";
-  });
+    setTimeout(() => {
+      navigate("/home"); // Hoặc "/login"
+    },1000);
+  },[navigate]);
 
   return <div></div>;
 }

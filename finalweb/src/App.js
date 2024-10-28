@@ -1,10 +1,10 @@
 import React from "react";
 
-import MasterLayout from "./layouts/admin/MasterLayout";
+import MasterLayout from "./layouts/MasterLayout";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/frontend/Auth/Login";
-import Register from "./components/frontend/Auth/Register";
-import Home from "./components/frontend/Home";
+// import Login from "./components/frontend/Auth/Login";
+// import Register from "./components/frontend/Auth/Register";
+// import Home from "./components/frontend/Home";
 
 function App() {
   return (

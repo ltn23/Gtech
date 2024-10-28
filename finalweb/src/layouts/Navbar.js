@@ -16,6 +16,7 @@ const Navbar = () => {
   const handleAuthButton = (e) => {
     const buttonText = e.target.textContent;
     if (buttonText === "Logout") {
+      localStorage.clear();
       window.location.href = "/logout";
     } else {
       return;

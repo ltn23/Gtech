@@ -20,9 +20,9 @@ class Order extends Model
     }
 
     // An order has many order items
-    public function order_Items()
+    public function orderItems()
     {
-        return $this->hasMany(Order_Item::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     // An order can have one payment record

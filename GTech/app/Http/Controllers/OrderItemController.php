@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order_item;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -13,8 +13,8 @@ class OrderItemController extends Controller
      */
     public function index()
     {
-        $order_Items = Order_Item::with('product', 'order')->get();
-        return response()->json($order_Items);
+        $orderItems = OrderItem::with('product', 'order')->get();
+        return response()->json($orderItems);
     }
 
     /**
@@ -30,8 +30,8 @@ class OrderItemController extends Controller
      */
     public function store(Request $request)
     {
-        $order_Item = Order_Item::create($request->all());
-        return response()->json($order_Item, 201);
+        $orderItem = OrderItem::create($request->all());
+        return response()->json($orderItem, 201);
     }
 
     /**
@@ -39,17 +39,17 @@ class OrderItemController extends Controller
      */
     public function show($id)
     {
-        $order_Item = Order_Item::with('product', 'order')->find($id);
-        if (!$order_Item) {
+        $orderItem = OrderItem::with('product', 'order')->find($id);
+        if (!$orderItem) {
             return response()->json(['message' => 'OrderItem not found'], 404);
         }
-        return response()->json($order_Item);
+        return response()->json($orderItem);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order_item $order_item)
+    public function edit(OrderItem $orderItem)
     {
         //
     }
@@ -59,13 +59,13 @@ class OrderItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $order_Item = Order_Item::find($id);
-        if (!$order_Item) {
+        $orderItem = OrderItem::find($id);
+        if (!$orderItem) {
             return response()->json(['message' => 'OrderItem not found'], 404);
         }
 
-        $order_Item->update($request->all());
-        return response()->json($order_Item);
+        $orderItem->update($request->all());
+        return response()->json($orderItem);
     }
 
     /**
@@ -73,12 +73,12 @@ class OrderItemController extends Controller
      */
     public function destroy($id)
     {
-        $order_Item = Order_Item::find($id);
-        if (!$order_Item) {
+        $orderItem = OrderItem::find($id);
+        if (!$orderItem) {
             return response()->json(['message' => 'OrderItem not found'], 404);
         }
 
-        $order_Item->delete();
+        $orderItem->delete();
         return response()->json(['message' => 'OrderItem deleted']);
     }
 }

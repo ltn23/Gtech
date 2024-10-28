@@ -1,13 +1,14 @@
 import React from "react";
 // import { Routes, Route  } from "react-router-dom";
-import "../../assets/admin/css/styles.css";
-import "../../assets/admin/js/scripts.js";
+import "../assets/css/styles.css";
+
+import "../assets/js/scripts.js";
 import { Routes, Route } from "react-router-dom";
 
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
-import Footer from "./Footer";
-import routes from "../../routes/routes.js";
+import Navbar from "./Navbar.js";
+import Sidebar from "./Sidebar.js";
+// import Footer from "./Footer";
+import routes from "../routes/routes.js";
 
 const MasterLayout = () => {
   return (
