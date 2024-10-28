@@ -1,0 +1,109 @@
+.custom-small-modal {
+    width: 80%; /* Adjust width for larger displays */
+    max-width: 1000px; /* Maximum width for the modal */
+    border-radius: 1rem; /* Rounded corners for the modal */
+}
+
+.modal-header {
+    background-color: #f4f5f7; /* Light background for the header */
+}
+
+.modal-title {
+    color: #343a40; /* Dark color for the title */
+}
+
+.modal-body {
+    background-color: #ffffff; /* White background for the body */
+    padding: 20px; /* Add padding around the body content */
+}
+
+.card {
+    border: none; /* Remove default card border */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Shadow for card */
+}
+
+.card-body {
+    padding: 20px; /* More padding for better spacing */
+}
+
+.text-secondary {
+    color: #6c757d; /* Secondary text color */
+}
+
+.row.pt-1 {
+    padding-top: 1rem; /* Adjust padding for rows */
+}
+
+h6 {
+    margin-bottom: 0.5rem; /* Spacing below headings */
+}
+
+.text-muted {
+    color: #6c757d; /* Muted text color */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .custom-small-modal {
+        width: 90%; /* Adjust modal width for smaller screens */
+    }
+    
+    .modal-body {
+        padding: 15px; /* Less padding for smaller screens */
+    }
+}
+
+/* Profile Card Styles */
+.card {
+    border: none; /* Remove default card border */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Shadow for card */
+    border-radius: 0.5rem; /* Slight rounding of card corners */
+}
+
+/* Avatar Styles */
+.card img {
+    border-radius: 50%; /* Make the avatar round */
+    border: 2px solid white; /* Optional: border around the avatar */
+}
+
+/* Text Styles */
+.card-body h6 {
+    font-weight: 600; /* Bolder headings */
+    color: #343a40; /* Darker color for better contrast */
+}
+
+/* Padding and Margin Adjustments */
+.card-body {
+    padding: 15px; /* More comfortable padding */
+}
+
+.row.pt-1 {
+    padding-top: 0.75rem; /* Slightly increased padding */
+}
+
+/* Information Text Styles */
+.text-muted {
+    color: #6c757d; /* Muted text color */
+    font-size: 0.9rem; /* Smaller font size for muted text */
+}
+
+/* Add some space between the sections */
+hr {
+    margin: 1rem 0; /* Spacing above and below horizontal rules */
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin: 0 auto; /* Center card on smaller screens */
+    }
+
+    .card-body {
+        padding: 10px; /* Less padding for smaller screens */
+    }
+
+    .text-muted {
+        font-size: 0.85rem; /* Smaller font size for smaller screens */
+    }
+}
+

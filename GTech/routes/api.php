@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
     use App\Http\Controllers\ReviewController;
     use App\Http\Controllers\ShoppingCartController;
     use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\UserController;
 
     // Nhóm các route liên quan đến xác thực
     Route::prefix('auth')->group(function () {
@@ -19,6 +20,10 @@ use App\Http\Controllers\AuthController;
         Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('web');
     });
 
+    Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+        Route::get('', [UserController::class, 'show']);
+        Route::put('', [UserController::class, 'update']);
+    });
     // Nhóm các route quản lý danh mục
     Route::apiResource('categories', CategoryController::class)->except(['show']);
 

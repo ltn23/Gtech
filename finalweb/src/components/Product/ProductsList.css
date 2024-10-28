@@ -1,5 +1,3 @@
-
-
 .products-container {
     padding: 20px;
     max-width: 1200px; /* You can adjust this based on your design */
@@ -8,7 +6,7 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust the minimum width */
+    grid-template-columns: repeat(3, 1fr); /* Set three equal columns */
     gap: 20px;
 }
 

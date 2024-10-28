@@ -37,6 +37,7 @@ const Sidebar = () => {
     customer: [
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },
       { to: "/profile", label: "Profile", icon: "fas fa-user" },
+      { to: "/shopping-cart", label: "Shopping Cart", icon: "fas fa-shopping-cart" },
       { to: "#", label: "Categories", icon: "fas fa-list", toggle: true }, // Toggle for categories
       { to: "/settings", label: "Settings", icon: "fas fa-cogs" },
     ],

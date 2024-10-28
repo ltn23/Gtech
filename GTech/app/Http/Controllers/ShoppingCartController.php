@@ -32,30 +32,33 @@ class ShoppingCartController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        // $userId = $request->user()->id;
-        $userId = $request->user()->id;
-        $productId = $request->input('product_id');
-        $quantity = $request->input('quantity', 1); // Default to 1 if not provided
+{
+    $userId = $request->user()->id; // Lấy ID của user đang đăng nhập
+    $productId = $request->input('product_id');
+    $quantity = $request->input('quantity', 1); // Mặc định là 1 nếu không truyền
 
-        // Check if the product already exists in the cart
-        $cartItem = ShoppingCart::where('user_id', $userId)->where('product_id', $productId)->first();
+    // Kiểm tra xem sản phẩm có tồn tại trong giỏ hàng không
+    $cartItem = ShoppingCart::where('user_id', $userId)
+                            ->where('product_id', $productId)
+                            ->first();
 
-        if ($cartItem) {
-            // Update quantity if it already exists
-            $cartItem->quantity += $quantity;
-            $cartItem->save();
-        } else {
-            // Add a new item to the cart
-            $cartItem = ShoppingCart::create([
-                'user_id' => $userId,
-                'product_id' => $productId,
-                'quantity' => $quantity,
-            ]);
-        }
-
-        return response()->json($cartItem, 201);
+    if ($cartItem) {
+        // Nếu đã có, chỉ cập nhật số lượng
+        $cartItem->quantity += $quantity;
+        $cartItem->save();
+    } else {
+        // Nếu chưa có, tạo mới sản phẩm trong giỏ hàng
+        $cartItem = ShoppingCart::create([
+            'user_id' => $userId,
+            'product_id' => $productId,
+            'quantity' => $quantity,
+        ]);
     }
+
+    // Trả về sản phẩm đã được thêm hoặc cập nhật
+    return response()->json($cartItem, 201);
+}
+
 
     /**
      * Display the specified resource.
