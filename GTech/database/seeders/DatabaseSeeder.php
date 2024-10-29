@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
 
         // Tạo thêm 10 người dùng ngẫu nhiên khác
         User::factory(10)->create([
+            'password' => Hash::make('123123'),
             'role' => 'customer',
         ]);
 

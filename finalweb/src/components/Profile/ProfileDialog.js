@@ -58,7 +58,7 @@ const ProfileDialog = ({ show, handleClose }) => {
   }
 
   return (
-    <Modal show={show} dialogClassName="custom-small-modal" onHide={handleClose} centered>
+    <Modal show={show} dialogClassName="modal-lg" onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Profile</Modal.Title>
       </Modal.Header>
@@ -72,12 +72,14 @@ const ProfileDialog = ({ show, handleClose }) => {
                     <div className="col-md-4 gradient-custom text-center text-white"
                       style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem' }}>
                       <img
-                        src={user?.avatar || "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"} // Use user avatar or fallback
+                        src={user?.avatar || (user.gender === 'male'
+                        ? 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp'
+                        : 'https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava2-bg.webp')} // Use user avatar or fallback
                         alt="Avatar"
                         className="img-fluid my-5"
                         style={{ width: '100px' }}
                       />
-                      <h5 className='text-secondary'>{user?.name || "N/A"}</h5> 
+                      <h5 className='text-secondary'>{user.name}</h5> 
                       <i className="far fa-edit mb-5"></i>
                     </div>
                     <div className="col-md-12"> 
@@ -87,11 +89,11 @@ const ProfileDialog = ({ show, handleClose }) => {
                         <div className="row pt-1">
                           <div className="col-6 mb-3">
                             <h6>Email</h6>
-                            <p className="text-muted">{user?.email || "N/A"}</p> 
+                            <p className="text-muted">{user.email}</p> 
                           </div>
                           <div className="col-6 mb-3">
                             <h6>Phone</h6>
-                            <p className="text-muted">{user?.phone || "N/A"}</p> 
+                            <p className="text-muted">{user.phone}</p> 
                           </div>
                         </div>
                         
@@ -99,18 +101,18 @@ const ProfileDialog = ({ show, handleClose }) => {
                         <div className="row pt-1">
                           <div className="col-6 mb-3">
                             <h6>Address</h6>
-                            <p className="text-muted">{user?.address || "N/A"}</p>
+                            <p className="text-muted">{user.address}</p>
                           </div>
                           <div className="col-6 mb-3">
                             <h6>Gender</h6>
-                            <p className="text-muted">{user?.gender || "N/A"}</p>
+                            <p className="text-muted">{user.gender}</p>
                           </div>
                         </div>
-                        {/* <div className="d-flex justify-content-start">
+                        <div className="d-flex justify-content-start">
                           <a href="#!"><i className="fab fa-facebook-f fa-lg me-3"></i></a>
                           <a href="#!"><i className="fab fa-twitter fa-lg me-3"></i></a>
                           <a href="#!"><i className="fab fa-instagram fa-lg"></i></a>
-                        </div> */}
+                        </div>
                       </div>
                     </div>
                   </div>

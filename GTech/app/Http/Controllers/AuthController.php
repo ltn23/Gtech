@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseController
 {
@@ -40,7 +41,8 @@ public function handleGoogleCallback()
             $user = User::create([
                 'name' => $googleUser->getName(),
                 'email' => $googleUser->getEmail(),
-                'password' => bcrypt(uniqid()), // Tạo mật khẩu ngẫu nhiên
+                // 'password' => bcrypt(uniqid()), // Tạo mật khẩu ngẫu nhiên
+                'password' => Hash::make('123123'),
                 'role' => 'customer',
             ]);
         }
