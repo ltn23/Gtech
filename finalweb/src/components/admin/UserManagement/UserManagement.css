@@ -1,0 +1,79 @@
+.user-management {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .badge-info {
+    background-color: #17a2b8;
+    color: #fff;
+  }
+  
+  .badge-danger {
+    background-color: #dc3545;
+  }
+  
+  button {
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
+  
+  .modal-content {
+    border-radius: 12px;
+  }
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Khoảng cách giữa các nút */
+  }
+  
+  .btn-custom {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Khoảng cách giữa icon và text */
+    border-radius: 8px; /* Bo góc mềm mại */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .btn-custom:hover {
+    transform: translateY(-2px); /* Hiệu ứng nổi khi hover */
+    opacity: 0.9;
+  }
+  
+  .btn-custom .icon {
+    font-size: 1rem; /* Kích thước icon */
+  }
+  
+  .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+  }
+  
+  .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #fff;
+  }
+  
+  .btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  

@@ -1,0 +1,129 @@
+/* UserManagement.css */
+
+.user-management {
+    margin-top: 50px;
+  }
+  
+  .user-management h2 {
+    font-weight: bold;
+    color: #4a4a4a;
+  }
+  
+  .table-responsive {
+    margin-top: 20px;
+  }
+  
+  .table thead th {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .table tbody td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .badge-info {
+    background-color: #17a2b8;
+    color: white;
+  }
+  
+  .badge-danger {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .action-buttons .btn-custom {
+    margin-right: 5px;
+  }
+  
+  .btn-custom .icon {
+    margin-right: 5px;
+  }
+  
+  /* Spinner in loading state */
+  .text-center p {
+    font-size: 18px;
+    color: #6c757d;
+  }
+  
+  /* Modal styles */
+  .modal-header {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .modal-title {
+    font-weight: 600;
+  }
+  
+  .modal-footer .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+  
+  /* Form controls inside Modal */
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-label {
+    font-weight: 600;
+    color: #4a4a4a;
+  }
+  
+  .form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+  }
+  
+  /* Toast notification */
+  .toast-header {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  .toast-body {
+    font-weight: 500;
+    color: white;
+  }
+  
+  .toast.bg-success {
+    background-color: #28a745;
+  }
+  
+  .toast.bg-danger {
+    background-color: #dc3545;
+  }
+  
+  /* Button styles */
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+  }
+  
+  .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+  }
+  
+  .btn-outline-danger {
+    color: #dc3545;
+    border-color: #dc3545;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+    }
+  
+    .btn-custom {
+      display: block;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+  }
+  

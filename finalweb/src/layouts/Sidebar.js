@@ -33,6 +33,16 @@ const Sidebar = () => {
         label: "User Management",
         icon: "fas fa-users",
       },
+      {
+        to: "/category-management",
+        label: "Category Management",
+        icon: "fas fa-money",
+      },
+      {
+        to: "/product-management",
+        label: "Product Management",
+        icon: "fas fa-box",
+      },
     ],
     customer: [
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },
