@@ -20,12 +20,10 @@ use App\Http\Controllers\AuthController;
         Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('web');
     });
 
-    Route::middleware('auth:sanctum')->prefix('user')->group(function () {
-        Route::get('users', [UserController::class, 'index']);
-        Route::get('', [UserController::class, 'show']);
-        Route::put('', [UserController::class, 'update']);
-    });
     Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::put('users/{id}', [UserController::class, 'update']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
 
     // Nhóm các route quản lý danh mục
     Route::apiResource('categories', CategoryController::class)->except(['show']);
