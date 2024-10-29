@@ -3,7 +3,8 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
     use App\Http\Controllers\CategoryController;
-    use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\OrderController;
     use App\Http\Controllers\OrderItemController;
     use App\Http\Controllers\PaymentController;
     use App\Http\Controllers\ProductController;
@@ -27,6 +28,8 @@ use App\Http\Controllers\AuthController;
     Route::post('users', [UserController::class, 'store']);
     Route::put('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
+
+    Route::post('/images', [ImageController::class, 'store']);
 
     // Nhóm các route quản lý danh mục
     Route::apiResource('categories', CategoryController::class)->except(['show']);

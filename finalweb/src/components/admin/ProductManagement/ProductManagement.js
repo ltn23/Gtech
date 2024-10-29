@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./ProductManagement.css";
-import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ProductManagement = () => {
@@ -8,7 +15,11 @@ const ProductManagement = () => {
   const [categories, setCategories] = useState([]); // New state for categories
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    variant: "success",
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -55,7 +66,10 @@ const ProductManagement = () => {
 
   const showToast = (message, variant = "success") => {
     setToast({ show: true, message, variant });
-    setTimeout(() => setToast({ show: false, message: "", variant: "success" }), 3000);
+    setTimeout(
+      () => setToast({ show: false, message: "", variant: "success" }),
+      3000
+    );
   };
 
   const handleShow = (product = {}) => {
@@ -69,7 +83,13 @@ const ProductManagement = () => {
   };
 
   const handleClose = () => {
-    setCurrentProduct({ name: "", description: "", price: 0, stock: 0, category: "" });
+    setCurrentProduct({
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      category: "",
+    });
     setEditMode(false);
     setShowModal(false);
   };
@@ -97,7 +117,11 @@ const ProductManagement = () => {
       }
       fetchProducts();
       handleClose();
-      showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
+      showToast(
+        editMode
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
     } catch (err) {
       setError("Failed to save product.");
     }
@@ -106,9 +130,12 @@ const ProductManagement = () => {
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        const response = await fetch(`http://localhost:8000/api/products/${productId}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `http://localhost:8000/api/products/${productId}`,
+          {
+            method: "DELETE",
+          }
+        );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -143,6 +170,7 @@ const ProductManagement = () => {
         <table className="table table-bordered table-hover mt-3">
           <thead>
             <tr>
+              <th>Image</th>
               <th>Name</th>
               <th>Description</th>
               <th>Price</th>
@@ -155,6 +183,13 @@ const ProductManagement = () => {
           <tbody>
             {products.map((product) => (
               <tr key={product.id}>
+                <td>
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    style={{ width: "100px", height: "auto" }}
+                  />
+                </td>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
                 <td>${product.price}</td>
@@ -185,7 +220,9 @@ const ProductManagement = () => {
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
+          <Modal.Title>
+            {editMode ? "Edit Product" : "Create Product"}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -237,7 +274,9 @@ const ProductManagement = () => {
                 onChange={handleInputChange}
                 required
               >
-                <option value="" disabled>Select a category</option>
+                <option value="" disabled>
+                  Select a category
+                </option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
                     {category.name}

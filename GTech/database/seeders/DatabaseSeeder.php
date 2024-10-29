@@ -56,11 +56,11 @@ class DatabaseSeeder extends Seeder
         }
 
         $products = [
-            ['category_id' => Category::where('name', 'Laptops')->first()->id, 'name' => 'MacBook Pro 16"', 'price' => 2499.99, 'description' => 'Apple MacBook Pro with M1 chip.', 'stock_quantity' => 50, 'status' => 'available', 'image_url' => 'https://example.com/macbook.jpg'],
-            ['category_id' => Category::where('name', 'Smartphones')->first()->id, 'name' => 'iPhone 14 Pro Max', 'price' => 1099.99, 'description' => 'Apple iPhone 14 with Pro Max features.', 'stock_quantity' => 100, 'status' => 'available', 'image_url' => 'https://example.com/iphone.jpg'],
-            ['category_id' => Category::where('name', 'Headphones')->first()->id, 'name' => 'Sony WH-1000XM5', 'price' => 349.99, 'description' => 'Noise-cancelling wireless headphones.', 'stock_quantity' => 200, 'status' => 'available', 'image_url' => 'https://example.com/sony.jpg'],
-            ['category_id' => Category::where('name', 'Smartwatches')->first()->id, 'name' => 'Apple Watch Series 8', 'price' => 499.99, 'description' => 'Latest Apple Watch with health monitoring.', 'stock_quantity' => 75, 'status' => 'available', 'image_url' => 'https://example.com/applewatch.jpg'],
-            ['category_id' => Category::where('name', 'Gaming Consoles')->first()->id, 'name' => 'PlayStation 5', 'price' => 499.99, 'description' => 'Next-gen gaming console from Sony.', 'stock_quantity' => 25, 'status' => 'available', 'image_url' => 'https://example.com/ps5.jpg'],
+            ['category_id' => Category::where('name', 'Laptops')->first()->id, 'name' => 'MacBook Pro 16"', 'price' => 2499.99, 'description' => 'Apple MacBook Pro with M1 chip.', 'stock_quantity' => 50, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218120/abduxru09ctukytscrb3.jpg'],
+            ['category_id' => Category::where('name', 'Smartphones')->first()->id, 'name' => 'iPhone 14 Pro Max', 'price' => 1099.99, 'description' => 'Apple iPhone 14 with Pro Max features.', 'stock_quantity' => 100, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218131/nsfywi1k06jo3ijyfjri.jpg'],
+            ['category_id' => Category::where('name', 'Headphones')->first()->id, 'name' => 'Sony WH-1000XM5', 'price' => 349.99, 'description' => 'Noise-cancelling wireless headphones.', 'stock_quantity' => 200, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218145/qlrkf6tr9hs4xwat8swm.jpg'],
+            ['category_id' => Category::where('name', 'Smartwatches')->first()->id, 'name' => 'Apple Watch Series 8', 'price' => 499.99, 'description' => 'Latest Apple Watch with health monitoring.', 'stock_quantity' => 75, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218154/m0o2j8e2xzbrq9op5n6y.png'],
+            ['category_id' => Category::where('name', 'Gaming Consoles')->first()->id, 'name' => 'PlayStation 5', 'price' => 499.99, 'description' => 'Next-gen gaming console from Sony.', 'stock_quantity' => 25, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218162/k2hsazqcvi21vhcirvxd.png'],
         ];
 
         foreach ($products as $product) {

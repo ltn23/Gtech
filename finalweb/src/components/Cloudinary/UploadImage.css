@@ -1,0 +1,53 @@
+/* UploadImage.css */
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .upload-container h1 {
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+  
+  .upload-container input[type="file"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 80%;
+    font-size: 16px;
+  }
+  
+  .upload-container button {
+    padding: 10px 20px;
+    background-color: #28a745; /* Màu xanh */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .upload-container button:hover {
+    background-color: #218838; /* Màu xanh đậm khi hover */
+  }
+  
+  .upload-image-preview {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .upload-image-preview img {
+    max-width: 100%;
+    border-radius: 5px;
+  }
+  
