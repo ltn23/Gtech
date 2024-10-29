@@ -9,10 +9,10 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import ProductsList from "../components/Product/ProductsList";
 import Profile from "../components/Profile/ProfileDialog";
 import ShoppingCart from "../components/ShoppingCart/ShoppingCart";
+import UserManagement from "../components/admin/UserManagement";
 
 const routes = [
   { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
-  // { path: "/profile", name: "Profile", element: <ProtectedRoute element={<Profile />} roleRequired="user" /> },
   { path: "/profile", name: "Profile", element: <Profile /> },
   { path: "/home", name: "Home", element: <Home /> },
   { path: "/register", name: "Register", element: <Register /> },
@@ -20,6 +20,7 @@ const routes = [
   { path: "/logout", name: "Logout", element: <Logout /> },
   { path: "/products", name: "Products", element: <ProductsList /> },
   { path: "/shopping-cart", name: "Shopping Cart", element: <ShoppingCart /> },
+  { path: "/user-management", name: "User Management", element: <UserManagement /> },
   { path: "*", name: "NotFound", element: <NotFound /> }
 
 

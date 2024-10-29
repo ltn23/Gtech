@@ -21,9 +21,12 @@ use App\Http\Controllers\AuthController;
     });
 
     Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+        Route::get('users', [UserController::class, 'index']);
         Route::get('', [UserController::class, 'show']);
         Route::put('', [UserController::class, 'update']);
     });
+    Route::get('users', [UserController::class, 'index']);
+
     // Nhóm các route quản lý danh mục
     Route::apiResource('categories', CategoryController::class)->except(['show']);
 
