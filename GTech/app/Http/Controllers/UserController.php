@@ -19,8 +19,7 @@ class UserController extends Controller
     public function show()
     {
         // Get the authenticated user
-        $user = Auth::user();
-        
+        $user =  request()->user();
         // Return the user information as JSON
         return response()->json($user);
     }

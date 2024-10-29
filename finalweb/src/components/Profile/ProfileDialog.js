@@ -15,7 +15,7 @@ const ProfileDialog = ({ show, handleClose }) => {
   const fetchData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/user', {
+      const response = await axios.get('http://localhost:8000/api/auth/profile', {
         headers: {
           Authorization: `Bearer ${token}`
         }
