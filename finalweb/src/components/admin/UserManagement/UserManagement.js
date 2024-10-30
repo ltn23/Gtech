@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./UserManagement.css"; // Custom CSS file
 import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap"; // Bootstrap library
 import { FaEdit, FaTrash } from "react-icons/fa";
+import axios from 'axios';
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
@@ -27,11 +28,16 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/users");
-      if (!response.ok) {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8000/api/users', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
+      const data =  response.data;
       setUsers(data);
     } catch (err) {
       setError("Failed to fetch users.");
@@ -88,14 +94,17 @@ const UserManagement = () => {
       : "http://localhost:8000/api/users";
 
     try {
-      const response = await fetch(url, {
+      const token = localStorage.getItem('token');
+      const response = await axios(url, {
+        
         method,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(currentUser),
+        data: currentUser,
       });
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
       fetchUsers(); // Reload users
@@ -109,22 +118,30 @@ const UserManagement = () => {
   const handleDelete = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        const response = await fetch(
+        const token = localStorage.getItem('token'); // Lấy token nếu cần thiết
+  
+        const response = await axios.delete(
           `http://localhost:8000/api/users/${userId}`,
           {
-            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`, // Thêm token vào header nếu cần
+            },
           }
         );
-        if (!response.ok) {
+  
+        if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
+  
         fetchUsers(); // Reload users
         showToast("User deleted successfully!", "success");
       } catch (err) {
+        console.error("Error:", err.response?.data || err.message); // Ghi log chi tiết lỗi
         showToast(err.message, "danger");
       }
     }
   };
+  
 
   if (loading)
     return (

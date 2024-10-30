@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;

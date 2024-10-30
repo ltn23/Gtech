@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductSaveRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -27,21 +28,18 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function save(ProductSaveRequest $request)
     {
-        $product = Product::create($request->all());
-        return response()->json($product, 201);
+        $requestData =  $request->validated();
+        $product = $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
+        $msg =  $requestData['id'] ? "Product updated successfully." : "Product created successfully.";
+        $product->fill($requestData);
+        $product->save();
+        return $this->sendSuccess($product,  $msg);
     }
+
 
     /**
      * Display the specified resource.
@@ -52,28 +50,6 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['message' => 'Product not found'], 404);
         }
-        return response()->json($product);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $product = Product::find($id);
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
-        }
-
-        $product->update($request->all());
         return response()->json($product);
     }
 

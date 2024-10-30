@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./CategoryManagement.css"; // Custom CSS file
 import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap"; // Bootstrap library
 import { FaEdit, FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
@@ -23,14 +24,19 @@ const CategoryManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/categories");
-      if (!response.ok) {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:8000/api//categories', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if (response.status !== 200) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
+      const data =  response.data;
       setCategories(data);
     } catch (err) {
-      setError("Failed to fetch categories.");
+      setError("Failed to fetch categoryes.");
     } finally {
       setLoading(false);
     }
@@ -70,22 +76,26 @@ const CategoryManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = editMode ? "PUT" : "POST";
+    const method = editMode ? "put" : "post"; // Use lowercase for axios methods
     const url = editMode
       ? `http://localhost:8000/api/categories/${currentCategory.id}`
       : "http://localhost:8000/api/categories";
-
+  
     try {
-      const response = await fetch(url, {
+      const response = await axios({
         method,
+        url,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('token')}` // Add the token here if required
         },
-        body: JSON.stringify(currentCategory),
+        data: currentCategory, // Use `data` instead of `body`
       });
-      if (!response.ok) {
+  
+      if (response.status !== 200 && response.status !== 201) {
         throw new Error("Network response was not ok");
       }
+  
       fetchCategories(); // Reload categories
       handleClose(); // Close modal
       showToast(editMode ? "Category updated successfully!" : "Category created successfully!");
@@ -93,17 +103,18 @@ const CategoryManagement = () => {
       setError("Failed to save category.");
     }
   };
+  
 
   const handleDelete = async (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
-        const response = await fetch(
+        const response = await axios(
           `http://localhost:8000/api/categories/${categoryId}`,
           {
             method: "DELETE",
           }
         );
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
         fetchCategories(); // Reload categories
