@@ -25,12 +25,18 @@ class ProductSaveRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => [Rule::exists('products', 'id')],
+            // 'id' => ['nullable', Rule::exists('products', 'id')],
+            'id' => ['nullable', Rule::exists('products', 'id')->where(function ($query) {
+            // Chỉ kiểm tra nếu có id
+            if ($this->input('id')) {
+                $query->where('id', $this->input('id'));
+            }
+        })],
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'stock_quantity' => 'required|integer',
-            'category_id' => [Rule::exists('categories', 'id')],
+            'category_id' => ['nullable', Rule::exists('categories', 'id')],
             'image_url' => 'nullable|url',
             'status' => ['required', Rule::in(['available', 'out_of_stock'])],
         ];

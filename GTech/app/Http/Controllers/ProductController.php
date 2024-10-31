@@ -32,12 +32,46 @@ class ProductController extends BaseController
      */
     public function save(ProductSaveRequest $request)
     {
-        $requestData =  $request->validated();
-        $product = $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
-        $msg =  $requestData['id'] ? "Product updated successfully." : "Product created successfully.";
+        // $requestData =  $request->validated();
+        // $product = $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
+        // $msg =  $requestData['id'] ? "Product updated successfully." : "Product created successfully.";
+        // $product->fill($requestData);
+        // $product->save();
+        // return $this->sendSuccess($product,  $msg);
+
+        // $requestData =  $request->validated();
+
+        // // Kiểm tra nếu có 'id' trong request
+        // $product = isset($requestData['id']) && $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
+
+
+        // // Cập nhật hoặc tạo mới
+        // $product->fill($requestData);
+        // $product->save();
+
+        // // Xác định thông điệp thành công dựa vào sự tồn tại của id
+        // $msg = isset($requestData['id']) ? "Product updated successfully." : "Product created successfully.";
+
+        // return $this->sendSuccess($product, $msg);
+
+
+
+        $requestData = $request->validated();
+
+        // Check if 'id' is present in request data to update existing product
+        $product = isset($requestData['id']) ? Product::find($requestData['id']) : new Product();
+    
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+        }
+    
+        // Update or create the product with validated data
         $product->fill($requestData);
         $product->save();
-        return $this->sendSuccess($product,  $msg);
+    
+        // Response message based on whether it was an update or create
+        $msg = isset($requestData['id']) ? "Product updated successfully." : "Product created successfully.";
+        return response()->json(['success' => true, 'message' => $msg, 'data' => $product]);
     }
 
 

@@ -6,7 +6,7 @@ import axios from "axios";
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // Thêm danh mục
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
@@ -14,18 +14,19 @@ const ProductManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({
+    id: null,
     name: "",
     description: "",
     price: 0,
     stock_quantity: 0,
-    category_id: "", // Thay đổi thuộc tính này cho phù hợp
+    category_id: "",
     image: null,
     status: "available",
   });
 
   useEffect(() => {
     fetchProducts();
-    fetchCategories(); // Gọi hàm này để lấy danh mục
+    fetchCategories();
   }, []);
 
   const fetchProducts = async () => {
@@ -44,7 +45,6 @@ const ProductManagement = () => {
       setLoading(false);
     }
   };
-  
 
   const fetchCategories = async () => {
     try {
@@ -62,7 +62,6 @@ const ProductManagement = () => {
       setLoading(false);
     }
   };
-  
 
   const showToast = (message, variant = "success") => {
     setToast({ show: true, message, variant });
@@ -72,15 +71,15 @@ const ProductManagement = () => {
   const handleShow = (product = {}) => {
     setCurrentProduct(
       product.id
-        ? { ...product, image: null } // Reset image for edit mode
-        : { name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" }
+        ? { ...product, image: null }
+        : { id: null, name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" }
     );
     setEditMode(!!product.id);
     setShowModal(true);
   };
 
   const handleClose = () => {
-    setCurrentProduct({ name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" });
+    setCurrentProduct({ id: null, name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" });
     setEditMode(false);
     setShowModal(false);
   };
@@ -105,54 +104,68 @@ const ProductManagement = () => {
       throw new Error("Failed to upload image");
     }
     
-    return response.data.secure_url; // Return the image URL
+    return response.data.secure_url;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const method = editMode ? "PUT" : "POST";
-    const url = editMode
-      ? `http://localhost:8000/api/products/${currentProduct.id}`
-      : "http://localhost:8000/api/products";
+    e.preventDefault(); // Prevent the default form submission behavior
+
+    // Prepare the product data to send to the backend
+    const productData = {
+        ...currentProduct,
+        image_url: currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url, // Upload the image if new
+    };
+
+    // Add the ID only if we are in edit mode (updating)
+    if (editMode) {
+        productData.id = currentProduct.id;
+    }
 
     try {
-      // Upload image to Cloudinary if new image is provided
-      let imageUrl = currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url;
+        // Perform the API request to save the product
+        const response = await axios.post(`http://localhost:8000/api/products`, productData, {
+            headers: {
+                
+                Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
+                "Content-Type": "application/json",
+            },
+        });
 
-      const productData = { ...currentProduct, image_url: imageUrl }; // Add image_url to product data
+        if (response.status !== 200) {
+            throw new Error("Network response was not ok");
+        }
 
-      const response = await axios({
-        method,
-        url,
-        headers: { "Content-Type": "application/json" },
-        data: productData,
-      });
+        // Refresh the product list and close the modal
+        fetchProducts();
+        handleClose();
+        showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
 
-      if (response.status !== 200) {
-        throw new Error("Network response was not ok");
-      }
-      fetchProducts();
-      handleClose();
-      showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
     } catch (err) {
-      setError("Failed to save product.");
+        setError("Failed to save product."); // Set error state if there's a problem
+        console.error("Error:", err); // Log error for debugging
     }
-  };
+};
+
 
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        const response = await axios.delete(`http://localhost:8000/api/products/${productId}`);
+        const token = localStorage.getItem("token"); // Lấy token từ localStorage
+        const response = await axios.delete(`http://localhost:8000/api/products/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` }, // Thêm token vào headers
+        });
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
-        fetchProducts();
+        fetchProducts(); // Tải lại danh sách sản phẩm
         showToast("Product deleted successfully!", "success");
       } catch (err) {
-        showToast(err.message, "danger");
+        showToast(err.message || "Failed to delete product.", "danger");
       }
     }
   };
+  
+  
 
   if (loading) return <div className="text-center"><Spinner animation="border" variant="primary" /></div>;
   if (error) return <div className="text-center"><p className="text-danger">{error}</p></div>;
@@ -231,10 +244,11 @@ const ProductManagement = () => {
             <Form.Group controlId="formProductDescription">
               <Form.Label>Description</Form.Label>
               <Form.Control
-                type="text"
+                as="textarea"
                 name="description"
                 value={currentProduct.description}
                 onChange={handleInputChange}
+                required
               />
             </Form.Group>
             <Form.Group controlId="formProductPrice">
@@ -287,15 +301,15 @@ const ProductManagement = () => {
               </Form.Control>
             </Form.Group>
             <Button variant="primary" type="submit">
-              {editMode ? "Update" : "Create"}
+              {editMode ? "Update Product" : "Create Product"}
             </Button>
           </Form>
         </Modal.Body>
       </Modal>
 
       <ToastContainer position="top-center">
-        <Toast onClose={() => setToast({ ...toast, show: false })} show={toast.show} delay={3000} autohide>
-          <Toast.Body className={`text-${toast.variant}`}>{toast.message}</Toast.Body>
+        <Toast onClose={() => setToast({ show: false })} show={toast.show} delay={3000} autohide>
+          <Toast.Body className={`bg-${toast.variant}`}>{toast.message}</Toast.Body>
         </Toast>
       </ToastContainer>
     </div>
