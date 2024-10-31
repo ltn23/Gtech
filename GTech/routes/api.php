@@ -13,18 +13,6 @@ use App\Http\Controllers\ShoppingCartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-// Nhóm các route liên quan đến xác thực
-Route::prefix('auth')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::get('/google', [AuthController::class, 'redirectToGoogle'])->middleware('web');
-    Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('web');
-
-    Route::prefix('products')->group(function () {
-        Route::get('', [ProductController::class, 'index']);
-        // Route::get('{id}', [ProductController::class, 'detail']);
-    });
-});
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -44,6 +32,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [ProductController::class, 'destroy']);
     });
 });
+
+
+
+// Nhóm các route liên quan đến xác thực
+Route::prefix('auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/google', [AuthController::class, 'redirectToGoogle'])->middleware('web');
+    Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('web');
+
+});
+
+Route::prefix('products')->group(function () {
+    Route::get('', [ProductController::class, 'index']);
+    Route::get('{id}', [ProductController::class, 'show']);
+});
+
+
 
 Route::post('/images', [ImageController::class, 'store']);
 

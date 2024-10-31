@@ -13,6 +13,7 @@ import UserManagement from "../components/admin/UserManagement/UserManagement";
 import ProductManagement from "../components/admin/ProductManagement/ProductManagement";
 import CategoryManagement from "../components/admin/CategoryManagement/CategoryManagement";
 import UploadImage from "../components/Cloudinary/UploadImage";
+import ProductDetails from "../components/Product/ProductDetails";
 
 const routes = [
   { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
@@ -22,6 +23,7 @@ const routes = [
   { path: "/login", name: "Login", element: localStorage.getItem("isLoggedIn") === "true" ? <Navigate to="/home" /> : <Login /> },
   { path: "/logout", name: "Logout", element: <Logout /> },
   { path: "/products", name: "Products", element: <ProductsList /> },
+  { path: "/products/:productId", name: "Products Details", element: <ProductDetails /> },
   { path: "/shopping-cart", name: "Shopping Cart", element: <ShoppingCart /> },
   { path: "/user-management", name: "User Management", element: <UserManagement /> },
   { path: "/product-management", name: "Product Management", element: <ProductManagement /> },

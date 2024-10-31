@@ -32,7 +32,7 @@ const ProductManagement = () => {
   const fetchProducts = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("http://localhost:8000/api/auth/products", {
+      const response = await axios.get("http://localhost:8000/api/products", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status !== 200) {

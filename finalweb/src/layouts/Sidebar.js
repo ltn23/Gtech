@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const Sidebar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState("guest");
-  const [categories, setCategories] = useState([]); // State for categories
-  const [showCategories, setShowCategories] = useState(false); // State to toggle categories
+  const [categories, setCategories] = useState([]); 
+  const [showCategories, setShowCategories] = useState(false); 
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
@@ -46,10 +46,8 @@ const Sidebar = () => {
     ],
     customer: [
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },
-      { to: "/profile", label: "Profile", icon: "fas fa-user" },
       { to: "/shopping-cart", label: "Shopping Cart", icon: "fas fa-shopping-cart" },
-      { to: "#", label: "Categories", icon: "fas fa-list", toggle: true }, // Toggle for categories
-      { to: "/settings", label: "Settings", icon: "fas fa-cogs" },
+      { to: "#", label: "Categories", icon: "fas fa-list", toggle: true }, 
     ],
     guest: [
       { to: "/login", label: "Login", icon: "fas fa-sign-in-alt" },

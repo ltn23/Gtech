@@ -18,16 +18,22 @@ const MasterLayout = () => {
         <div id="layoutSidenav_nav">
           <Sidebar />
         </div>
-        <div id="layoutSidenav_content">
+        <div
+          style={{ backgroundColor: "#F0F0F0", minHeight: "100vh" }}
+          id="layoutSidenav_content"
+        >
           <Routes>
             {routes.map((route, idx) => (
-              <Route key={idx} path={route.path} element={route.element} name={route.name}/>
+              <Route
+                key={idx}
+                path={route.path}
+                element={route.element}
+                name={route.name}
+              />
             ))}
           </Routes>
         </div>
-        < >
-          {/* <Footer /> */}
-        </>
+        <>{/* <Footer /> */}</>
       </div>
     </div>
   );

@@ -1,68 +1,54 @@
 .products-container {
     padding: 20px;
-    max-width: 1200px; /* You can adjust this based on your design */
+    max-width: 1200px;
     margin: auto;
 }
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Set three equal columns */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
 }
 
 .product-card {
-    background: #fff;
+    background: #ffffff;
     border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    display: flex; /* Use flexbox for layout inside each card */
-    flex-direction: column; /* Stack the elements vertically */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .product-image {
-    width: 100%;
-    height: 150px; /* Adjust the height for better layout */
-    object-fit: cover; /* Maintain aspect ratio */
+    width: 100%; 
+    height: 200px; /* Thiết lập chiều cao cố định cho hình ảnh */
+    object-fit: cover; /* Giữ tỷ lệ khung hình hình ảnh */
+    border-bottom: 1px solid #ddd;
 }
 
 .product-info {
-    padding: 10px; /* Add padding for better spacing */
-    flex-grow: 1; /* Allow the info section to grow */
+    padding: 15px; 
+    flex-grow: 1; 
 }
 
 .product-name {
-    font-size: 1.1em;
-    margin: 10px 0;
-}
-
-.product-description {
-    font-size: 0.9em;
-    color: #666;
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
 }
 
 .product-price {
-    font-size: 1.1em;
+    font-size: 1.2em;
     font-weight: bold;
-    margin-top: 10px;
+    color: #28a745; 
+    margin-top: 5px;
 }
 
-.add-to-cart {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.2s;
-}
-
-.add-to-cart:hover {
-    background-color: #218838;
-}

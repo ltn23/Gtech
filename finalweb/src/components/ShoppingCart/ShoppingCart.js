@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './ShoppingCart.css'; // Thêm CSS riêng cho ShoppingCart nếu cần
+import './ShoppingCart.css'; // Add custom CSS if needed
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchCartItems();
+    // Khởi tạo selectedItems là một đối tượng rỗng khi vào trang
+    setSelectedItems({});
   }, []);
 
   const fetchCartItems = async () => {
@@ -33,6 +36,11 @@ const ShoppingCart = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         setCartItems(cartItems.filter((item) => item.id !== id));
+        setSelectedItems((prevSelected) => {
+          const newSelected = { ...prevSelected };
+          delete newSelected[id];
+          return newSelected;
+        });
       } catch (err) {
         console.error('Error removing item:', err);
       }
@@ -41,8 +49,7 @@ const ShoppingCart = () => {
 
   const handleQuantityChange = async (id, delta) => {
     const newQuantity = cartItems.find(item => item.id === id).quantity + delta;
-
-    if (newQuantity < 1) return; // Không cho phép số lượng dưới 1
+    if (newQuantity < 1) return;
 
     try {
       await axios.put(`http://localhost:8000/api/cart/${id}`, { quantity: newQuantity }, {
@@ -52,6 +59,19 @@ const ShoppingCart = () => {
     } catch (err) {
       console.error('Error updating quantity:', err);
     }
+  };
+
+  const handleCheckboxChange = (id) => {
+    setSelectedItems((prevSelected) => ({
+      ...prevSelected,
+      [id]: !prevSelected[id],
+    }));
+  };
+
+  const calculateTotal = () => {
+    return cartItems.reduce((acc, item) => {
+      return selectedItems[item.id] ? acc + item.product.price * item.quantity : acc;
+    }, 0).toFixed(2);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -86,6 +106,12 @@ const ShoppingCart = () => {
                         <div className="card mb-3" key={item.id}>
                           <div className="card-body">
                             <div className="d-flex justify-content-between">
+                              <input
+                                type="checkbox"
+                                checked={selectedItems[item.id] || false}
+                                onChange={() => handleCheckboxChange(item.id)}
+                                style={{ marginRight: '10px' }}
+                              />
                               <div className="d-flex flex-row align-items-center">
                                 <img
                                   src={item.product.image_url}
@@ -101,7 +127,7 @@ const ShoppingCart = () => {
                               <div className="d-flex flex-row align-items-center">
                                 <button
                                   onClick={() => handleQuantityChange(item.id, -1)}
-                                  disabled={item.quantity <= 1} // Disable nếu số lượng <= 1
+                                  disabled={item.quantity <= 1}
                                   style={{ marginRight: '10px' }}
                                 >
                                   -
@@ -111,11 +137,11 @@ const ShoppingCart = () => {
                                 </div>
                                 <button
                                   onClick={() => handleQuantityChange(item.id, 1)}
-                                  style={{ marginLeft: '10px', marginRight: '20px' }} // Tăng khoảng cách giữa nút + và giá
+                                  style={{ marginLeft: '10px', marginRight: '20px' }}
                                 >
                                   +
                                 </button>
-                                <div style={{ width: '80px', textAlign: 'right', marginRight: '20px' }}> {/* Giãn cách giữa giá và thùng rác */}
+                                <div style={{ width: '80px', textAlign: 'right', marginRight: '20px' }}>
                                   <h5 className="mb-0">${item.product.price}</h5>
                                 </div>
                                 <button
@@ -133,61 +159,17 @@ const ShoppingCart = () => {
                   </div>
 
                   <div className="col-lg-5">
-                    <div className="card bg-primary text-white rounded-3">
-                      <div className="card-body">
-                        <h5 className="mb-0">Card details</h5>
-                        <p className="small mb-2">Card type</p>
-                        <div>
-                          <i className="fab fa-cc-mastercard fa-2x me-2 text-white"></i>
-                          <i className="fab fa-cc-visa fa-2x me-2 text-white"></i>
-                          <i className="fab fa-cc-amex fa-2x me-2 text-white"></i>
-                          <i className="fab fa-cc-paypal fa-2x text-white"></i>
-                        </div>
-                        <hr className="my-4" />
-                        <form>
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="form-outline form-white mb-4">
-                                <input type="text" id="typeText" className="form-control form-control-lg" placeholder="Cardholder's Name" />
-                                <label className="form-label" htmlFor="typeText">Cardholder's Name</label>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="form-outline form-white mb-4">
-                                <input type="text" id="typeCard" className="form-control form-control-lg" placeholder="Card Number" />
-                                <label className="form-label" htmlFor="typeCard">Card Number</label>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-md-6">
-                              <div className="form-outline form-white mb-4">
-                                <input type="text" id="typeExp" className="form-control form-control-lg" placeholder="MM/YYYY" />
-                                <label className="form-label" htmlFor="typeExp">Expiration</label>
-                              </div>
-                            </div>
-                            <div className="col-md-6">
-                              <div className="form-outline form-white mb-4">
-                                <input type="text" id="typeCcv" className="form-control form-control-lg" placeholder="CVV" />
-                                <label className="form-label" htmlFor="typeCcv">CVV</label>
-                              </div>
-                            </div>
-                          </div>
-                          <button className="btn btn-info btn-lg mb-1" type="submit">Pay</button>
-                        </form>
-                      </div>
-                    </div>
                     <div className="card text-dark rounded-3 mt-4">
                       <div className="card-body">
                         <h5 className="mb-3">Summary</h5>
                         <hr />
                         <div className="d-flex justify-content-between mb-2">
                           <span>Total (USD)</span>
-                          <span>${(cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0) + 20).toFixed(2)}</span>
+                          <span>${calculateTotal()}</span>
                         </div>
                         <button className="btn btn-warning btn-lg btn-block" type="button">
                           <div className="d-flex justify-content-between">
-                            <span>Checkout <i className="fas fa-angle-right"></i></span>
+                            <span>Buy Now <i className="fas fa-angle-right"></i></span>
                           </div>
                         </button>
                       </div>
