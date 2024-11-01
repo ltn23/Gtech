@@ -75,6 +75,18 @@ const ShoppingCart = () => {
     }, 0).toFixed(2);
   };
 
+  const handleBuyNow = () => {
+    const selectedCartItems = cartItems.filter(item => selectedItems[item.id]);
+    const totalAmount = calculateTotal();
+  
+    if (selectedCartItems.length === 0) {
+      alert('Please select at least one item to proceed to checkout.');
+      return;
+    }
+  
+    navigate('/checkout', { state: { cartItems: selectedCartItems, selectedItems, total: totalAmount } });
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -168,11 +180,17 @@ const ShoppingCart = () => {
                           <span>Total (USD)</span>
                           <span>${calculateTotal()}</span>
                         </div>
-                        <button className="btn btn-warning btn-lg btn-block" type="button">
+                        {/* <button className="btn btn-warning btn-lg btn-block" type="button">
                           <div className="d-flex justify-content-between">
                             <span>Buy Now <i className="fas fa-angle-right"></i></span>
                           </div>
-                        </button>
+                        </button> */}
+                        <button className="btn btn-warning btn-lg btn-block" type="button" onClick={handleBuyNow}>
+  <div className="d-flex justify-content-between">
+    <span>Buy Now <i className="fas fa-angle-right"></i></span>
+  </div>
+</button>
+
                       </div>
                     </div>
                   </div>

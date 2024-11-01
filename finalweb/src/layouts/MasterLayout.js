@@ -1,5 +1,4 @@
 import React from "react";
-// import { Routes, Route  } from "react-router-dom";
 import "../assets/css/styles.css";
 
 import "../assets/js/scripts.js";
@@ -7,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./Navbar.js";
 import Sidebar from "./Sidebar.js";
-// import Footer from "./Footer";
+
 import routes from "../routes/routes.js";
 
 const MasterLayout = () => {
@@ -33,7 +32,6 @@ const MasterLayout = () => {
             ))}
           </Routes>
         </div>
-        <>{/* <Footer /> */}</>
       </div>
     </div>
   );

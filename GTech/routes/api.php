@@ -31,6 +31,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [ProductController::class, 'save']);
         Route::delete('{id}', [ProductController::class, 'destroy']);
     });
+
+    Route::prefix('orders')->group(function () {
+        Route::get('', [OrderController::class, 'index']);
+        Route::post('', [OrderController::class, 'store']);
+        Route::get('{id}', [OrderController::class, 'show']);
+        Route::put('{id}', [OrderController::class, 'update']);
+        Route::delete('{id}', [OrderController::class, 'destroy']);
+    });
 });
 
 
@@ -51,6 +59,7 @@ Route::prefix('products')->group(function () {
 
 
 
+
 Route::post('/images', [ImageController::class, 'store']);
 
 // Nhóm các route quản lý danh mục
@@ -58,7 +67,7 @@ Route::apiResource('categories', CategoryController::class)->except(['show']);
 
 // Nhóm các route quản lý sản phẩm
 // Nhóm các route quản lý đơn hàng
-Route::apiResource('orders', OrderController::class);
+// Route::apiResource('orders', OrderController::class);
 
 // Nhóm các route quản lý mục trong đơn hàng
 Route::apiResource('order-items', OrderItemController::class);

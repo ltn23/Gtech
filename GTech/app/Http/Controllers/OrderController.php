@@ -15,7 +15,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::with('user', 'order_Items.product', 'payment')->get();
+        
+        $orders = Order::with('user', 'orderItems.product', 'payment')->get();
         return response()->json($orders);
     }
 
@@ -33,31 +34,31 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        // Create an order
         $order = Order::create([
-            'user_id' => $request->user_id,
+            'user_id' => $request->user()->id,
             'status' => $request->status ?? 'pending',
             'total_price' => $request->total_price,
         ]);
 
-        // Add order items
-        foreach ($request->order_items as $item) {
+        foreach ($request->products as $product) {
             OrderItem::create([
                 'order_id' => $order->id,
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
+                'product_id' => $product['id'],
+                'quantity' => $product['quantity'],
+                'price' => $product['price'],
             ]);
         }
 
-        return response()->json($order->load('order_Items.product'), 201);
+        // Change 'order_Items' to 'orderItems'
+        return response()->json($order->load('orderItems.product'), 201);
     }
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
-        $order = Order::with('user', 'order_Items.product', 'payment')->find($id);
+       
+        $order = Order::with('user', 'orderItems.product', 'payment')->find($id);
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
         }
@@ -87,7 +88,8 @@ class OrderController extends Controller
         }
 
         $order->update($request->all());
-        return response()->json($order->load('order_Items.product'));
+        
+        return response()->json($order->load('orderItems.product'));
     }
 
     /**

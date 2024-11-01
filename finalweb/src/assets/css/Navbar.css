@@ -1,0 +1,12 @@
+.profile-link,
+.auth-link,
+.register-link {
+  background-color: #343a40;
+  transition: all 0.3s ease;
+}
+
+.profile-link:hover,
+.auth-link:hover,
+.register-link:hover {
+  background-color: #495057;
+}
