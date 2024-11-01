@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './ShoppingCart.css'; // Add custom CSS if needed
 
 const ShoppingCart = () => {
@@ -8,6 +8,7 @@ const ShoppingCart = () => {
   const [selectedItems, setSelectedItems] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCartItems();

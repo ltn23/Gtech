@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./ProductManagement.css";
 import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
@@ -10,7 +10,7 @@ const ProductManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
-  
+
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({
@@ -29,44 +29,36 @@ const ProductManagement = () => {
     fetchCategories();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:8000/api/products", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.status !== 200) {
-        throw new Error("Network response was not ok");
-      }
       setProducts(response.data);
     } catch (err) {
-      setError("Failed to fetch products.");
+      setError("Failed to fetch products. Please check your network or login again.");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/categories', {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:8000/api/categories", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.status !== 200) {
-        throw new Error("Network response was not ok");
-      }
       setCategories(response.data);
     } catch (err) {
-      setError("Failed to fetch categories.");
-    } finally {
-      setLoading(false);
+      setError("Failed to fetch categories. Please check your network or login again.");
     }
-  };
+  }, []);
 
-  const showToast = (message, variant = "success") => {
+  const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });
     setTimeout(() => setToast({ show: false, message: "", variant: "success" }), 3000);
-  };
+  }, []);
 
   const handleShow = (product = {}) => {
     setCurrentProduct(
@@ -108,64 +100,56 @@ const ProductManagement = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
 
-    // Prepare the product data to send to the backend
     const productData = {
-        ...currentProduct,
-        image_url: currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url, // Upload the image if new
+      ...currentProduct,
+      image_url: currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url,
     };
 
-    // Add the ID only if we are in edit mode (updating)
     if (editMode) {
-        productData.id = currentProduct.id;
+      productData.id = currentProduct.id;
     }
 
     try {
-        // Perform the API request to save the product
-        const response = await axios.post(`http://localhost:8000/api/products`, productData, {
-            headers: {
-                
-                Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token
-                "Content-Type": "application/json",
-            },
-        });
+      const response = await axios.post(`http://localhost:8000/api/products`, productData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-        if (response.status !== 200) {
-            throw new Error("Network response was not ok");
-        }
+      if (![200, 201].includes(response.status)) {
+        throw new Error("Network response was not ok");
+      }
 
-        // Refresh the product list and close the modal
-        fetchProducts();
-        handleClose();
-        showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
+      fetchProducts();
+      handleClose();
+      showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
 
     } catch (err) {
-        setError("Failed to save product."); // Set error state if there's a problem
-        console.error("Error:", err); // Log error for debugging
+      setError("Failed to save product.");
     }
-};
-
+  };
 
   const handleDelete = async (productId) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        const token = localStorage.getItem("token"); // Lấy token từ localStorage
+        const token = localStorage.getItem("token");
         const response = await axios.delete(`http://localhost:8000/api/products/${productId}`, {
-          headers: { Authorization: `Bearer ${token}` }, // Thêm token vào headers
+          headers: { Authorization: `Bearer ${token}` },
         });
+
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
-        fetchProducts(); // Tải lại danh sách sản phẩm
+        fetchProducts();
         showToast("Product deleted successfully!", "success");
       } catch (err) {
         showToast(err.message || "Failed to delete product.", "danger");
       }
     }
   };
-  
-  
 
   if (loading) return <div className="text-center"><Spinner animation="border" variant="primary" /></div>;
   if (error) return <div className="text-center"><p className="text-danger">{error}</p></div>;
@@ -176,137 +160,17 @@ const ProductManagement = () => {
       <Button variant="success" className="mb-3" onClick={() => handleShow()}>
         + Create Product
       </Button>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover mt-3">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>
-                  <img src={product.image_url} alt={product.name} style={{ width: '100px', height: 'auto' }} />
-                </td>
-                <td>{product.name}</td>
-                <td>{product.description}</td>
-                <td>${product.price}</td>
-                <td>{product.stock_quantity}</td>
-                <td>{product.category.name}</td>
-                <td>{product.status}</td>
-                <td className="action-buttons">
-                  <Button variant="outline-warning" size="sm" onClick={() => handleShow(product)}>
-                    <FaEdit className="icon" /> Edit
-                  </Button>
-                  <Button variant="outline-danger" size="sm" onClick={() => handleDelete(product.id)}>
-                    <FaTrash className="icon" /> Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formProductImage">
-              <Form.Label>Image</Form.Label>
-              <Form.Control
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                required={!editMode} // Bắt buộc chọn hình ảnh khi tạo mới
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                name="name"
-                value={currentProduct.name}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="description"
-                value={currentProduct.description}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductPrice">
-              <Form.Label>Price</Form.Label>
-              <Form.Control
-                type="number"
-                name="price"
-                value={currentProduct.price}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductStock">
-              <Form.Label>Stock Quantity</Form.Label>
-              <Form.Control
-                type="number"
-                name="stock_quantity"
-                value={currentProduct.stock_quantity}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-            <Form.Group controlId="formProductCategory">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                as="select"
-                name="category_id"
-                value={currentProduct.category_id}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select category</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="formProductStatus">
-              <Form.Label>Status</Form.Label>
-              <Form.Control
-                as="select"
-                name="status"
-                value={currentProduct.status}
-                onChange={handleInputChange}
-              >
-                <option value="available">Available</option>
-                <option value="unavailable">Unavailable</option>
-              </Form.Control>
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              {editMode ? "Update Product" : "Create Product"}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-
+      <ProductTable products={products} handleShow={handleShow} handleDelete={handleDelete} />
+      <ProductModal
+        show={showModal}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        handleInputChange={handleInputChange}
+        handleImageChange={handleImageChange}
+        currentProduct={currentProduct}
+        categories={categories}
+        editMode={editMode}
+      />
       <ToastContainer position="top-center">
         <Toast onClose={() => setToast({ show: false })} show={toast.show} delay={3000} autohide>
           <Toast.Body className={`bg-${toast.variant}`}>{toast.message}</Toast.Body>
@@ -315,5 +179,140 @@ const ProductManagement = () => {
     </div>
   );
 };
+
+const ProductTable = ({ products, handleShow, handleDelete }) => (
+  <div className="table-responsive">
+    <table className="table table-bordered table-hover mt-3">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.map((product) => (
+          <tr key={product.id}>
+            <td>
+              <img src={product.image_url} alt={product.name} style={{ width: '100px', height: 'auto' }} />
+            </td>
+            <td>{product.name}</td>
+            <td>{product.description}</td>
+            <td>${product.price}</td>
+            <td>{product.stock_quantity}</td>
+            <td>{product.category.name}</td>
+            <td>{product.status}</td>
+            <td className="action-buttons">
+              <Button variant="outline-warning" size="sm" onClick={() => handleShow(product)}>
+                <FaEdit className="icon" /> Edit
+              </Button>
+              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(product.id)}>
+                <FaTrash className="icon" /> Delete
+              </Button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, handleImageChange, currentProduct, categories, editMode }) => (
+  <Modal show={show} onHide={handleClose}>
+    <Modal.Header closeButton>
+      <Modal.Title>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formProductImage">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            required={!editMode}
+          />
+        </Form.Group>
+        <Form.Group controlId="formProductName">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            value={currentProduct.name}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formProductDescription">
+          <Form.Label>Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="description"
+            value={currentProduct.description}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formProductPrice">
+          <Form.Label>Price</Form.Label>
+          <Form.Control
+            type="number"
+            name="price"
+            value={currentProduct.price}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formProductStock">
+          <Form.Label>Stock Quantity</Form.Label>
+          <Form.Control
+            type="number"
+            name="stock_quantity"
+            value={currentProduct.stock_quantity}
+            onChange={handleInputChange}
+            required
+          />
+        </Form.Group>
+        <Form.Group controlId="formProductCategory">
+          <Form.Label>Category</Form.Label>
+          <Form.Control
+            as="select"
+            name="category_id"
+            value={currentProduct.category_id}
+            onChange={handleInputChange}
+            required
+          >
+            <option value="">Select category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+        <Form.Group controlId="formProductStatus">
+          <Form.Label>Status</Form.Label>
+          <Form.Control
+            as="select"
+            name="status"
+            value={currentProduct.status}
+            onChange={handleInputChange}
+          >
+            <option value="available">Available</option>
+            <option value="unavailable">Unavailable</option>
+          </Form.Control>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          {editMode ? "Update Product" : "Create Product"}
+        </Button>
+      </Form>
+    </Modal.Body>
+  </Modal>
+);
 
 export default ProductManagement;

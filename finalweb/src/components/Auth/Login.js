@@ -29,7 +29,6 @@ function Login() {
     }
 
     if (token) {
-      // Lưu token và role vào localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("isLoggedIn", true);
       localStorage.setItem("role", role);
@@ -74,7 +73,6 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-    // Đưa người dùng đến trang đăng nhập của Google
     window.location.href = "http://localhost:8000/api/auth/google";
   };
 
