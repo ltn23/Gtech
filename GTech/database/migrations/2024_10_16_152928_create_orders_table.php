@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->dateTime('order_date') ->useCurrent();
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
             $table->decimal('total_price', 8, 2)->default(0.00);
             $table->timestamps();
         });

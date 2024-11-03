@@ -19,7 +19,6 @@ const Checkout = () => {
     address: "",
     city: "", // Added city field
     country: "", // Added country field
-    zip: "", // Added zip code field
   });
 
   const handleChange = (e) => {
@@ -157,22 +156,7 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-4">
-                    <div className="mb-4">
-                      <label className="form-label" htmlFor="zip-code">
-                        Zip / Postal Code
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="zip-code"
-                        name="zip"
-                        value={userDetails.zip}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
+                  
                 </div>
                 <div className="feed-item-list">
                   <div>
@@ -182,24 +166,7 @@ const Checkout = () => {
                   <div>
                     <h5 className="font-size-14 mb-3">Payment method:</h5>
                     <div className="row">
-                      <div className="col-lg-4 col-sm-6">
-                        <div>
-                          <label className="card-radio-label">
-                            <input
-                              type="radio"
-                              name="pay-method"
-                              value="credit_card"
-                              className="card-radio-input"
-                              checked={"credit_card"}
-                              
-                            />
-                            <span className="card-radio py-3 text-center text-truncate">
-                              <i className="bx bx-credit-card d-block h2 mb-3"></i>
-                              Credit / Debit Card
-                            </span>
-                          </label>
-                        </div>
-                      </div>
+                    
 
                       <div className="col-lg-4 col-sm-6">
                         <div>
