@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import './ShoppingCart.css'; // Add custom CSS if needed
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import "./ShoppingCart.css"; // Add custom CSS if needed
 
 const ShoppingCart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -18,8 +18,8 @@ const ShoppingCart = () => {
 
   const fetchCartItems = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/cart', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      const response = await axios.get("http://localhost:8000/api/cart", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setCartItems(response.data);
     } catch (err) {
@@ -30,11 +30,13 @@ const ShoppingCart = () => {
   };
 
   const handleRemoveFromCart = async (id) => {
-    const confirmed = window.confirm('Are you sure you want to remove this item from your cart?');
+    const confirmed = window.confirm(
+      "Are you sure you want to remove this item from your cart?"
+    );
     if (confirmed) {
       try {
         await axios.delete(`http://localhost:8000/api/cart/${id}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setCartItems(cartItems.filter((item) => item.id !== id));
         setSelectedItems((prevSelected) => {
@@ -43,22 +45,31 @@ const ShoppingCart = () => {
           return newSelected;
         });
       } catch (err) {
-        console.error('Error removing item:', err);
+        console.error("Error removing item:", err);
       }
     }
   };
 
   const handleQuantityChange = async (id, delta) => {
-    const newQuantity = cartItems.find(item => item.id === id).quantity + delta;
+    const newQuantity =
+      cartItems.find((item) => item.id === id).quantity + delta;
     if (newQuantity < 1) return;
 
     try {
-      await axios.put(`http://localhost:8000/api/cart/${id}`, { quantity: newQuantity }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-      });
-      setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity: newQuantity } : item));
+      await axios.put(
+        `http://localhost:8000/api/cart/${id}`,
+        { quantity: newQuantity },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      setCartItems(
+        cartItems.map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
+        )
+      );
     } catch (err) {
-      console.error('Error updating quantity:', err);
+      console.error("Error updating quantity:", err);
     }
   };
 
@@ -70,28 +81,40 @@ const ShoppingCart = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((acc, item) => {
-      return selectedItems[item.id] ? acc + item.product.price * item.quantity : acc;
-    }, 0).toFixed(2);
+    return cartItems
+      .reduce((acc, item) => {
+        return selectedItems[item.id]
+          ? acc + item.product.price * item.quantity
+          : acc;
+      }, 0)
+      .toFixed(2);
   };
 
   const handleBuyNow = () => {
-    const selectedCartItems = cartItems.filter(item => selectedItems[item.id]);
+    const selectedCartItems = cartItems.filter(
+      (item) => selectedItems[item.id]
+    );
     const totalAmount = calculateTotal();
-  
+
     if (selectedCartItems.length === 0) {
-      alert('Please select at least one item to proceed to checkout.');
+      alert("Please select at least one item to proceed to checkout.");
       return;
     }
-  
-    navigate('/checkout', { state: { cartItems: selectedCartItems, selectedItems, total: totalAmount } });
+
+    navigate("/checkout", {
+      state: {
+        cartItems: selectedCartItems,
+        selectedItems,
+        total: totalAmount,
+      },
+    });
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <section className="h-100 h-custom" style={{ backgroundColor: '#eee' }}>
+    <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col">
@@ -109,7 +132,9 @@ const ShoppingCart = () => {
                     <div className="d-flex justify-content-between align-items-center mb-4">
                       <div>
                         <p className="mb-1">Shopping cart</p>
-                        <p className="mb-0">You have {cartItems.length} items in your cart</p>
+                        <p className="mb-0">
+                          You have {cartItems.length} items in your cart
+                        </p>
                       </div>
                     </div>
                     {cartItems.length === 0 ? (
@@ -123,43 +148,69 @@ const ShoppingCart = () => {
                                 type="checkbox"
                                 checked={selectedItems[item.id] || false}
                                 onChange={() => handleCheckboxChange(item.id)}
-                                style={{ marginRight: '10px' }}
+                                style={{ marginRight: "10px" }}
                               />
                               <div className="d-flex flex-row align-items-center">
                                 <img
                                   src={item.product.image_url}
                                   className="img-fluid rounded-3"
                                   alt={item.product.name}
-                                  style={{ width: '65px' }}
+                                  style={{ width: "65px" }}
                                 />
                                 <div className="ms-3">
                                   <h5>{item.product.name}</h5>
-                                  <p className="small mb-0">{item.product.description}</p>
+                                  <p className="small mb-0">
+                                    {item.product.description}
+                                  </p>
                                 </div>
                               </div>
                               <div className="d-flex flex-row align-items-center">
                                 <button
-                                  onClick={() => handleQuantityChange(item.id, -1)}
+                                  onClick={() =>
+                                    handleQuantityChange(item.id, -1)
+                                  }
                                   disabled={item.quantity <= 1}
-                                  style={{ marginRight: '10px' }}
+                                  style={{ marginRight: "10px" }}
                                 >
                                   -
                                 </button>
-                                <div style={{ width: '50px', textAlign: 'center' }}>
-                                  <h5 className="fw-normal mb-0">{item.quantity}</h5>
+                                <div
+                                  style={{ width: "50px", textAlign: "center" }}
+                                >
+                                  <h5 className="fw-normal mb-0">
+                                    {item.quantity}
+                                  </h5>
                                 </div>
                                 <button
-                                  onClick={() => handleQuantityChange(item.id, 1)}
-                                  style={{ marginLeft: '10px', marginRight: '20px' }}
+                                  onClick={() =>
+                                    handleQuantityChange(item.id, 1)
+                                  }
+                                  style={{
+                                    marginLeft: "10px",
+                                    marginRight: "20px",
+                                  }}
                                 >
                                   +
                                 </button>
-                                <div style={{ width: '80px', textAlign: 'right', marginRight: '20px' }}>
-                                  <h5 className="mb-0">${item.product.price}</h5>
+                                <div
+                                  style={{
+                                    width: "80px",
+                                    textAlign: "right",
+                                    marginRight: "20px",
+                                  }}
+                                >
+                                  <h5 className="mb-0">
+                                    ${item.product.price}
+                                  </h5>
                                 </div>
                                 <button
                                   onClick={() => handleRemoveFromCart(item.id)}
-                                  style={{ color: '#cecece', background: 'none', border: 'none', cursor: 'pointer' }}
+                                  style={{
+                                    color: "#cecece",
+                                    background: "none",
+                                    border: "none",
+                                    cursor: "pointer",
+                                  }}
                                 >
                                   <i className="fas fa-trash-alt"></i>
                                 </button>
@@ -180,17 +231,18 @@ const ShoppingCart = () => {
                           <span>Total (USD)</span>
                           <span>${calculateTotal()}</span>
                         </div>
-                        {/* <button className="btn btn-warning btn-lg btn-block" type="button">
-                          <div className="d-flex justify-content-between">
-                            <span>Buy Now <i className="fas fa-angle-right"></i></span>
-                          </div>
-                        </button> */}
-                        <button className="btn btn-warning btn-lg btn-block" type="button" onClick={handleBuyNow}>
-  <div className="d-flex justify-content-between">
-    <span>Buy Now <i className="fas fa-angle-right"></i></span>
-  </div>
-</button>
 
+                        <button
+                          className="btn btn-warning btn-lg btn-block"
+                          type="button"
+                          onClick={handleBuyNow}
+                        >
+                          <div className="d-flex justify-content-between">
+                            <span>
+                              Buy Now <i className="fas fa-angle-right"></i>
+                            </span>
+                          </div>
+                        </button>
                       </div>
                     </div>
                   </div>

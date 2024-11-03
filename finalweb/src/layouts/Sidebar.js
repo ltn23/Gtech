@@ -43,6 +43,7 @@ const Sidebar = () => {
         label: "Product Management",
         icon: "fas fa-box",
       },
+      { to: "/order-management", label: "Order Management", icon: "fas fa-clipboard-list" }
     ],
     customer: [
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },

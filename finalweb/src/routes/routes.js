@@ -15,6 +15,7 @@ import CategoryManagement from "../components/admin/CategoryManagement/CategoryM
 import UploadImage from "../components/Cloudinary/UploadImage";
 import ProductDetails from "../components/Product/ProductDetails";
 import Checkout from "../components/Checkout/Checkout";
+import OrderManagement from "../components/admin/OrderManagement/OrderManagement";
 
 const routes = [
   { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
@@ -31,6 +32,7 @@ const routes = [
   { path: "/product-management", name: "Product Management", element: <ProtectedRoute element={<ProductManagement />} roleRequired="admin" /> },
   { path: "/category-management", name: "Category Management", element: <ProtectedRoute element={<CategoryManagement />} roleRequired="admin" /> },
   { path: "/uploadimage", name: "Upload Imgae", element: <ProtectedRoute element={<UploadImage />} roleRequired="admin" /> },
+  { path: "/order-management", name: "Order Management", element: <ProtectedRoute element={<OrderManagement />} roleRequired="admin" /> },
   { path: "*", name: "NotFound", element: <NotFound /> }
 
 
