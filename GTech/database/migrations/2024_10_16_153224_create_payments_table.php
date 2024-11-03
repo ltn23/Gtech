@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade'); 
             $table->enum('payment_method', ['paypal', 'cash']);
-            // $table->enum('payment_status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->enum('payment_status', ['pending', 'completed', 'failed'])->default('pending');
             $table->decimal('total_amount', 10, 2)->default(0.00);
             $table->timestamps();
         });

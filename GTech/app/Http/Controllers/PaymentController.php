@@ -32,7 +32,7 @@ class PaymentController extends Controller
 {
     // Validate the request
     $request->validate([
-        'order_id' => 'required|exists:orders,id', // kiểm tra xem order_id có hợp lệ không
+        'order_id' => 'required|exists:orders,id', 
         'payment_method' => 'required|in:paypal,cash',
         'total_amount' => 'required|numeric',
     ]);

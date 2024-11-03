@@ -57,11 +57,11 @@ class DatabaseSeeder extends Seeder
         }
 
         $products = [
-            ['category_id' => Category::where('name', 'Laptops')->first()->id, 'name' => 'MacBook Pro 16"', 'price' => 2499.99, 'description' => 'Apple MacBook Pro with M1 chip.', 'stock_quantity' => 50, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218120/abduxru09ctukytscrb3.jpg'],
-            ['category_id' => Category::where('name', 'Smartphones')->first()->id, 'name' => 'iPhone 14 Pro Max', 'price' => 1099.99, 'description' => 'Apple iPhone 14 with Pro Max features.', 'stock_quantity' => 100, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218131/nsfywi1k06jo3ijyfjri.jpg'],
-            ['category_id' => Category::where('name', 'Headphones')->first()->id, 'name' => 'Sony WH-1000XM5', 'price' => 349.99, 'description' => 'Noise-cancelling wireless headphones.', 'stock_quantity' => 200, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218145/qlrkf6tr9hs4xwat8swm.jpg'],
-            ['category_id' => Category::where('name', 'Smartwatches')->first()->id, 'name' => 'Apple Watch Series 8', 'price' => 499.99, 'description' => 'Latest Apple Watch with health monitoring.', 'stock_quantity' => 75, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218154/m0o2j8e2xzbrq9op5n6y.png'],
-            ['category_id' => Category::where('name', 'Gaming Consoles')->first()->id, 'name' => 'PlayStation 5', 'price' => 499.99, 'description' => 'Next-gen gaming console from Sony.', 'stock_quantity' => 25, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218162/k2hsazqcvi21vhcirvxd.png'],
+            ['category_id' => Category::where('name', 'Laptops')->first()->id, 'name' => 'MacBook Pro 16"', 'price' => 12, 'description' => 'Apple MacBook Pro with M1 chip.', 'stock_quantity' => 50, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218120/abduxru09ctukytscrb3.jpg'],
+            ['category_id' => Category::where('name', 'Smartphones')->first()->id, 'name' => 'iPhone 14 Pro Max', 'price' => 20, 'description' => 'Apple iPhone 14 with Pro Max features.', 'stock_quantity' => 100, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218131/nsfywi1k06jo3ijyfjri.jpg'],
+            ['category_id' => Category::where('name', 'Headphones')->first()->id, 'name' => 'Sony WH-1000XM5', 'price' => 50, 'description' => 'Noise-cancelling wireless headphones.', 'stock_quantity' => 200, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218145/qlrkf6tr9hs4xwat8swm.jpg'],
+            ['category_id' => Category::where('name', 'Smartwatches')->first()->id, 'name' => 'Apple Watch Series 8', 'price' => 49, 'description' => 'Latest Apple Watch with health monitoring.', 'stock_quantity' => 75, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218154/m0o2j8e2xzbrq9op5n6y.png'],
+            ['category_id' => Category::where('name', 'Gaming Consoles')->first()->id, 'name' => 'PlayStation 5', 'price' => 60, 'description' => 'Next-gen gaming console from Sony.', 'stock_quantity' => 25, 'status' => 'available', 'image_url' => 'https://res.cloudinary.com/dsh0cqmhc/image/upload/v1730218162/k2hsazqcvi21vhcirvxd.png'],
         ];
 
         foreach ($products as $product) {
@@ -69,8 +69,8 @@ class DatabaseSeeder extends Seeder
         }
 
         $orders = [
-            ['user_id' => User::where('email', 'customer@gtech.com')->first()->id, 'order_date' => now(), 'status' => 'pending', 'total_price' => 1599.98],
-            ['user_id' => User::where('email', 'customer@gtech.com')->first()->id, 'order_date' => now(), 'status' => 'completed', 'total_price' => 999.99],
+            ['user_id' => User::where('email', 'customer@gtech.com')->first()->id, 'order_date' => now(), 'status' => 'pending', 'total_price' => 32]
+            
         ];
 
         foreach ($orders as $order) {
@@ -78,8 +78,8 @@ class DatabaseSeeder extends Seeder
         }
 
         $orderItems = [
-            ['order_id' => Order::first()->id, 'product_id' => Product::where('name', 'MacBook Pro 16"')->first()->id, 'quantity' => 1, 'price' => 2499.99],
-            ['order_id' => Order::first()->id, 'product_id' => Product::where('name', 'iPhone 14 Pro Max')->first()->id, 'quantity' => 1, 'price' => 1099.99],
+            ['order_id' => Order::first()->id, 'product_id' => Product::where('name', 'MacBook Pro 16"')->first()->id, 'quantity' => 1, 'price' => 12],
+            ['order_id' => Order::first()->id, 'product_id' => Product::where('name', 'iPhone 14 Pro Max')->first()->id, 'quantity' => 1, 'price' => 20],
         ];
 
         foreach ($orderItems as $item) {
@@ -87,8 +87,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $payments = [
-            ['order_id' => Order::first()->id, 'payment_method' => 'cash', 'total_amount' => 1599.98],
-            ['order_id' => Order::skip(1)->first()->id, 'payment_method' => 'cash', 'total_amount' => 999.99],
+            ['order_id' => Order::first()->id, 'payment_method' => 'cash','payment_status' => 'completed', 'total_amount' => 32],
         ];
 
         foreach ($payments as $payment) {

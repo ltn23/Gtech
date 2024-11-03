@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Checkout.css"; // Ensure to include any necessary styles
 import axios from "axios";
@@ -13,7 +13,6 @@ const Checkout = () => {
   };
 
   const [paymentMethod, setPaymentMethod] = useState("cash");
-
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "", 
@@ -26,6 +25,7 @@ const Checkout = () => {
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
   };
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails((prev) => ({ ...prev, [name]: value }));
@@ -50,24 +50,80 @@ const Checkout = () => {
       });
 
       const orderId = orderResponse.data.id; // lấy ID của order mới
-    const paymentData = {
-      order_id: orderId,
-      payment_method: paymentMethod, 
-      total_amount: parseInt(total),
-    };
 
-    console.log("Sending payment data:", paymentData);
+      if (paymentMethod === "cash") {
+        const paymentData = {
+          order_id: orderId,
+          payment_method: paymentMethod,
+          total_amount: parseInt(total),
+        };
 
-    await axios.post("http://localhost:8000/api/payments", paymentData, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-      alert("Order placed successfully!");
-      navigate("/home"); // Redirect to home or order confirmation page
+        await axios.post("http://localhost:8000/api/payments", paymentData, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        alert("Order placed successfully!");
+        navigate("/home"); // Redirect to home or order confirmation page
+      }
     } catch (error) {
       console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
     }
   };
+
+  useEffect(() => {
+    if (paymentMethod === "paypal" && window.paypal) {
+      window.paypal
+        .Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: total, // total order amount
+                  },
+                },
+              ],
+            });
+          },
+          onApprove: async (data, actions) => {
+            const payment = await actions.order.capture();
+            console.log("Payment successful:", payment);
+
+            const orderData = {
+              total_price: parseInt(total),
+              products: cartItems.map((item) => ({
+                id: item.product.id,
+                quantity: item.quantity,
+                price: item.product.price,
+              })),
+            };
+
+            const orderResponse = await axios.post("http://localhost:8000/api/orders", orderData, {
+              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+            
+            const orderId = orderResponse.data.id;
+
+            const paymentData = {
+              order_id: orderId,
+              payment_method: "paypal",
+              total_amount: parseInt(total),
+            };
+
+            await axios.post("http://localhost:8000/api/payments", paymentData, {
+              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+            alert("Order and PayPal payment placed successfully!");
+            navigate("/home");
+          },
+          onError: (err) => {
+            console.error("PayPal checkout error:", err);
+            alert("PayPal payment failed. Please try again.");
+          },
+        })
+        .render("#paypal-button-container"); // This will display the PayPal button
+    }
+  }, [paymentMethod]);
 
   return (
     <div className="container">
@@ -174,7 +230,6 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
-                  
                 </div>
                 <div className="feed-item-list">
                   <div>
@@ -184,8 +239,6 @@ const Checkout = () => {
                   <div>
                     <h5 className="font-size-14 mb-3">Payment method:</h5>
                     <div className="row">
-                    
-
                       <div className="col-lg-4 col-sm-6">
                         <div>
                           <label className="card-radio-label">
@@ -196,7 +249,6 @@ const Checkout = () => {
                               className="card-radio-input"
                               checked={paymentMethod === "paypal"}
                               onChange={handlePaymentMethodChange}
-                              
                             />
                             <span className="card-radio py-3 text-center text-truncate">
                               <i className="bx bxl-paypal d-block h2 mb-3"></i>
@@ -205,7 +257,6 @@ const Checkout = () => {
                           </label>
                         </div>
                       </div>
-
                       <div className="col-lg-4 col-sm-6">
                         <div>
                           <label className="card-radio-label">
@@ -215,8 +266,7 @@ const Checkout = () => {
                               value="cash"
                               className="card-radio-input"
                               checked={paymentMethod === "cash"}
-        onChange={handlePaymentMethodChange}
-                              
+                              onChange={handlePaymentMethodChange}
                             />
                             <span className="card-radio py-3 text-center text-truncate">
                               <i className="bx bx-money d-block h2 mb-3"></i>
@@ -229,61 +279,13 @@ const Checkout = () => {
                   </div>
                 </div>
                 <h3>Total: ${total}</h3>
-                <button type="submit" className="btn btn-success">
-                  Confirm Order
-                </button>
+                {paymentMethod === "cash" && (
+                  <button type="submit" className="btn btn-success">
+                    Confirm Order
+                  </button>
+                )}
               </form>
-            </div>
-          </div>
-        </div>
-
-        <div className="col-xl-4">
-          <div className="card checkout-order-summary">
-            <div className="card-body">
-              <div className="p-3 bg-light mb-3">
-                <h5 className="font-size-16 mb-0">Order Summary</h5>
-              </div>
-              <div className="table-responsive">
-                <table className="table table-centered mb-0 table-nowrap">
-                  <thead>
-                    <tr>
-                      <th style={{ width: "110px" }}>Product</th>
-                      <th>Product Desc</th>
-                      <th>Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems
-                      .filter((item) => selectedItems[item.id])
-                      .map((item) => (
-                        <tr key={item.id}>
-                          <th scope="row">
-                            <img
-                              src={item.product.image_url}
-                              alt={item.product.name}
-                              className="avatar-lg rounded"
-                            />
-                          </th>
-                          <td>
-                            <h5 className="font-size-16 text-truncate">
-                              {item.product.name}
-                            </h5>
-                            <p className="text-muted mb-0">
-                              ${item.product.price} x {item.quantity}
-                            </p>
-                          </td>
-                          <td>${item.product.price * item.quantity}</td>
-                        </tr>
-                      ))}
-                    <tr>
-                      <td colSpan="2">
-                        <h5 className="font-size-14 m-0">Total:</h5>
-                      </td>
-                      <td>${total}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              {paymentMethod === "paypal" && <div id="paypal-button-container"></div>}
             </div>
           </div>
         </div>
