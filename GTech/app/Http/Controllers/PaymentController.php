@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-
+use Illuminate\Support\Facades\Log;
 class PaymentController extends Controller
 {
     /**
@@ -29,10 +29,25 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+{
+    // Validate the request
+    $request->validate([
+        'order_id' => 'required|exists:orders,id', // kiểm tra xem order_id có hợp lệ không
+        'payment_method' => 'required|in:paypal,cash',
+        'total_amount' => 'required|numeric',
+    ]);
+
+    // Tạo payment
+    try {
         $payment = Payment::create($request->all());
         return response()->json($payment, 201);
+    } catch (\Exception $e) {
+        // Log error và trả về phản hồi lỗi
+        Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
+        return response()->json(['message' => 'Failed to create payment'], 500);
     }
+}
+
 
     /**
      * Display the specified resource.

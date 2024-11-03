@@ -87,8 +87,8 @@ class DatabaseSeeder extends Seeder
         }
 
         $payments = [
-            ['order_id' => Order::first()->id, 'payment_method' => 'cash on delivery','payment_status' => 'completed', 'total_amount' => 1599.98],
-            ['order_id' => Order::skip(1)->first()->id, 'payment_method' => 'cash on delivery','payment_status' => 'pending', 'total_amount' => 999.99],
+            ['order_id' => Order::first()->id, 'payment_method' => 'cash', 'total_amount' => 1599.98],
+            ['order_id' => Order::skip(1)->first()->id, 'payment_method' => 'cash', 'total_amount' => 999.99],
         ];
 
         foreach ($payments as $payment) {

@@ -12,15 +12,20 @@ const Checkout = () => {
     total: 0,
   };
 
+  const [paymentMethod, setPaymentMethod] = useState("cash");
+
   const [userDetails, setUserDetails] = useState({
     name: "",
-    email: "", // Added email field
+    email: "", 
     phone: "",
     address: "",
-    city: "", // Added city field
-    country: "", // Added country field
+    city: "", 
+    country: "", 
   });
 
+  const handlePaymentMethodChange = (e) => {
+    setPaymentMethod(e.target.value);
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails((prev) => ({ ...prev, [name]: value }));
@@ -40,9 +45,22 @@ const Checkout = () => {
     };
 
     try {
-      await axios.post("http://localhost:8000/api/orders", orderData, {
+      const orderResponse = await axios.post("http://localhost:8000/api/orders", orderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+
+      const orderId = orderResponse.data.id; // lấy ID của order mới
+    const paymentData = {
+      order_id: orderId,
+      payment_method: paymentMethod, 
+      total_amount: parseInt(total),
+    };
+
+    console.log("Sending payment data:", paymentData);
+
+    await axios.post("http://localhost:8000/api/payments", paymentData, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
       alert("Order placed successfully!");
       navigate("/home"); // Redirect to home or order confirmation page
     } catch (error) {
@@ -176,7 +194,8 @@ const Checkout = () => {
                               name="pay-method"
                               value="paypal"
                               className="card-radio-input"
-                              checked={"paypal"}
+                              checked={paymentMethod === "paypal"}
+                              onChange={handlePaymentMethodChange}
                               
                             />
                             <span className="card-radio py-3 text-center text-truncate">
@@ -195,7 +214,8 @@ const Checkout = () => {
                               name="pay-method"
                               value="cash"
                               className="card-radio-input"
-                              checked={"cash"}
+                              checked={paymentMethod === "cash"}
+        onChange={handlePaymentMethodChange}
                               
                             />
                             <span className="card-radio py-3 text-center text-truncate">

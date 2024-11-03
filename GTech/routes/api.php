@@ -39,6 +39,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('{id}', [OrderController::class, 'update']);
         Route::delete('{id}', [OrderController::class, 'destroy']);
     });
+
+    Route::prefix('payments')->group(function () {
+        Route::get('', [PaymentController::class, 'store']);
+        Route::post('', [PaymentController::class, 'store']);
+        Route::delete('{id}', [PaymentController::class, 'destroy']);
+    });
 });
 
 
@@ -73,7 +79,7 @@ Route::apiResource('categories', CategoryController::class)->except(['show']);
 Route::apiResource('order-items', OrderItemController::class);
 
 // Nhóm các route quản lý thanh toán
-Route::apiResource('payments', PaymentController::class);
+// Route::apiResource('payments', PaymentController::class);
 
 // Nhóm các route liên quan đến giỏ hàng (yêu cầu xác thực)
 Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
