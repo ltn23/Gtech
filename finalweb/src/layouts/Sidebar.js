@@ -48,6 +48,7 @@ const Sidebar = () => {
     customer: [
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },
       { to: "/shopping-cart", label: "Shopping Cart", icon: "fas fa-shopping-cart" },
+      { to: "/order-confirmation", label: "OrderConfirmation", icon: "fas fa-box-open" },
       { to: "#", label: "Categories", icon: "fas fa-list", toggle: true }, 
     ],
     guest: [

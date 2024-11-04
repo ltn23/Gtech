@@ -28,25 +28,55 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+//     public function store(Request $request)
+// {
+//     // Validate the request
+//     $request->validate([
+//         'order_id' => 'required|exists:orders,id', 
+//         'payment_method' => 'required|in:paypal,cash',
+//         'total_amount' => 'required|numeric',
+//     ]);
+
+//     // Tạo payment
+//     try {
+//         $payment = Payment::create($request->all());
+//         return response()->json($payment, 201);
+//     } catch (\Exception $e) {
+//         // Log error và trả về phản hồi lỗi
+//         Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
+//         return response()->json(['message' => 'Failed to create payment'], 500);
+//     }
+// }
+
+public function store(Request $request)
 {
     // Validate the request
     $request->validate([
-        'order_id' => 'required|exists:orders,id', 
+        'order_id' => 'required|exists:orders,id',
         'payment_method' => 'required|in:paypal,cash',
         'total_amount' => 'required|numeric',
     ]);
 
-    // Tạo payment
+    // Set payment status based on payment method
+    $paymentStatus = $request->payment_method === 'paypal' ? 'completed' : 'pending';
+
+    // Create payment with conditional status
     try {
-        $payment = Payment::create($request->all());
+        $payment = Payment::create([
+            'order_id' => $request->order_id,
+            'payment_method' => $request->payment_method,
+            'total_amount' => $request->total_amount,
+            'payment_status' => $paymentStatus,
+        ]);
+
         return response()->json($payment, 201);
     } catch (\Exception $e) {
-        // Log error và trả về phản hồi lỗi
+        // Log error and return failure response
         Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
         return response()->json(['message' => 'Failed to create payment'], 500);
     }
 }
+
 
 
     /**
