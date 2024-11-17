@@ -7,7 +7,7 @@ const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all"); // Default to show all
+  const [filterStatus, setFilterStatus] = useState("all");
 
   useEffect(() => {
     fetchMyOrders();
@@ -19,11 +19,34 @@ const MyOrders = () => {
       const response = await axios.get("http://localhost:8000/api/orders/my-orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setOrders(response.data);
+      
+      // Sắp xếp đơn hàng mới nhất ở trên cùng
+      const sortedOrders = response.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  
+      setOrders(sortedOrders);
     } catch (err) {
       setError("Failed to fetch your orders. Please try again later.");
     } finally {
       setLoading(false);
+    }
+  };
+  
+
+  const cancelOrder = async (orderId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `http://localhost:8000/api/orders/${orderId}/status`,
+        { status: "cancelled" },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // Refresh orders after cancellation
+      fetchMyOrders();
+    } catch (err) {
+      console.error("Failed to cancel order:", err);
+      alert("Failed to cancel order. Please try again later.");
     }
   };
 
@@ -106,7 +129,7 @@ const MyOrders = () => {
                 <div className="card mb-4" style={{ borderRadius: "10px" }} key={order.id}>
                   <div className="card-header px-4 py-5">
                     <h5 className="text-muted mb-0">
-                      Order #{order.id} -{" "}
+                      My Order -{" "}
                       <span style={{ color: "#a8729a" }}>{order.status.toUpperCase()}</span>
                     </h5>
                   </div>
@@ -119,7 +142,7 @@ const MyOrders = () => {
                     </div>
 
                     {/* Hiển Thị Chi Tiết Các Sản Phẩm */}
-                    <Accordion>
+                    <Accordion alwaysOpen>
                       {order.order_items.map((item) => (
                         <Accordion.Item eventKey={item.id} key={item.id}>
                           <Accordion.Header>
@@ -160,11 +183,17 @@ const MyOrders = () => {
                     <div className="d-flex justify-content-between pt-2">
                       <p className="fw-bold mb-0">Order Details</p>
                       <p className="text-muted mb-0">
-                        <span className="fw-bold me-4">Total</span> $
-                        {order.total_price}
+                        <span className="fw-bold me-4">Total</span> ${order.total_price}
                       </p>
                     </div>
                   </div>
+                  {order.status === "pending" && (
+                    <div className="card-footer">
+                      <Button variant="danger" onClick={() => cancelOrder(order.id)}>
+                        Cancel Order
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))
             )}

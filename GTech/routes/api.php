@@ -3,12 +3,14 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ShoppingCartController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -46,6 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('', [PaymentController::class, 'store']);
         Route::post('', [PaymentController::class, 'store']);
         Route::delete('{id}', [PaymentController::class, 'destroy']);
+        Route::put('order/{orderId}', [PaymentController::class, 'updatePaymentStatus']);
+
     });
 });
 
@@ -99,3 +103,9 @@ Route::middleware('auth:sanctum')->prefix('reviews')->group(function () {
     Route::put('{id}', [ReviewController::class, 'update']);
     Route::delete('{id}', [ReviewController::class, 'destroy']);
 });
+
+//admin
+Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);
+Route::middleware('auth:sanctum')->get('/sales', [SalesController::class, 'index']);
+Route::middleware('auth:sanctum')->get('/product/top', [ProductController::class, 'topProduct']);
+Route::get('/users/activities', [UserController::class, 'getRecentActivities']);

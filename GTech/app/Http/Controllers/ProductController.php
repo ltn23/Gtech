@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductSaveRequest;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -99,5 +100,34 @@ class ProductController extends BaseController
 
         $product->delete();
         return response()->json(['message' => 'Product deleted']);
+    }
+    //admin dashboard
+    public function topProduct()
+    {
+        try {
+            $topProducts = OrderItem::selectRaw('
+                    product_id,
+                    SUM(quantity) as units_sold,
+                    SUM(price * quantity) as revenue
+                ')
+                ->groupBy('product_id')
+                ->orderByDesc('units_sold')
+                ->with('product:id,name') // Include product details
+                ->take(10) // Limit to top 10 products
+                ->get();
+
+            $products = $topProducts->map(function ($item) {
+                return [
+                    'id' => $item->product_id,
+                    'name' => $item->product->name,
+                    'units_sold' => $item->units_sold,
+                    'revenue' => $item->revenue,
+                ];
+            });
+
+            return response()->json($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch top products'], 500);
+        }
     }
 }

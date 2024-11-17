@@ -46,23 +46,33 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
+  
+      // Cập nhật trạng thái đơn hàng
       await axios.put(
         `http://localhost:8000/api/orders/${orderId}/status`,
-        {
-          status: newStatus,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
+  
+      // Nếu trạng thái là "completed", cập nhật trạng thái thanh toán
+      if (newStatus === "completed") {
+        const paymentResponse = await axios.put(
+          `http://localhost:8000/api/payments/order/${orderId}`,
+          { payment_status: "completed" },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+  
+        console.log("Payment updated:", paymentResponse.data);
+      }
+  
       showToast(`Order status updated to ${newStatus}!`, "success");
-      fetchOrders(); // Refresh order list after status update
+      fetchOrders(); // Refresh orders
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       showToast("Failed to update order status.", "danger");
     }
   };
+  
 
   const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });

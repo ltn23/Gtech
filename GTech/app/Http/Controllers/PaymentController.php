@@ -126,4 +126,23 @@ public function store(Request $request)
         $payment->delete();
         return response()->json(['message' => 'Payment deleted']);
     }
+
+    public function updatePaymentStatus(Request $request, $orderId)
+{
+    $request->validate([
+        'payment_status' => 'required|in:pending,completed',
+    ]);
+
+    $payment = Payment::where('order_id', $orderId)->first();
+
+    if (!$payment) {
+        return response()->json(['message' => 'Payment not found'], 404);
+    }
+
+    $payment->payment_status = $request->payment_status;
+    $payment->save();
+
+    return response()->json(['message' => 'Payment status updated successfully', 'payment' => $payment]);
+}
+
 }
