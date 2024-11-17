@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Spinner } from "react-bootstrap";
-import "./MyOrders.css"; 
+import { Spinner, Button, Card, Accordion } from "react-bootstrap";
+import "./MyOrders.css";
 
 const MyOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all"); // Default to show all
 
   useEffect(() => {
     fetchMyOrders();
@@ -15,12 +16,9 @@ const MyOrders = () => {
   const fetchMyOrders = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "http://localhost:8000/api/orders/my-orders",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get("http://localhost:8000/api/orders/my-orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setOrders(response.data);
     } catch (err) {
       setError("Failed to fetch your orders. Please try again later.");
@@ -29,16 +27,25 @@ const MyOrders = () => {
     }
   };
 
+  const getFilteredOrders = () => {
+    if (filterStatus === "all") {
+      return orders;
+    }
+    return orders.filter((order) => order.status === filterStatus);
+  };
+
   const getProgressPercentage = (status) => {
     switch (status) {
       case "pending":
-        return "33%"; 
+        return "33%";
       case "shipping":
-        return "66%"; 
+        return "66%";
       case "completed":
-        return "100%"; 
+        return "100%";
+      case "cancelled":
+        return "0%";
       default:
-        return "0%"; 
+        return "0%";
     }
   };
 
@@ -50,119 +57,106 @@ const MyOrders = () => {
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-lg-10 col-xl-8">
-            {orders.length === 0 ? (
+            {/* Bộ Lọc Trạng Thái */}
+            <div className="mb-4 text-center">
+              <Button
+                variant={filterStatus === "all" ? "primary" : "outline-primary"}
+                onClick={() => setFilterStatus("all")}
+                className="m-1"
+              >
+                All
+              </Button>
+              <Button
+                variant={filterStatus === "pending" ? "warning" : "outline-warning"}
+                onClick={() => setFilterStatus("pending")}
+                className="m-1"
+              >
+                Pending
+              </Button>
+              <Button
+                variant={filterStatus === "shipping" ? "info" : "outline-info"}
+                onClick={() => setFilterStatus("shipping")}
+                className="m-1"
+              >
+                Shipping
+              </Button>
+              <Button
+                variant={filterStatus === "completed" ? "success" : "outline-success"}
+                onClick={() => setFilterStatus("completed")}
+                className="m-1"
+              >
+                Completed
+              </Button>
+              <Button
+                variant={filterStatus === "cancelled" ? "danger" : "outline-danger"}
+                onClick={() => setFilterStatus("cancelled")}
+                className="m-1"
+              >
+                Cancelled
+              </Button>
+            </div>
+
+            {/* Danh Sách Đơn Hàng */}
+            {getFilteredOrders().length === 0 ? (
               <div className="card text-center p-5">
-                <h5 className="text-muted">You have no orders.</h5>
+                <h5 className="text-muted">No orders available for this status.</h5>
               </div>
             ) : (
-              orders.map((order, index) => (
-                <div
-                  className="card mb-4"
-                  style={{ borderRadius: "10px" }}
-                  key={order.id}
-                >
+              getFilteredOrders().map((order, index) => (
+                <div className="card mb-4" style={{ borderRadius: "10px" }} key={order.id}>
                   <div className="card-header px-4 py-5">
                     <h5 className="text-muted mb-0">
-                      Thanks for your Order,{" "}
-                      <span style={{ color: "#a8729a" }}>
-                        Order {index + 1}
-                      </span>
-                      !
+                      Order #{order.id} -{" "}
+                      <span style={{ color: "#a8729a" }}>{order.status.toUpperCase()}</span>
                     </h5>
                   </div>
                   <div className="card-body p-4">
                     <div className="d-flex justify-content-between align-items-center mb-4">
-                      <p
-                        className="lead fw-normal mb-0"
-                        style={{ color: "#a8729a" }}
-                      >
+                      <p className="lead fw-normal mb-0" style={{ color: "#a8729a" }}>
                         Receipt
                       </p>
-                      <p className="small text-muted mb-0">
-                        Receipt Voucher : {order.id}
-                      </p>
+                      <p className="small text-muted mb-0">Voucher: {order.id}</p>
                     </div>
-                    {order.order_items.map((item) => (
-                      <div className="card shadow-0 border mb-4" key={item.id}>
-                        <div className="card-body">
-                          <div className="row">
-                            <div className="col-md-2">
+
+                    {/* Hiển Thị Chi Tiết Các Sản Phẩm */}
+                    <Accordion>
+                      {order.order_items.map((item) => (
+                        <Accordion.Item eventKey={item.id} key={item.id}>
+                          <Accordion.Header>
+                            {item.product.name} - Qty: {item.quantity}
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            <div className="d-flex justify-content-between">
                               <img
                                 src={item.product.image_url}
-                                className="img-fluid rounded"
                                 alt={item.product.name}
+                                style={{ width: "65px", height: "auto" }}
+                                className="rounded"
                               />
+                              <p>Quantity: {item.quantity}</p>
+                              <p>${item.price}</p>
                             </div>
-                            <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                              <p className="text-muted mb-0">
-                                {item.product.name}
-                              </p>
-                            </div>
-                            <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                              <p className="text-muted mb-0 small">
-                                Qty: {item.quantity}
-                              </p>
-                            </div>
-                            <div className="col-md-2 text-center d-flex justify-content-center align-items-center">
-                              <p className="text-muted mb-0 small">
-                                ${item.price}
-                              </p>
-                            </div>
-                          </div>
-                          <hr
-                            className="mb-4"
-                            style={{ backgroundColor: "#e0e0e0", opacity: 1 }}
-                          />
-                          <div className="row d-flex align-items-center">
-                            <div className="row d-flex align-items-center">
-                              <div className="col-md-2">
-                                <p className="text-muted mb-0 small">
-                                  Track Order
-                                </p>
-                              </div>
-                              <div className="col-md-10">
-                                <div
-                                  className="progress"
-                                  style={{
-                                    height: "6px",
-                                    borderRadius: "16px",
-                                  }}
-                                >
-                                  <div
-                                    className="progress-bar"
-                                    role="progressbar"
-                                    style={{
-                                      width: getProgressPercentage(
-                                        order.status
-                                      ),
-                                      borderRadius: "16px",
-                                      backgroundColor: "#a8729a",
-                                    }}
-                                    aria-valuenow={parseInt(
-                                      getProgressPercentage(order.status),
-                                      10
-                                    )}
-                                    aria-valuemin="0"
-                                    aria-valuemax="100"
-                                  ></div>
-                                </div>
-                                <div className="d-flex justify-content-between mb-1">
-                                  <p className="text-muted mt-1 mb-0 small">
-                                    Pending
-                                  </p>
-                                  <p className="text-muted mt-1 mb-0 small">
-                                    Shipping
-                                  </p>
-                                  <p className="text-muted mt-1 mb-0 small">
-                                    Completed
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      ))}
+                    </Accordion>
+
+                    <div className="progress mt-4" style={{ height: "6px", borderRadius: "16px" }}>
+                      <div
+                        className="progress-bar"
+                        role="progressbar"
+                        style={{
+                          width: getProgressPercentage(order.status),
+                          borderRadius: "16px",
+                          backgroundColor: "#a8729a",
+                        }}
+                      ></div>
+                    </div>
+                    <div className="d-flex justify-content-between mb-1">
+                      <p className="text-muted mt-1 mb-0 small">Pending</p>
+                      <p className="text-muted mt-1 mb-0 small">Shipping</p>
+                      <p className="text-muted mt-1 mb-0 small">Completed</p>
+                    </div>
                     <div className="d-flex justify-content-between pt-2">
                       <p className="fw-bold mb-0">Order Details</p>
                       <p className="text-muted mb-0">
@@ -170,19 +164,6 @@ const MyOrders = () => {
                         {order.total_price}
                       </p>
                     </div>
-                  </div>
-                  <div
-                    className="card-footer border-0 px-4 py-5"
-                    style={{
-                      backgroundColor: "#a8729a",
-                      borderBottomLeftRadius: "10px",
-                      borderBottomRightRadius: "10px",
-                    }}
-                  >
-                    <h5 className="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
-                      Total paid:{" "}
-                      <span className="h2 mb-0 ms-2">${order.total_price}</span>
-                    </h5>
                   </div>
                 </div>
               ))
