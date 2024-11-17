@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('orders')->group(function () {
+        Route::put('{id}/status', [OrderController::class, 'updateStatus']);
+        Route::get('/my-orders', [OrderController::class, 'getMyOrders']);
         Route::get('', [OrderController::class, 'index']);
         Route::post('', [OrderController::class, 'store']);
         Route::get('{id}', [OrderController::class, 'show']);

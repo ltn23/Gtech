@@ -15,7 +15,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        
+
         $orders = Order::with('user', 'orderItems.product', 'payment')->get();
         return response()->json($orders);
     }
@@ -57,7 +57,7 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-       
+
         $order = Order::with('user', 'orderItems.product', 'payment')->find($id);
         if (!$order) {
             return response()->json(['message' => 'Order not found'], 404);
@@ -88,7 +88,7 @@ class OrderController extends Controller
         }
 
         $order->update($request->all());
-        
+
         return response()->json($order->load('orderItems.product'));
     }
 
@@ -105,4 +105,34 @@ class OrderController extends Controller
         $order->delete();
         return response()->json(['message' => 'Order deleted']);
     }
+
+    public function getMyOrders(Request $request)
+    {
+        $user = $request->user();
+
+        $orders = Order::with('orderItems.product', 'payment')
+            ->where('user_id', $user->id)
+            ->get();
+
+        return response()->json($orders);
+    }
+
+    public function updateStatus(Request $request, $id)
+{
+    $order = Order::find($id);
+
+    if (!$order) {
+        return response()->json(['message' => 'Order not found'], 404);
+    }
+
+    $validatedData = $request->validate([
+        'status' => 'required|in:pending,shipping,completed,cancelled',
+    ]);
+
+    $order->status = $validatedData['status'];
+    $order->save();
+
+    return response()->json(['message' => 'Order status updated successfully', 'order' => $order]);
+}
+
 }

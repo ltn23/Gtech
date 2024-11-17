@@ -16,9 +16,10 @@ import UploadImage from "../components/Cloudinary/UploadImage";
 import ProductDetails from "../components/Product/ProductDetails";
 import Checkout from "../components/Checkout/Checkout";
 import OrderManagement from "../components/admin/OrderManagement/OrderManagement";
+import MyOrders from "../components/MyOrder/MyOrders";
 
 const routes = [
-  { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
+  
   { path: "/profile", name: "Profile", element: <Profile /> },
   { path: "/home", name: "Home", element: <Home /> },
   { path: "/register", name: "Register", element: <Register /> },
@@ -28,6 +29,10 @@ const routes = [
   { path: "/products/:productId", name: "Products Details", element: <ProductDetails /> },
   { path: "/shopping-cart", name: "Shopping Cart", element: <ShoppingCart /> },
   { path: "/checkout", name: "Checkout", element: <Checkout /> },
+  {path: "/my-orders", name: "My Orders", element: <MyOrders/>},
+
+  //admin
+  { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
   { path: "/user-management", name: "User Management", element: <ProtectedRoute element={<UserManagement />} roleRequired="admin" /> },
   { path: "/product-management", name: "Product Management", element: <ProtectedRoute element={<ProductManagement />} roleRequired="admin" /> },
   { path: "/category-management", name: "Category Management", element: <ProtectedRoute element={<CategoryManagement />} roleRequired="admin" /> },

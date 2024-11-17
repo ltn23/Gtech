@@ -1,0 +1,103 @@
+.gradient-custom {
+    /* Gradient Background */
+    background: #cd9cf2;
+    background: -webkit-linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+    background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
+  }
+  
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .card-footer {
+    background-color: #a8729a;
+    color: white;
+  }
+  
+  .card {
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-body {
+    background-color: #ffffff;
+  }
+  
+  .progress {
+    background-color: #f1f1f1;
+  }
+  
+  .progress-bar {
+    background-color: #a8729a;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .fw-bold {
+    font-weight: bold !important;
+  }
+  
+  .h2 {
+    font-size: 1.75rem !important;
+  }
+  
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  
+  img {
+    width: 100%;
+    max-width: 65px;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .d-flex {
+    display: flex;
+  }
+  
+  .align-items-center {
+    align-items: center;
+  }
+  
+  .justify-content-center {
+    justify-content: center;
+  }
+  
+  .justify-content-between {
+    justify-content: space-between;
+  }
+  
+  .text-uppercase {
+    text-transform: uppercase;
+  }
+  
+  .pt-2 {
+    padding-top: 0.5rem !important;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .mb-0 {
+    margin-bottom: 0 !important;
+  }
+  
+  .ms-2 {
+    margin-left: 0.5rem !important;
+  }
+  
+  .me-4 {
+    margin-right: 1.5rem !important;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  
