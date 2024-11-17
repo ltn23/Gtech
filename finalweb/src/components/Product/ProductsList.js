@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom"; // Thêm useNavigate
-import { ToastContainer} from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./ProductsList.css";
 
@@ -11,7 +11,7 @@ const ProductsList = () => {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-  const navigate = useNavigate(); // Khai báo useNavigate
+  const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   const categoryId = query.get("category");
 
@@ -40,15 +40,16 @@ const ProductsList = () => {
   }, [categoryId]);
 
   const handleProductClick = (productId) => {
-    navigate(`/products/${productId}`); // Chuyển đến trang ProductDetails
+    navigate(`/products/${productId}`);
   };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p className="text-danger">Error: {error.message}</p>;
 
   return (
     <div className="products-container">
       <ToastContainer />
+      <h2 className="mb-4">Product List</h2>
       <div className="products-grid">
         {products.map((product) => (
           <div
@@ -62,8 +63,17 @@ const ProductsList = () => {
               className="product-image"
             />
             <div className="product-info">
-              <h2 className="product-name">{product.name}</h2>
+              <h3 className="product-name">{product.name}</h3>
               <p className="product-price">${product.price}</p>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toast.success("Added to cart!");
+                }}
+                className="btn-add-to-cart"
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         ))}
