@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isSidebarOpen }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState("guest");
-  const [categories, setCategories] = useState([]); 
-  const [showCategories, setShowCategories] = useState(false); 
+  const [categories, setCategories] = useState([]);
+  const [showCategories, setShowCategories] = useState(false);
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
@@ -18,7 +19,6 @@ const Sidebar = () => {
   }, []);
 
   const fetchCategories = async () => {
-    // Replace with your API endpoint
     const response = await fetch("http://localhost:8000/api/categories");
     const data = await response.json();
     setCategories(data);
@@ -49,7 +49,7 @@ const Sidebar = () => {
       { to: "/products", label: "Products", icon: "fas fa-tachometer-alt" },
       { to: "/shopping-cart", label: "Shopping Cart", icon: "fas fa-shopping-cart" },
       { to: "/my-orders", label: "My Orders", icon: "fas fa-box-open" },
-      { to: "#", label: "Categories", icon: "fas fa-list", toggle: true }, 
+      { to: "#", label: "Categories", icon: "fas fa-list", toggle: true },
     ],
     guest: [
       { to: "/login", label: "Login", icon: "fas fa-sign-in-alt" },
@@ -64,7 +64,12 @@ const Sidebar = () => {
   };
 
   return (
-    <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <nav
+      className={`sb-sidenav accordion sb-sidenav-dark ${
+        isSidebarOpen ? "open" : "closed"
+      }`}
+      id="sidenavAccordion"
+    >
       <div className="sb-sidenav-menu">
         <div className="nav">
           <div className="sb-sidenav-menu-heading">Core</div>

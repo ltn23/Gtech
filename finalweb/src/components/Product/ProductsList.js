@@ -49,7 +49,6 @@ const ProductsList = () => {
   return (
     <div className="products-container">
       <ToastContainer />
-      <h2 className="mb-4">Product List</h2>
       <div className="products-grid">
         {products.map((product) => (
           <div

@@ -1,0 +1,41 @@
+.sb-sidenav {
+    background-color: #1e1e2d; /* Màu nền sidebar tối hơn */
+    color: #ffffff;
+    width: 200px; /* Điều chỉnh chiều rộng từ 250px xuống 200px */
+    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi khi mở/đóng */
+    position: fixed;
+    height: 100%;
+}
+
+.sb-sidenav.closed {
+    width: 0;
+    overflow: hidden;
+}
+
+.sb-sidenav-menu {
+    padding: 15px 0; /* Giảm padding để tiết kiệm không gian */
+}
+
+.nav-link {
+    color: #c3c4ca;
+    display: flex;
+    align-items: center;
+    padding: 8px 10px; /* Giảm padding */
+    border-radius: 4px; /* Giảm bo góc */
+    transition: all 0.3s ease-in-out;
+    text-decoration: none;
+}
+
+.sb-nav-link-icon {
+    margin-right: 8px; /* Giảm khoảng cách giữa icon và text */
+}
+
+.sb-sidenav-menu-heading {
+    font-size: 0.75rem; /* Thu nhỏ kích thước chữ */
+    padding: 8px 10px; /* Giảm padding */
+}
+
+.sb-sidenav-footer {
+    padding: 10px; /* Giảm padding ở footer */
+}
+

@@ -108,4 +108,4 @@ Route::middleware('auth:sanctum')->prefix('reviews')->group(function () {
 Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);
 Route::middleware('auth:sanctum')->get('/sales', [SalesController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/product/top', [ProductController::class, 'topProduct']);
-Route::get('/users/activities', [UserController::class, 'getRecentActivities']);
+

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../assets/css/styles.css";
 
 import "../assets/js/scripts.js";
@@ -10,12 +10,17 @@ import Sidebar from "./Sidebar.js";
 import routes from "../routes/routes.js";
 
 const MasterLayout = () => {
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
   return (
     <div className="sb-nav-fixed">
-      <Navbar />
+      <Navbar toggleSidebar={toggleSidebar} />
       <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-          <Sidebar />
+          <Sidebar isSidebarOpen={isSidebarOpen} />
         </div>
         <div
           style={{ backgroundColor: "#F0F0F0", minHeight: "100vh" }}

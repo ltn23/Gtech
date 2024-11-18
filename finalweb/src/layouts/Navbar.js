@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProfileDialog from "../components/Profile/ProfileDialog";
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
   
@@ -34,15 +34,15 @@ const Navbar = () => {
     <>
       <nav className="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <Link className="navbar-brand ps-3" to="/dashboard">
-          GTECH
+          GTech
         </Link>
-        {/* <button
+        <button
           className="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
           id="sidebarToggle"
-          href="#!"
+          onClick={toggleSidebar}
         >
           <i className="fas fa-bars"></i>
-        </button> */}
+        </button>
         <ul className="d-flex justify-content-end ms-auto me-0 me-md-3 my-2 my-md-0">
           {isLoggedIn && (
             <li className="nav-item me-2">
