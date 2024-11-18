@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Checkout.css"; // Ensure to include any necessary styles
+import "./Checkout.css"; 
 import axios from "axios";
 
 const Checkout = () => {
@@ -79,7 +79,7 @@ const Checkout = () => {
               purchase_units: [
                 {
                   amount: {
-                    value: total, // total order amount
+                    value: total,
                   },
                 },
               ],
@@ -121,7 +121,7 @@ const Checkout = () => {
             alert("PayPal payment failed. Please try again.");
           },
         })
-        .render("#paypal-button-container"); // This will display the PayPal button
+        .render("#paypal-button-container"); 
     }
   }, [paymentMethod]);
 
@@ -286,6 +286,40 @@ const Checkout = () => {
                 )}
               </form>
               {paymentMethod === "paypal" && <div id="paypal-button-container"></div>}
+            </div>
+          </div>
+        </div>
+
+        {/* Order Summary Section */}
+        <div className="col-xl-4">
+          <div className="card checkout-order-summary">
+            <div className="card-body">
+              <h5 className="font-size-16 mb-3">Order Summary</h5>
+              <hr />
+              {cartItems.map((item) => (
+                <div key={item.id} className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="d-flex flex-row align-items-center">
+                    <img
+                      src={item.product.image_url}
+                      className="img-fluid rounded-3"
+                      alt={item.product.name}
+                      style={{ width: "50px", marginRight: "10px" }}
+                    />
+                    <div>
+                      <h6 className="m-0">{item.product.name}</h6>
+                      <small className="text-muted">Quantity: {item.quantity}</small>
+                    </div>
+                  </div>
+                  <div>
+                    <h6 className="m-0">${(item.product.price * item.quantity).toFixed(2)}</h6>
+                  </div>
+                </div>
+              ))}
+              <hr />
+              <div className="d-flex justify-content-between">
+                <h6>Total</h6>
+                <h6>${total}</h6>
+              </div>
             </div>
           </div>
         </div>

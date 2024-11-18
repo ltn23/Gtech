@@ -64,15 +64,6 @@ const ProductsList = () => {
             <div className="product-info">
               <h3 className="product-name">{product.name}</h3>
               <p className="product-price">${product.price}</p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toast.success("Added to cart!");
-                }}
-                className="btn-add-to-cart"
-              >
-                Add to Cart
-              </button>
             </div>
           </div>
         ))}
