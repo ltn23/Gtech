@@ -10,6 +10,7 @@ const ProductDetails = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newReview, setNewReview] = useState({
@@ -45,6 +46,17 @@ const ProductDetails = () => {
           }
         );
         setReviews(response.data);
+        // Calculate average rating
+        if (response.data.length > 0) {
+          const totalRating = response.data.reduce(
+            (acc, review) => acc + review.rating,
+            0
+          );
+          const average = totalRating / response.data.length;
+          setAverageRating(average.toFixed(1)); // Limit to 1 decimal place
+        } else {
+          setAverageRating(0);
+        }
       } catch (err) {
         toast.error("Failed to load reviews", { position: "top-right" });
       }
@@ -139,9 +151,9 @@ const ProductDetails = () => {
                   <Badge bg="success">In Stock</Badge>
                 </span>
                 <span className="text-warning">
-                  {product.rating} <i className="fas fa-star"></i>
+                  {averageRating} <i className="fas fa-star"></i>
                 </span>
-                <span className="ms-2">({product.reviews_count} reviews)</span>
+                <span className="ms-2">({reviews.length} reviews)</span>
               </div>
               <p className="product-description">{product.description}</p>
               <h4 className="product-price">${product.price}</h4>
@@ -156,6 +168,7 @@ const ProductDetails = () => {
               </div>
             </div>
           </div>
+
 
           {/* Feedback and Reviews Section */}
           <div className="reviews-section mt-5">
@@ -178,7 +191,7 @@ const ProductDetails = () => {
             )}
 
             <div className="add-review mt-4">
-              <h5>Leave a Review</h5>
+              <h5>Comment</h5>
               <Form onSubmit={handleReviewSubmit}>
                 <Form.Group controlId="rating">
                   <Form.Label>Rating</Form.Label>
