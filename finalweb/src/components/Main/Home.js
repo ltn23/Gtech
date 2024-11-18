@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css';
+import axios from "axios";
 
 function Home() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,19 +29,38 @@ function Home() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/categories");
-        const data = await response.json();
-        setCategories(data);
-        setLoading(false); // Set loading to false after fetching data
-      } catch (error) {
-        console.error("Failed to fetch categories:", error);
-        setLoading(false); // Set loading to false in case of an error
+        const response = await axios.get("http://localhost:8000/api/categories");
+        setCategories(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/products", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setProducts(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoadingProducts(false);
       }
     };
 
     fetchCategories();
+    fetchProducts();
   }, []);
 
+  if (loadingCategories || loadingProducts)
+    return <p>Loading...</p>;
+
+  if (error) return <p className="text-danger">Error: {error.message}</p>;
   return (
     <div className="home-container">
       {loading ? (
@@ -120,28 +144,36 @@ function Home() {
               </div>
             </div>
           </section>
+
+          <section className="products-section my-5">
+        <div className="container">
+          <h3>New Products</h3>
+          <div className="products-grid">
+            {products.map((product) => (
+              <div
+                className="product-card"
+                key={product.id}
+                onClick={() => navigate(`/products/${product.id}`)}
+              >
+                <img
+                  src={product.image_url}
+                  alt={product.name}
+                  className="product-image"
+                />
+                <div className="product-info">
+                  <h3 className="product-name">{product.name}</h3>
+                  <p className="product-price">${product.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
         </div>
       )}
     </div>
   );
 }
 
-const categories = [
-  { name: "Laptops", icon: "fas fa-couch" },
-  { name: "Sport and travel", icon: "fas fa-basketball-ball" },
-  { name: "Jewellery", icon: "fas fa-ring" },
-  { name: "Accessories", icon: "fas fa-clock" },
-  { name: "Kid's toys", icon: "fas fa-baby-carriage" },
-  { name: "Pet items", icon: "fas fa-paw" },
-  { name: "Smartphones", icon: "fas fa-mobile" },
-  { name: "Tools", icon: "fas fa-tools" },
-];
-
-const products = [
-  { name: "GoPro action camera", price: "29.95", image: "https://mdbootstrap.com/img/bootstrap-ecommerce/items/1.webp" },
-  { name: "Canon EOS Camera", price: "590.00", image: "https://mdbootstrap.com/img/bootstrap-ecommerce/items/2.webp" },
-  { name: "Apple iPhone", price: "1099.00", image: "https://mdbootstrap.com/img/bootstrap-ecommerce/items/4.webp" },
-  { name: "Blue Jeans", price: "29.95", image: "https://mdbootstrap.com/img/bootstrap-ecommerce/items/9.webp" },
-];
 
 export default Home;
