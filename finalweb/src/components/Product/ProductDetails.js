@@ -45,6 +45,7 @@ const ProductDetails = () => {
             },
           }
         );
+        console.log("Fetched reviews:", response.data);
         setReviews(response.data);
         // Calculate average rating
         if (response.data.length > 0) {
@@ -53,7 +54,7 @@ const ProductDetails = () => {
             0
           );
           const average = totalRating / response.data.length;
-          setAverageRating(average.toFixed(1)); // Limit to 1 decimal place
+          setAverageRating(average.toFixed(1));
         } else {
           setAverageRating(0);
         }
@@ -88,7 +89,7 @@ const ProductDetails = () => {
       product_id: productId,
       rating: newReview.rating,
       comment: newReview.comment,
-  });
+    });
 
     try {
       const response = await axios.post(
@@ -169,29 +170,34 @@ const ProductDetails = () => {
             </div>
           </div>
 
-
           {/* Feedback and Reviews Section */}
-          <div className="reviews-section mt-5">
-            <h4>Customer Reviews</h4>
-            <hr />
-            {reviews.length > 0 ? (
-              reviews.map((review) => (
-                <div key={review.id} className="review-item">
-                  <strong>{review.user.name}</strong> 
-                  <span className="text-warning ms-2">
-                    {Array.from({ length: review.rating }, (_, i) => (
-                      <i key={i} className="fas fa-star"></i>
-                    ))}
-                  </span>
-                  <p>{review.comment}</p>
-                </div>
-              ))
-            ) : (
-              <p>No reviews yet.</p>
-            )}
+          <div className="row mt-5">
+            {/* Customer Reviews Column */}
+            <div className="col-md-6 reviews-section">
+              <h4>Customer Reviews</h4>
+              <hr />
+              {reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div key={review.id} className="review-item mb-3">
+                    <strong>{review.user?.name || "Anonymous"}</strong>{" "}
+                    {/* Kiểm tra nếu user tồn tại */}
+                    <span className="text-warning ms-2">
+                      {Array.from({ length: review.rating }, (_, i) => (
+                        <i key={i} className="fas fa-star"></i>
+                      ))}
+                    </span>
+                    <p>{review.comment}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No reviews yet.</p>
+              )}
+            </div>
 
-            <div className="add-review mt-4">
-              <h5>Comment</h5>
+            {/* Comment Section Column */}
+            <div className="col-md-6 add-review">
+              <h4>Leave a Comment</h4>
+              <hr />
               <Form onSubmit={handleReviewSubmit}>
                 <Form.Group controlId="rating">
                   <Form.Label>Rating</Form.Label>

@@ -19,6 +19,7 @@ class ReviewController extends Controller
         return response()->json($reviews);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -31,35 +32,38 @@ class ReviewController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    try {
-        $userId = $request->user()->id;
-        $productId = $request->input('product_id');
-        $rating = $request->input('rating');
-        $comment = $request->input('comment');
+    {
+        try {
+            $userId = $request->user()->id;
+            $productId = $request->input('product_id');
+            $rating = $request->input('rating');
+            $comment = $request->input('comment');
 
-        // Validate the request data
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string',
-        ]);
-  
+            // Validate the request data
+            $request->validate([
+                'product_id' => 'required|exists:products,id',
+                'rating' => 'required|integer|min:1|max:5',
+                'comment' => 'nullable|string',
+            ]);
 
-        // Create a new review
-        $review = Review::create([
-            'user_id' => $userId,
-            'product_id' => $productId,
-            'rating' => $rating,
-            'comment' => $comment,
-        ]);
-       
-        return response()->json($review, 201);
-    } catch (\Exception $e) {
-        Log::error("Review store error: " . $e->getMessage());
-        return response()->json(['message' => 'Server error'], 500);
+            // Create a new review
+            $review = Review::create([
+                'user_id' => $userId,
+                'product_id' => $productId,
+                'rating' => $rating,
+                'comment' => $comment,
+            ]);
+
+            // Load user data to include it in the response
+            $review->load('user');
+
+            return response()->json($review, 201);
+        } catch (\Exception $e) {
+            Log::error("Review store error: " . $e->getMessage());
+            return response()->json(['message' => 'Server error'], 500);
+        }
     }
-}
+
 
 
 
