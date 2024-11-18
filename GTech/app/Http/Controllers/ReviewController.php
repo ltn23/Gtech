@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
+
 
 class ReviewController extends Controller
 {
@@ -29,7 +31,8 @@ class ReviewController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+{
+    try {
         $userId = $request->user()->id;
         $productId = $request->input('product_id');
         $rating = $request->input('rating');
@@ -41,6 +44,7 @@ class ReviewController extends Controller
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string',
         ]);
+  
 
         // Create a new review
         $review = Review::create([
@@ -49,9 +53,15 @@ class ReviewController extends Controller
             'rating' => $rating,
             'comment' => $comment,
         ]);
-
+       
         return response()->json($review, 201);
+    } catch (\Exception $e) {
+        Log::error("Review store error: " . $e->getMessage());
+        return response()->json(['message' => 'Server error'], 500);
     }
+}
+
+
 
     /**
      * Display the specified resource.

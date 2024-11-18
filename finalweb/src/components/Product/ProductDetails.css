@@ -63,3 +63,22 @@
     padding: 15px 30px; /* Tăng kích thước nút */
     font-size: 20px; /* Tăng kích thước chữ trong nút */
 }
+
+.reviews-section {
+    margin-top: 30px;
+  }
+  
+  .review-item {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+  
+  .review-item strong {
+    font-size: 16px;
+  }
+  
+  .add-review h5 {
+    margin-bottom: 15px;
+  }
+  
