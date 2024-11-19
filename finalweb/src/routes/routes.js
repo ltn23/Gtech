@@ -17,6 +17,7 @@ import ProductDetails from "../components/Product/ProductDetails";
 import Checkout from "../components/Checkout/Checkout";
 import OrderManagement from "../components/admin/OrderManagement/OrderManagement";
 import MyOrders from "../components/MyOrder/MyOrders";
+import SearchResults from "../components/Search/SearchResults";
 
 const routes = [
   
@@ -29,7 +30,8 @@ const routes = [
   { path: "/products/:productId", name: "Products Details", element: <ProductDetails /> },
   { path: "/shopping-cart", name: "Shopping Cart", element: <ShoppingCart /> },
   { path: "/checkout", name: "Checkout", element: <Checkout /> },
-  {path: "/my-orders", name: "My Orders", element: <MyOrders/>},
+  { path: "/my-orders", name: "My Orders", element: <MyOrders/>},
+  { path: "/search", name: "Search", element: <SearchResults/>},
 
   //admin
   { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },

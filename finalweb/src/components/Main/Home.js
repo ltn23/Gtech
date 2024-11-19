@@ -7,6 +7,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [error, setError] = useState(null);
@@ -57,6 +58,26 @@ function Home() {
     fetchProducts();
   }, []);
 
+  // Search function
+  const handleSearch = async () => {
+    try {
+      setLoadingProducts(true);
+      const response = await axios.get(
+        `http://localhost:8000/api/products?search=${searchTerm}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setProducts(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
   if (loadingCategories || loadingProducts)
     return <p>Loading...</p>;
 
@@ -71,6 +92,26 @@ function Home() {
         </div>
       ) : (
         <div className="home-content">
+        {/* Search bar */}
+        <section className="search-bar mt-4">
+  <div className="container">
+    <div className="input-group">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <button
+        className="btn btn-primary"
+        onClick={() => navigate(`/search?query=${searchTerm}`)} // Navigate to SearchResults
+      >
+        Search
+      </button>
+    </div>
+  </div>
+</section>
           <section className="hero-section pt-3">
             <div className="container">
               <div className="row gx-3">
@@ -117,6 +158,8 @@ function Home() {
               </div>
             </div>
           </section>
+
+          
 
           <section className="category-section pt-5">
             <div className="container">

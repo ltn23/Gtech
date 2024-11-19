@@ -13,50 +13,48 @@ class ProductController extends BaseController
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+    //     $query = Product::with('category');
+
+    //     // Check if a category ID is provided
+    //     if ($request->has('category')) {
+    //         $query->where('category_id', $request->input('category'));
+    //     }
+
+    //     // Get the products based on the query
+    //     $products = $query->get();
+
+    //     return response()->json($products);
+    // }
+
     public function index(Request $request)
-    {
-        $query = Product::with('category');
+{
+    $query = Product::query();
 
-        // Check if a category ID is provided
-        if ($request->has('category')) {
-            $query->where('category_id', $request->input('category'));
-        }
-
-        // Get the products based on the query
-        $products = $query->get();
-
-        return response()->json($products);
+    // Search functionality
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->where('name', 'like', "%{$search}%");
     }
+
+    // Optional: Filter by category
+    if ($request->has('category')) {
+        $categoryId = $request->input('category');
+        $query->where('category_id', $categoryId);
+    }
+
+    $products = $query->get();
+
+    return response()->json($products);
+}
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function save(ProductSaveRequest $request)
     {
-        // $requestData =  $request->validated();
-        // $product = $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
-        // $msg =  $requestData['id'] ? "Product updated successfully." : "Product created successfully.";
-        // $product->fill($requestData);
-        // $product->save();
-        // return $this->sendSuccess($product,  $msg);
-
-        // $requestData =  $request->validated();
-
-        // // Kiểm tra nếu có 'id' trong request
-        // $product = isset($requestData['id']) && $requestData['id'] ? Product::find($requestData['id'])->first() : new Product();
-
-
-        // // Cập nhật hoặc tạo mới
-        // $product->fill($requestData);
-        // $product->save();
-
-        // // Xác định thông điệp thành công dựa vào sự tồn tại của id
-        // $msg = isset($requestData['id']) ? "Product updated successfully." : "Product created successfully.";
-
-        // return $this->sendSuccess($product, $msg);
-
-
-
         $requestData = $request->validated();
 
         // Check if 'id' is present in request data to update existing product
@@ -101,6 +99,7 @@ class ProductController extends BaseController
         $product->delete();
         return response()->json(['message' => 'Product deleted']);
     }
+
     //admin dashboard
     public function topProduct()
     {

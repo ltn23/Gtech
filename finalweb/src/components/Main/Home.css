@@ -11,3 +11,17 @@
 .products-section .card:hover {
   transform: scale(1.05);
 }
+
+.search-bar .input-group {
+  margin-bottom: 20px;
+}
+
+.search-bar .form-control {
+  border-radius: 0;
+  height: 50px;
+}
+
+.search-bar .btn {
+  height: 50px;
+}
+   
