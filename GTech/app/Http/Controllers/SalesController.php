@@ -13,7 +13,8 @@ class SalesController extends Controller
     {
         try {
             // Group sales data by month and calculate total sales
-            $sales = Order::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, SUM(total_price) as total_sales')
+            $sales = Order::selectRaw('DATE_FORMAT(order_date, "%Y-%m") as month, SUM(total_price) as total_sales')
+                ->where('status', 'completed')
                 ->groupBy('month')
                 ->orderBy('month', 'asc')
                 ->get();
