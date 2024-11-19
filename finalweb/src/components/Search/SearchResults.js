@@ -7,8 +7,8 @@ const SearchResults = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchParams] = useSearchParams();
-  const searchTerm = searchParams.get("query");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,12 +33,33 @@ const SearchResults = () => {
     fetchSearchResults();
   }, [searchTerm]);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setSearchParams({ query: searchTerm });
+    setLoading(true);
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="text-danger">Error: {error.message}</p>;
 
   return (
     <div className="search-results-container">
-      <h3>Search Results for "{searchTerm}"</h3>
+      
+
+      <form className="search-bar" onSubmit={handleSearch}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button type="submit" className="btn btn-primary">
+          Search
+        </button>
+      </form>
+
+      <h3>Search Results for "{searchParams.get("query")}"</h3>
       {products.length > 0 ? (
         <div className="products-grid">
           {products.map((product) => (

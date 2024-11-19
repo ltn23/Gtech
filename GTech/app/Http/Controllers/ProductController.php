@@ -30,8 +30,8 @@ class ProductController extends BaseController
 
     public function index(Request $request)
 {
-    $query = Product::query();
-
+    // $query = Product::query();
+    $query = Product::with('category');
     // Search functionality
     if ($request->has('search')) {
         $search = $request->input('search');

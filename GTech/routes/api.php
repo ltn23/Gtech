@@ -78,9 +78,7 @@ Route::post('/images', [ImageController::class, 'store']);
 // Nhóm các route quản lý danh mục
 Route::apiResource('categories', CategoryController::class)->except(['show']);
 
-// Nhóm các route quản lý sản phẩm
-// Nhóm các route quản lý đơn hàng
-// Route::apiResource('orders', OrderController::class);
+
 
 // Nhóm các route quản lý mục trong đơn hàng
 Route::apiResource('order-items', OrderItemController::class);
