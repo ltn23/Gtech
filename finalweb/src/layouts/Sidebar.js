@@ -102,23 +102,7 @@ const Sidebar = ({ isSidebarOpen }) => {
                 {category.name}
               </Link>
             ))}
-          {isLoggedIn && (
-            <>
-              <div className="sb-sidenav-menu-heading">Addons</div>
-              <Link className="nav-link" to="/charts">
-                <div className="sb-nav-link-icon">
-                  <i className="fas fa-chart-area"></i>
-                </div>
-                Charts
-              </Link>
-              <Link className="nav-link" to="/tables">
-                <div className="sb-nav-link-icon">
-                  <i className="fas fa-table"></i>
-                </div>
-                Tables
-              </Link>
-            </>
-          )}
+        
         </div>
       </div>
       <div className="sb-sidenav-footer">

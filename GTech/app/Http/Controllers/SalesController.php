@@ -12,7 +12,6 @@ class SalesController extends Controller
     public function index()
     {
         try {
-            // Group sales data by month and calculate total sales
             $sales = Order::selectRaw('DATE_FORMAT(order_date, "%Y-%m") as month, SUM(total_price) as total_sales')
                 ->where('status', 'completed')
                 ->groupBy('month')
