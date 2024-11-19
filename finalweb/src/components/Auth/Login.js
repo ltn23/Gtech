@@ -38,7 +38,11 @@ function Login() {
     }
   }, [location, navigate]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    navigate("/home"); // Điều hướng về trang home
+  };
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
