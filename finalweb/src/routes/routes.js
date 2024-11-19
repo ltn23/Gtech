@@ -18,6 +18,7 @@ import Checkout from "../components/Checkout/Checkout";
 import OrderManagement from "../components/admin/OrderManagement/OrderManagement";
 import MyOrders from "../components/MyOrder/MyOrders";
 import SearchResults from "../components/Search/SearchResults";
+import Chatbot from "../components/Chatbot/Chatbot";
 
 const routes = [
   
@@ -33,6 +34,8 @@ const routes = [
   { path: "/my-orders", name: "My Orders", element: <MyOrders/>},
   { path: "/search", name: "Search", element: <SearchResults/>},
 
+  //chatbot
+  { path: "/chatbot", name: "Chat Bot", element: <Chatbot/>},
   //admin
   { path: "/dashboard", name: "Admin", element: <ProtectedRoute element={<Dashboard />} roleRequired="admin" /> },
   { path: "/user-management", name: "User Management", element: <ProtectedRoute element={<UserManagement />} roleRequired="admin" /> },

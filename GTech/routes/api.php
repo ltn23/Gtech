@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\OrderController;
@@ -103,6 +104,9 @@ Route::middleware('auth:sanctum')->prefix('reviews')->group(function () {
     Route::put('{id}', [ReviewController::class, 'update']);
     Route::delete('{id}', [ReviewController::class, 'destroy']);
 });
+
+//chatbot 
+Route::post('/chat', [ChatbotController::class, 'handleChat']);
 
 //admin
 Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);

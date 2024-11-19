@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css';
 import axios from "axios";
+import ChatDialog from "../Chatbot/ChatDialog";
+
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -92,6 +94,7 @@ function Home() {
         </div>
       ) : (
         <div className="home-content">
+        <ChatDialog />
         {/* Search bar */}
         <section className="search-bar mt-4">
   <div className="container">
