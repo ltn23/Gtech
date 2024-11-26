@@ -242,26 +242,47 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
   }, [order]);
 
   return (
-    <Modal show={show} onHide={handleClose} size="lg">
+    <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
-        <Modal.Title>Order Details</Modal.Title>
+        <Modal.Title className="modal-title">Order Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {order ? (
-          <>
-            <h5>User Name: {order.user.name}</h5>
-            <h5>Status: {order.status}</h5>
-            <h5>Total Price: ${order.total_price}</h5>
-            <h5>
-              Payment Method:{" "}
-              {order.payment ? order.payment.payment_method : "N/A"}
-            </h5>
-            <h5>
-              Payment Status:{" "}
-              {order.payment ? order.payment.payment_status : "N/A"}
-            </h5>
-            <h5>Order Items:</h5>
-            <Table striped bordered hover>
+          <div className="order-details">
+            <div className="order-summary">
+              <h5 className="section-title">Order Summary</h5>
+              <div className="summary-row">
+                <span className="label">User Name:</span>
+                <span className="value">{order.user.name}</span>
+              </div>
+              <div className="summary-row">
+                <span className="label">Order Status:</span>
+                <span
+                  className={`badge badge-${getBadgeColor(order.status)}`}
+                >
+                  {order.status}
+                </span>
+              </div>
+              <div className="summary-row">
+                <span className="label">Total Price:</span>
+                <span className="value">${order.total_price}</span>
+              </div>
+              <div className="summary-row">
+                <span className="label">Payment Method:</span>
+                <span className="value">
+                  {order.payment ? order.payment.payment_method : "N/A"}
+                </span>
+              </div>
+              <div className="summary-row">
+                <span className="label">Payment Status:</span>
+                <span className="value">
+                  {order.payment ? order.payment.payment_status : "N/A"}
+                </span>
+              </div>
+            </div>
+
+            <h5 className="section-title mt-4">Order Items</h5>
+            <Table responsive bordered hover className="order-items-table">
               <thead>
                 <tr>
                   <th>Image</th>
@@ -280,12 +301,10 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
                           alt={
                             item.product ? item.product.name : "Unknown Product"
                           }
-                          style={{ width: "65px", height: "auto" }}
+                          className="product-image"
                         />
                       </td>
-                      <td>
-                        {item.product ? item.product.name : "Unknown Product"}
-                      </td>
+                      <td>{item.product ? item.product.name : "Unknown Product"}</td>
                       <td>{item.quantity}</td>
                       <td>${item.price}</td>
                     </tr>
@@ -299,7 +318,7 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
                 )}
               </tbody>
             </Table>
-          </>
+          </div>
         ) : (
           <p>Loading order details...</p>
         )}
