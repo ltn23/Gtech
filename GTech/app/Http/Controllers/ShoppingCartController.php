@@ -107,12 +107,4 @@ class ShoppingCartController extends Controller
         $cartItem->delete();
         return response()->json(['message' => 'Item removed from cart']);
     }
-
-    // public function clearCart(Request $request)
-    // {
-    //     $userId = $request->user()->id;
-    //     Shopping_Cart::where('user_id', $userId)->delete();
-
-    //     return response()->json(['message' => 'Cart cleared']);
-    // }
 }

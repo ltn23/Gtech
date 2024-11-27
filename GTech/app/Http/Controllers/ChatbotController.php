@@ -18,7 +18,7 @@ class ChatbotController extends Controller
                     'Content-Type' => 'application/json',
                 ],
                 'json' => [
-                    'model' => 'gemma2:9b', // Đảm bảo model này đã được tải trong Ollama
+                    'model' => 'gemma2:9b', 
                     'messages' => $request->input('messages'),
                 ],
             ]);

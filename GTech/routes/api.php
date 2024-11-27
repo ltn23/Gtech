@@ -92,7 +92,6 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::post('', [ShoppingCartController::class, 'store']);
     Route::put('{id}', [ShoppingCartController::class, 'update']);
     Route::delete('{id}', [ShoppingCartController::class, 'destroy']);
-    // Route::delete('clear', [ShoppingCartController::class, 'clearCart']);
 });
 
 // Nhóm các route liên quan đến đánh giá (yêu cầu xác thực)
