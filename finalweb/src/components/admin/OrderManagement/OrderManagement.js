@@ -53,8 +53,7 @@ const OrderManagement = () => {
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
-      // Nếu trạng thái là "completed", cập nhật trạng thái thanh toán
+      
       if (newStatus === "completed") {
         const paymentResponse = await axios.put(
           `http://localhost:8000/api/payments/order/${orderId}`,
@@ -64,9 +63,10 @@ const OrderManagement = () => {
   
         console.log("Payment updated:", paymentResponse.data);
       }
+      
   
       showToast(`Order status updated to ${newStatus}!`, "success");
-      fetchOrders(); // Refresh orders
+      fetchOrders(); 
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       showToast("Failed to update order status.", "danger");

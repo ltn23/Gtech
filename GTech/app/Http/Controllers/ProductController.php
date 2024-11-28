@@ -111,8 +111,8 @@ class ProductController extends BaseController
                 ')
                 ->groupBy('product_id')
                 ->orderByDesc('units_sold')
-                ->with('product:id,name') // Include product details
-                ->take(10) // Limit to top 10 products
+                ->with('product:id,name') 
+                ->take(5) 
                 ->get();
 
             $products = $topProducts->map(function ($item) {

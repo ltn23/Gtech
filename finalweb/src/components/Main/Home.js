@@ -140,21 +140,30 @@ function Home() {
                 <main className="col-lg-9">
                   <div className="hero-slider">
                     <Slider {...settings}>
-                      <div onClick={() => navigate(`/products`)} style={{ cursor: 'pointer' }}>
+                      <div
+                        onClick={() => navigate(`/products`)}
+                        style={{ cursor: "pointer" }}
+                      >
                         <img
                           src="https://res.cloudinary.com/dsh0cqmhc/image/upload/c_fill,w_696,h_310/v1732707649/oczs7aixooavu4ikrekj.webp"
                           alt="Product 1"
                           className="img-fluid rounded-5"
                         />
                       </div>
-                      <div onClick={() => navigate(`/products`)} style={{ cursor: 'pointer' }}>
+                      <div
+                        onClick={() => navigate(`/products`)}
+                        style={{ cursor: "pointer" }}
+                      >
                         <img
                           src="https://res.cloudinary.com/dsh0cqmhc/image/upload/t_noel1/v1732789675/noel1_tfaltw.png"
                           alt="Product 2"
                           className="img-fluid rounded-5"
                         />
                       </div>
-                      <div onClick={() => navigate(`/products`)} style={{ cursor: 'pointer' }}>
+                      <div
+                        onClick={() => navigate(`/products`)}
+                        style={{ cursor: "pointer" }}
+                      >
                         <img
                           src="https://res.cloudinary.com/dsh0cqmhc/image/upload/t_noel1/v1732790106/noel4_sfjsgw.png"
                           alt="Product 3"
@@ -163,22 +172,35 @@ function Home() {
                       </div>
                     </Slider>
                   </div>
-                  
                 </main>
                 <aside className="col-lg-3">
                   <div
                     className="card-banner h-100 rounded-5"
-                    style={{ backgroundColor: "#f87217" }}
+                    style={{
+                      backgroundColor: "#f87217",
+                      padding: "20px",
+                      height: "400px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      textAlign: "center",
+                    }}
                   >
-                    <div className="card-body text-center pb-5">
+                    <div className="card-body text-center pb-5" style={{borderRadius: "32px"}}>
+                      <img
+                        src="https://res.cloudinary.com/dsh0cqmhc/image/upload/v1732802332/black_friday_yyqka4.png"
+                        alt="Amazing Gift"
+                        className="img-fluid rounded-5 mb-3"
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          objectFit: "cover",
+                          borderRadius: "10px",
+                        }}
+                      />
                       <h5 className="pt-5 text">Amazing Gifts</h5>
                       <p className="text">Perfect gifts for any occasion</p>
-                      <button
-                        onClick={() => navigate("/gifts")}
-                        className="btn btn-outline"
-                      >
-                        View more
-                      </button>
+                      
                     </div>
                   </div>
                 </aside>
