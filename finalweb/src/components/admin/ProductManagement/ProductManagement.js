@@ -102,6 +102,15 @@ const ProductManagement = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (currentProduct.price < 0) {
+      showToast("Price cannot be negative.", "danger");
+      return;
+    }
+    if (currentProduct.stock_quantity < 0) {
+      showToast("Stock quantity cannot be negative.", "danger");
+      return;
+    }
+
     const productData = {
       ...currentProduct,
       image_url: currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url,
@@ -266,6 +275,7 @@ const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, hand
             value={currentProduct.price}
             onChange={handleInputChange}
             required
+            min="0"
           />
         </Form.Group>
         <Form.Group controlId="formProductStock">
@@ -276,6 +286,7 @@ const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, hand
             value={currentProduct.stock_quantity}
             onChange={handleInputChange}
             required
+            min="0" 
           />
         </Form.Group>
         <Form.Group controlId="formProductCategory">
@@ -304,7 +315,7 @@ const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, hand
             onChange={handleInputChange}
           >
             <option value="available">Available</option>
-            <option value="unavailable">Unavailable</option>
+            <option value="unavailable">Out of Stock</option>
           </Form.Control>
         </Form.Group>
         <Button variant="primary" type="submit">
