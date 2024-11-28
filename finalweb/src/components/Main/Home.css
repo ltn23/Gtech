@@ -1,5 +1,6 @@
 .hero-section .card-banner {
   height: 350px;
+  
 }
 .hero-section {
   position: relative;
@@ -99,5 +100,28 @@
 .category-section .next-arrow {
   right: 10px;
 }
+
+/* Đảm bảo mũi tên có màu đen */
+.hero-section .slick-prev,
+.hero-section .slick-next {
+
+  background-color: rgba(0, 0, 0, 0.5); 
+  border-radius: 50%; 
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* Hover effect on Hero Section arrows */
+.hero-section .slick-prev:hover,
+.hero-section .slick-next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white !important;
+}
+
 
    

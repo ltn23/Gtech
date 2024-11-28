@@ -149,14 +149,14 @@ function Home() {
                       </div>
                       <div onClick={() => navigate(`/products`)} style={{ cursor: 'pointer' }}>
                         <img
-                          src="https://via.placeholder.com/800x350?text=Product+2"
+                          src="https://res.cloudinary.com/dsh0cqmhc/image/upload/t_noel1/v1732789675/noel1_tfaltw.png"
                           alt="Product 2"
                           className="img-fluid rounded-5"
                         />
                       </div>
                       <div onClick={() => navigate(`/products`)} style={{ cursor: 'pointer' }}>
                         <img
-                          src="https://via.placeholder.com/800x350?text=Product+3"
+                          src="https://res.cloudinary.com/dsh0cqmhc/image/upload/t_noel1/v1732790106/noel4_sfjsgw.png"
                           alt="Product 3"
                           className="img-fluid rounded-5"
                         />
