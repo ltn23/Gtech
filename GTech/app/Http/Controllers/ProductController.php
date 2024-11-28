@@ -10,27 +10,9 @@ use Illuminate\Routing\Controller;
 
 class ProductController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     */
-    // public function index(Request $request)
-    // {
-    //     $query = Product::with('category');
-
-    //     // Check if a category ID is provided
-    //     if ($request->has('category')) {
-    //         $query->where('category_id', $request->input('category'));
-    //     }
-
-    //     // Get the products based on the query
-    //     $products = $query->get();
-
-    //     return response()->json($products);
-    // }
-
     public function index(Request $request)
 {
-    // $query = Product::query();
+    
     $query = Product::with('category');
     // Search functionality
     if ($request->has('search')) {
@@ -45,6 +27,10 @@ class ProductController extends BaseController
     }
 
     $products = $query->get();
+
+    if ($request->has('search')) {
+        $products = $query->take(5)->get();
+    }
 
     return response()->json($products);
 }

@@ -53,16 +53,36 @@
 }
 
 .search-bar .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  max-width: 600px; 
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
+
 .search-bar .form-control {
-  border-radius: 0;
-  height: 50px;
+  border-radius: 30px; 
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 1rem; 
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .search-bar .btn {
-  height: 50px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 30px; /* Match button corners with the input */
+  font-size: 1rem;
+  background-color: #f87217; /* Orange button color */
+  color: white;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.search-bar .btn:hover {
+  background-color: #e96013; /* Slightly darker orange for hover effect */
 }
 .category-section .category-list {
   display: flex;
@@ -123,5 +143,70 @@
   color: white !important;
 }
 
+.suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%; /* Make sure it takes up the full width of the parent container */
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+  border-radius: 8px; /* Rounded corners */
+  margin-top: 5px;
+}
 
-   
+.suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #ddd;
+}
+
+.suggestions-list li:hover {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none; /* Remove the border from the last item */
+}
+
+.suggestions-list li {
+  font-size: 14px;
+  color: #333;
+}
+
+.suggestions-list li:hover {
+  font-weight: bold; /* Make the text bold when hovered */
+}
+
+.products-section .d-flex {
+  display: flex;
+}
+
+.products-section .d-flex.justify-content-between {
+  justify-content: space-between;
+}
+
+.products-section .btn-link {
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.products-section .btn-link:hover {
+  text-decoration: underline;
+}
+
+.products-section .products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}

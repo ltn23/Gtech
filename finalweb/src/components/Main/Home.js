@@ -10,6 +10,7 @@ function Home() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [error, setError] = useState(null);
@@ -48,7 +49,11 @@ function Home() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        setProducts(response.data);
+        const sortedProducts = response.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at); // Hoặc sử dụng trường khác nếu cần
+        });
+
+        setProducts(sortedProducts.slice(0, 5));
       } catch (err) {
         setError(err);
       } finally {
@@ -60,24 +65,27 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // Search function
-  const handleSearch = async () => {
-    try {
-      setLoadingProducts(true);
-      const response = await axios.get(
-        `http://localhost:8000/api/products?search=${searchTerm}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      setProducts(response.data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoadingProducts(false);
+  // Fetch search suggestions
+  const handleSearchChange = async (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+
+    if (term.length > 2) {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/products?search=${term}`
+        );
+        setSuggestions(response.data);
+      } catch (err) {
+        setError(err);
+      }
+    } else {
+      setSuggestions([]);
     }
+  };
+
+  const handleSearchSubmit = () => {
+    navigate(`/search?query=${searchTerm}`);
   };
 
   const settings = {
@@ -122,15 +130,28 @@ function Home() {
                   className="form-control"
                   placeholder="Search products..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleSearchChange}
                 />
                 <button
                   className="btn btn-primary"
-                  onClick={() => navigate(`/search?query=${searchTerm}`)} // Navigate to SearchResults
+                  onClick={handleSearchSubmit}
                 >
                   Search
                 </button>
               </div>
+              {/* Suggestions */}
+              {suggestions.length > 0 && (
+                <ul className="suggestions-list">
+                  {suggestions.map((product) => (
+                    <li
+                      key={product.id}
+                      onClick={() => navigate(`/products/${product.id}`)}
+                    >
+                      {product.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </section>
           {/* Hero Section with Image Slideshow */}
@@ -186,7 +207,10 @@ function Home() {
                       textAlign: "center",
                     }}
                   >
-                    <div className="card-body text-center pb-5" style={{borderRadius: "32px"}}>
+                    <div
+                      className="card-body text-center pb-5"
+                      style={{ borderRadius: "32px" }}
+                    >
                       <img
                         src="https://res.cloudinary.com/dsh0cqmhc/image/upload/v1732802332/black_friday_yyqka4.png"
                         alt="Amazing Gift"
@@ -200,7 +224,6 @@ function Home() {
                       />
                       <h5 className="pt-5 text">Amazing Gifts</h5>
                       <p className="text">Perfect gifts for any occasion</p>
-                      
                     </div>
                   </div>
                 </aside>
@@ -247,7 +270,16 @@ function Home() {
 
           <section className="products-section my-5">
             <div className="container">
-              <h3>New Products</h3>
+              <div className="d-flex justify-content-between align-items-center">
+                <h3>New Products</h3>
+                <button
+                  className="btn btn-link text-primary"
+                  onClick={() => navigate("/products")}
+                >
+                  Xem tất cả
+                </button>
+              </div>
+
               <div className="products-grid">
                 {products.map((product) => (
                   <div

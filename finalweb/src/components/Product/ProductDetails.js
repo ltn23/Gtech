@@ -120,7 +120,7 @@ const ProductDetails = () => {
   return (
     <div className="product-details-container">
       <ToastContainer />
-      <Link to="/products" className="continue-shopping">
+      <Link to="/home" className="continue-shopping">
         <i className="fas fa-arrow-left me-2"></i> Continue Shopping
       </Link>
       {product && (
