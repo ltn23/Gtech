@@ -276,7 +276,7 @@ function Home() {
                   className="btn btn-link text-primary"
                   onClick={() => navigate("/products")}
                 >
-                  Xem tất cả
+                  See All
                 </button>
               </div>
 

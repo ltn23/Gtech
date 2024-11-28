@@ -72,7 +72,7 @@ const Sidebar = ({ isSidebarOpen }) => {
     >
       <div className="sb-sidenav-menu">
         <div className="nav">
-          <div className="sb-sidenav-menu-heading">Core</div>
+          
           {currentMenuItems.map((item, index) => (
             <Link
               key={index}
