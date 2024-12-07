@@ -40,7 +40,7 @@ function Login() {
 
   const handleClose = () => {
     setShow(false);
-    navigate("/home"); // Điều hướng về trang home
+    navigate("/home");
   };
   
 
@@ -65,10 +65,9 @@ function Login() {
         console.log(response.data.message);
         window.location.href = "home";
       } else {
-        // Hiển thị lỗi từ server
+        
         setErrorMessage(response.data.message || "Invalid credentials");
-        // alert(response.data.message);
-        // console.error(response.data.message);
+        
       }
     } catch (error) {
       setErrorMessage("There was an error logging in. Please try again.");
@@ -83,7 +82,8 @@ function Login() {
   return (
     <Modal show={show} onHide={handleClose} centered className="login-modal">
       <Modal.Header closeButton>
-        <Modal.Title>Login</Modal.Title>
+      <Modal.Title style={{ color: 'black', fontSize: '26px', fontWeight: 'bold' }}>Login</Modal.Title>
+
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleLogin}>

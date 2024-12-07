@@ -33,6 +33,10 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (cartItems.length === 0) {
+      alert("Your shopping cart is empty. Please select a product to continue.");
+      return;
+    }
     let products = cartItems.map((item) => ({
       id: item.product.id,
       quantity: item.quantity,
@@ -42,6 +46,7 @@ const Checkout = () => {
     const orderData = {
       total_price: parseInt(total),
       products: products,
+
     };
 
     try {

@@ -24,7 +24,10 @@ function Register() {
     }
   }, [location]);
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    navigate("/home");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,12 +59,12 @@ function Register() {
         setSuccessMessage("Registration successful! Redirecting to login...");
         setTimeout(() => {
           navigate("/login"); // Điều hướng sau khi đăng ký thành công
-        }, 2000);
+        }, 5000);
       } catch (error) {
         // console.error("There was an error registering!", error);
         // setError("Registration failed. Please try again.");
         if (error.response && error.response.data) {
-          setError(error.response.data.message); // Hiển thị thông báo lỗi cụ thể từ server
+          setError(error.response.data.message);
         } else {
           setError("Registration failed. Please try again.");
         }
@@ -72,7 +75,7 @@ function Register() {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title className="register-title">Register</Modal.Title>
+        <Modal.Title className="register-title" style={{color: "black"}}>Register</Modal.Title>
       </Modal.Header>
       <Modal.Body>
       {error && <Alert variant="danger">{error}</Alert>}

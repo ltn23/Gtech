@@ -28,7 +28,10 @@ const ProductsList = () => {
             },
           }
         );
-        setProducts(response.data);
+        const sortedProducts = response.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at); // Hoặc sử dụng trường khác nếu cần
+        });
+        setProducts(sortedProducts);
       } catch (err) {
         setError(err);
       } finally {

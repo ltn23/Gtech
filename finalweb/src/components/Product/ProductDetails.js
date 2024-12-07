@@ -59,7 +59,7 @@ const ProductDetails = () => {
           setAverageRating(0);
         }
       } catch (err) {
-        toast.error("Failed to load reviews", { position: "top-right" });
+        toast.error("Please login before purchasing the product.", { position: "top-right" });
       }
     };
 

@@ -248,7 +248,8 @@ function Home() {
                           navigate(`/products?category=${category.id}`)
                         }
                       >
-                        <i className="fas fa-tag fa-xl"></i>
+                        <i className="fas fa-cogs fa-xl"></i>
+
                       </button>
                       <div className="text-dark">{category.name}</div>
                     </div>

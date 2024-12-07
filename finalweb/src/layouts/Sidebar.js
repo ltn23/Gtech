@@ -27,7 +27,7 @@ const Sidebar = ({ isSidebarOpen }) => {
   const menuItems = {
     admin: [
       { to: "/dashboard", label: "Dashboard", icon: "fas fa-tachometer-alt" },
-      { to: "/admin-panel", label: "Admin Panel", icon: "fas fa-user-shield" },
+
       {
         to: "/user-management",
         label: "User Management",
@@ -36,7 +36,7 @@ const Sidebar = ({ isSidebarOpen }) => {
       {
         to: "/category-management",
         label: "Category Management",
-        icon: "fas fa-money",
+        icon: "fas fa-user-shield",
       },
       {
         to: "/product-management",
@@ -52,8 +52,8 @@ const Sidebar = ({ isSidebarOpen }) => {
       { to: "#", label: "Categories", icon: "fas fa-list", toggle: true },
     ],
     guest: [
-      { to: "/login", label: "Login", icon: "fas fa-sign-in-alt" },
-      { to: "/register", label: "Register", icon: "fas fa-user-plus" },
+      // { to: "/login", label: "Login", icon: "fas fa-sign-in-alt" },
+      // { to: "/register", label: "Register", icon: "fas fa-user-plus" },
     ],
   };
 

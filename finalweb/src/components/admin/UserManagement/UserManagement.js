@@ -190,7 +190,7 @@ const UserTable = ({ users, handleShow, handleDelete }) => (
 const UserModal = ({ show, handleClose, handleSubmit, handleInputChange, currentUser, editMode }) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>{editMode ? "Edit User" : "Create User"}</Modal.Title>
+      <Modal.Title style={{color: 'black'}}>{editMode ? "Edit User" : "Create User"}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>
@@ -233,6 +233,7 @@ const UserModal = ({ show, handleClose, handleSubmit, handleInputChange, current
             name="phone"
             value={currentUser.phone}
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="formUserAddress">
@@ -242,6 +243,7 @@ const UserModal = ({ show, handleClose, handleSubmit, handleInputChange, current
             name="address"
             value={currentUser.address}
             onChange={handleInputChange}
+            required
           />
         </Form.Group>
         <Form.Group controlId="formUserGender">

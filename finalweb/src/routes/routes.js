@@ -27,12 +27,12 @@ const routes = [
   { path: "/register", name: "Register", element: <Register /> },
   { path: "/login", name: "Login", element: localStorage.getItem("isLoggedIn") === "true" ? <Navigate to="/home" /> : <Login /> },
   { path: "/logout", name: "Logout", element: <Logout /> },
-  { path: "/products", name: "Products", element: <ProductsList /> },
-  { path: "/products/:productId", name: "Products Details", element: <ProductDetails /> },
-  { path: "/shopping-cart", name: "Shopping Cart", element: <ShoppingCart /> },
-  { path: "/checkout", name: "Checkout", element: <Checkout /> },
-  { path: "/my-orders", name: "My Orders", element: <MyOrders/>},
-  { path: "/search", name: "Search", element: <SearchResults/>},
+  { path: "/products", name: "Products", element: <ProtectedRoute element={<ProductsList />} roleRequired="customer" /> },
+  { path: "/products/:productId", name: "Products Details", element: <ProtectedRoute element={<ProductDetails />} roleRequired="customer" /> },
+  { path: "/shopping-cart", name: "Shopping Cart", element: <ProtectedRoute element={<ShoppingCart />} roleRequired="customer" /> },
+  { path: "/checkout", name: "Checkout", element: <ProtectedRoute element={<Checkout />} roleRequired="customer"  /> },
+  { path: "/my-orders", name: "My Orders", element: <ProtectedRoute element={<MyOrders />} roleRequired="customer" />},
+  { path: "/search", name: "Search", element: <ProtectedRoute element={<SearchResults />} roleRequired="customer" />},
 
   //chatbot
   { path: "/chatbot", name: "Chat Bot", element: <Chatbot/>},

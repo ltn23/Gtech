@@ -1,25 +1,20 @@
-/* Thiết kế lại modal với nền gradient nổi bật */
 .login-modal {
-    width: 400px; /* Chiều rộng modal */
-    height: auto; /* Chiều cao tùy theo nội dung */
-    background: linear-gradient(135deg, #ff5f6d, #ffc371); /* Gradient nổi bật từ đỏ cam sang vàng */
+    width: 400px; 
+    height: auto; 
+    /* background: linear-gradient(135deg, #ff5f6d, #ffc371);
     border-radius: 20px; /* Bo góc mềm mại hơn */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng kết hợp để tạo hiệu ứng mềm mại */
-    padding: 40px; /* Tạo khoảng cách bên trong modal */
-    border: none; /* Loại bỏ viền ngoài */
-    position: relative; /* Để điều chỉnh vị trí của nút đóng */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng động khi modal xuất hiện */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 20px rgba(0, 0, 0, 0.1); 
+    padding: 40px; 
+    border: none; 
+    position: relative; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
-/* Hiệu ứng khi modal xuất hiện */
 .login-modal.show {
-    transform: scale(1.05); /* Modal phóng to nhẹ để tạo cảm giác nổi bật */
+    transform: scale(1.05); 
 }
 
 
-
-
-/* Đặt lại nút đóng để phù hợp với modal */
 .login-modal .modal-header .btn-close {
     position: absolute;
     top: 20px;
@@ -27,46 +22,46 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: #fff; /* Màu trắng để dễ nhìn */
+    color: #fff; 
     cursor: pointer;
 }
 
 /* Thiết kế lại input field */
 .input-field {
-    border-radius: 20px; /* Bo góc lớn cho input */
-    border: 2px solid #feb47b; /* Viền gradient cam vàng */
-    padding: 15px; /* Tăng khoảng cách bên trong input */
-    font-size: 16px; /* Kích thước chữ hợp lý */
-    transition: all 0.3s ease; /* Gom các hiệu ứng chuyển đổi */
-    background-color: #ffffff; /* Màu nền trắng */
-    box-shadow: 0 0 10px rgba(255, 182, 193, 0.2); /* Đổ bóng mềm mại xung quanh */
+    border-radius: 20px; 
+    border: 2px solid #feb47b; 
+    padding: 15px; 
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background-color: #ffffff; 
+    box-shadow: 0 0 10px rgba(255, 182, 193, 0.2); 
 }
 
 .input-field:focus {
-    border-color: #ff7e5f; /* Màu viền khi focus */
-    box-shadow: 0 0 20px rgba(255, 126, 95, 0.5); /* Hiệu ứng đổ bóng sáng mạnh hơn khi focus */
+    border-color: #ff7e5f; 
+    box-shadow: 0 0 20px rgba(255, 126, 95, 0.5); 
 }
 
-/* Thiết kế lại nút đăng nhập */
+
 .primary {
-    background: linear-gradient(to right, #6a11cb, #2575fc); /* Màu gradient tím sang xanh lam */
+    background: linear-gradient(to right, #6a11cb, #2575fc); 
     border: none;
     padding: 14px 25px;
     font-size: 16px;
     font-weight: bold;
     color: white;
-    border-radius: 50px; /* Bo góc tròn để tạo cảm giác hiện đại */
-    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển tiếp toàn diện */
+    border-radius: 50px; 
+    transition: all 0.3s ease-in-out;
     cursor: pointer;
     width: 100%;
-    text-transform: uppercase; /* Chữ in hoa cho nút đăng nhập */
-    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4); /* Hiệu ứng đổ bóng phát sáng nhẹ */
+    text-transform: uppercase; 
+    box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4); 
 }
 
 .primary:hover {
-    background: linear-gradient(to right, #2575fc, #6a11cb); /* Đảo ngược màu gradient khi hover */
-    box-shadow: 0 6px 20px rgba(37, 117, 252, 0.6); /* Đổ bóng mạnh hơn để tạo sự nổi bật */
-    transform: scale(1.05); /* Phóng to nhẹ khi hover */
+    background: linear-gradient(to right, #2575fc, #6a11cb);
+    box-shadow: 0 6px 20px rgba(37, 117, 252, 0.6); 
+    transform: scale(1.05); 
 }
 
 /* Thiết kế lại nút Google login */
@@ -74,23 +69,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335); /* Gradient 4 màu đặc trưng của Google */
+    background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
     color: white;
     padding: 14px 20px;
     font-size: 16px;
     font-weight: bold;
     border: none;
-    border-radius: 50px; /* Bo góc tròn */
+    border-radius: 50px; 
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     width: 100%;
     margin-top: 20px;
-    box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4); /* Đổ bóng phát sáng */
+    box-shadow: 0 4px 15px rgba(66, 133, 244, 0.4); 
 }
 
 .google-login-button:hover {
-    transform: translateY(-5px) rotate(-1deg); /* Đẩy lên và xoay nhẹ khi hover */
-    box-shadow: 0 6px 20px rgba(66, 133, 244, 0.6); /* Tăng đổ bóng khi hover */
+    transform: translateY(-5px) rotate(-1deg); 
+    box-shadow: 0 6px 20px rgba(66, 133, 244, 0.6);
 }
 
 .google-icon {
@@ -102,7 +97,7 @@
 /* Thiết kế lại nút hủy */
 button.outline-danger {
     color: #ff1744;
-    border: 2px solid #ff1744; /* Màu viền đỏ nổi bật */
+    border: 2px solid #ff1744;
     padding: 12px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -129,8 +124,9 @@ button.outline-danger:hover {
 .modal-title {
     font-weight: 700;
     font-size: 26px;
-    color: #ffffff; /* Màu trắng để nổi bật trên nền gradient */
-    text-align: center; /* Căn giữa tiêu đề */
-    text-transform: uppercase; /* Chữ in hoa toàn bộ */
+    color: black; /* Màu trắng */
+    text-align: center;
+    text-transform: uppercase;
     margin-bottom: 20px;
 }
+

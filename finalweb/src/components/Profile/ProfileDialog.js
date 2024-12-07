@@ -60,7 +60,7 @@ const ProfileDialog = ({ show, handleClose }) => {
   return (
     <Modal show={show} dialogClassName="modal-lg" onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Profile</Modal.Title>
+        <Modal.Title style={{color: 'black'}}>Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <section className="vh-100" style={{ backgroundColor: '#f4f5f7' }}>

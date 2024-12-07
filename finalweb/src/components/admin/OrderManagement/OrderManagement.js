@@ -244,7 +244,7 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
-        <Modal.Title className="modal-title">Order Details</Modal.Title>
+        <Modal.Title className="modal-title" style={{color: "black"}}>Order Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {order ? (

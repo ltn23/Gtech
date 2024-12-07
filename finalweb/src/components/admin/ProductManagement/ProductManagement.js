@@ -35,7 +35,10 @@ const ProductManagement = () => {
       const response = await axios.get("http://localhost:8000/api/products", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setProducts(response.data);
+      const sortedProducts = response.data.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at); 
+      });
+      setProducts(sortedProducts);
     } catch (err) {
       setError("Failed to fetch products. Please check your network or login again.");
     } finally {
@@ -234,7 +237,7 @@ const ProductTable = ({ products, handleShow, handleDelete }) => (
 const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, handleImageChange, currentProduct, categories, editMode }) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
+      <Modal.Title style={{color: 'black'}}>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>
