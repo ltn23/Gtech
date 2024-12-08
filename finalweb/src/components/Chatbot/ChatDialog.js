@@ -5,7 +5,7 @@ import axios from 'axios'; // Thêm axios để gọi API
 const ChatDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: 'Xin chào! Tôi có thể giúp gì cho bạn?' }
+    { role: 'assistant', content: 'Hello! How can I help you?' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false); // Để hiển thị trạng thái loading
@@ -28,9 +28,14 @@ const ChatDialog = () => {
       setMessages([...newMessages, { role: 'assistant', content: aiResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);
-      setMessages([...newMessages, { role: 'assistant', content: 'Lỗi kết nối API.' }]);
+      setMessages([...newMessages, { role: 'assistant', content: 'API connection error.' }]);
     } finally {
       setLoading(false); // Kết thúc trạng thái loading
+    }
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage(); 
     }
   };
 
@@ -47,13 +52,14 @@ const ChatDialog = () => {
                 <strong>{msg.role === 'user' ? 'You' : 'Bot'}:</strong> {msg.content}
               </div>
             ))}
-            {loading && <p>Đang xử lý...</p>}
+            {loading && <p>Processing...</p>}
           </div>
           <div className="chat-input">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyPress}
               placeholder="Type your message..."
             />
             <button onClick={handleSendMessage}>Send</button>

@@ -50,7 +50,7 @@ function Home() {
           },
         });
         const sortedProducts = response.data.sort((a, b) => {
-          return new Date(b.created_at) - new Date(a.created_at); // Hoặc sử dụng trường khác nếu cần
+          return new Date(b.created_at) - new Date(a.created_at); 
         });
 
         setProducts(sortedProducts.slice(0, 5));
@@ -65,7 +65,6 @@ function Home() {
     fetchProducts();
   }, []);
 
-  // Fetch search suggestions
   const handleSearchChange = async (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -86,6 +85,11 @@ function Home() {
 
   const handleSearchSubmit = () => {
     navigate(`/search?query=${searchTerm}`);
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchSubmit();
+    }
   };
 
   const settings = {
@@ -121,7 +125,6 @@ function Home() {
       ) : (
         <div className="home-content">
           <ChatDialog />
-          {/* Search bar */}
           <section className="search-bar mt-4">
             <div className="container">
               <div className="input-group">
@@ -131,6 +134,7 @@ function Home() {
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={handleSearchChange}
+                  onKeyPress={handleKeyPress}
                 />
                 <button
                   className="btn btn-primary"
@@ -139,7 +143,6 @@ function Home() {
                   Search
                 </button>
               </div>
-              {/* Suggestions */}
               {suggestions.length > 0 && (
                 <ul className="suggestions-list">
                   {suggestions.map((product) => (
@@ -154,7 +157,6 @@ function Home() {
               )}
             </div>
           </section>
-          {/* Hero Section with Image Slideshow */}
           <section className="hero-section pt-3">
             <div className="container">
               <div className="row gx-3">

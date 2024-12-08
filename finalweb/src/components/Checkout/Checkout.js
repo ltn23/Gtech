@@ -6,9 +6,8 @@ import axios from "axios";
 const Checkout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { cartItems, selectedItems, total } = location.state || {
+  const { cartItems, total } = location.state || {
     cartItems: [],
-    selectedItems: {},
     total: 0,
   };
 
@@ -54,7 +53,7 @@ const Checkout = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
-      const orderId = orderResponse.data.id; // lấy ID của order mới
+      const orderId = orderResponse.data.id;
 
       if (paymentMethod === "cash") {
         const paymentData = {
@@ -67,7 +66,7 @@ const Checkout = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         alert("Order placed successfully!");
-        navigate("/home"); // Redirect to home or order confirmation page
+        navigate("/home"); 
       }
     } catch (error) {
       console.error("Error placing order:", error);
