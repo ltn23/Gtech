@@ -27,7 +27,7 @@ class ProductSaveRequest extends FormRequest
         return [
             // 'id' => ['nullable', Rule::exists('products', 'id')],
             'id' => ['nullable', Rule::exists('products', 'id')->where(function ($query) {
-            // Chỉ kiểm tra nếu có id
+           
             if ($this->input('id')) {
                 $query->where('id', $this->input('id'));
             }

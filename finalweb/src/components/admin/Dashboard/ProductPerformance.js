@@ -11,9 +11,12 @@ const ProductPerformance = () => {
     const fetchProducts = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8000/api/product/top", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/product/top",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setProducts(response.data);
       } catch (err) {
         setError("Failed to fetch top-performing products.");

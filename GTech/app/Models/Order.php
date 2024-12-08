@@ -10,10 +10,13 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'order_date', 'status', 'total_price'
+        'user_id',
+        'order_date',
+        'status',
+        'total_price'
     ];
 
-    // An order belongs to a user
+
     public function user()
     {
         return $this->belongsTo(User::class);

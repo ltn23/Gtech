@@ -20,11 +20,11 @@ return new class extends Migration
             $table->string('password');
             $table->string('phone', 20)->default('');
             $table->string('address', 255)->nullable();
-            $table->enum('role', [ 'admin','customer'])->default('customer');
+            $table->enum('role', ['admin', 'customer'])->default('customer');
             $table->rememberToken();
             $table->timestamps();
-        });      
-        
+        });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
@@ -39,7 +39,6 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-
     }
 
     /**

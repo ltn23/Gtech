@@ -6,7 +6,6 @@ function UploadImage() {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
 
-  // Xử lý khi người dùng chọn hình
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };

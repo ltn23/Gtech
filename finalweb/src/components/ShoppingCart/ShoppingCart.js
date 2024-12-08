@@ -12,7 +12,6 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     fetchCartItems();
-    // Khởi tạo selectedItems là một đối tượng rỗng khi vào trang
     setSelectedItems({});
   }, []);
 

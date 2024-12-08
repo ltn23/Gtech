@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./CategoryManagement.css";
-import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 
@@ -8,10 +15,17 @@ const CategoryManagement = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    variant: "success",
+  });
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState({ name: "", description: "" });
+  const [currentCategory, setCurrentCategory] = useState({
+    name: "",
+    description: "",
+  });
 
   useEffect(() => {
     fetchCategories();
@@ -21,11 +35,13 @@ const CategoryManagement = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:8000/api/categories", {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       setCategories(response.data);
     } catch (err) {
-      setError("Failed to fetch categories. Please check your network or login again.");
+      setError(
+        "Failed to fetch categories. Please check your network or login again."
+      );
     } finally {
       setLoading(false);
     }
@@ -33,7 +49,10 @@ const CategoryManagement = () => {
 
   const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });
-    setTimeout(() => setToast({ show: false, message: "", variant: "success" }), 3000);
+    setTimeout(
+      () => setToast({ show: false, message: "", variant: "success" }),
+      3000
+    );
   }, []);
 
   const handleShow = (category = {}) => {
@@ -77,7 +96,11 @@ const CategoryManagement = () => {
 
       fetchCategories();
       handleClose();
-      showToast(editMode ? "Category updated successfully!" : "Category created successfully!");
+      showToast(
+        editMode
+          ? "Category updated successfully!"
+          : "Category created successfully!"
+      );
     } catch (err) {
       showToast("Failed to save category. Please try again.", "danger");
     }
@@ -86,14 +109,19 @@ const CategoryManagement = () => {
   const handleDelete = async (categoryId) => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
-        const response = await axios.delete(`http://localhost:8000/api/categories/${categoryId}`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-        });
+        const response = await axios.delete(
+          `http://localhost:8000/api/categories/${categoryId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
-        
+
         fetchCategories();
         showToast("Category deleted successfully!", "success");
       } catch (err) {
@@ -115,13 +143,11 @@ const CategoryManagement = () => {
       <Button variant="success" className="mb-3" onClick={() => handleShow()}>
         + Create Category
       </Button>
-      {error && (
-        <div className="alert alert-danger text-center">{error}</div>
-      )}
-      <CategoryTable 
-        categories={categories} 
-        handleShow={handleShow} 
-        handleDelete={handleDelete} 
+      {error && <div className="alert alert-danger text-center">{error}</div>}
+      <CategoryTable
+        categories={categories}
+        handleShow={handleShow}
+        handleDelete={handleDelete}
       />
       <CategoryModal
         show={showModal}
@@ -159,10 +185,18 @@ const CategoryTable = ({ categories, handleShow, handleDelete }) => (
             <td>{category.name}</td>
             <td>{category.description}</td>
             <td className="action-buttons">
-              <Button variant="outline-warning" size="sm" onClick={() => handleShow(category)}>
+              <Button
+                variant="outline-warning"
+                size="sm"
+                onClick={() => handleShow(category)}
+              >
                 <FaEdit className="icon" /> Edit
               </Button>
-              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(category.id)}>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleDelete(category.id)}
+              >
                 <FaTrash className="icon" /> Delete
               </Button>
             </td>
@@ -173,10 +207,19 @@ const CategoryTable = ({ categories, handleShow, handleDelete }) => (
   </div>
 );
 
-const CategoryModal = ({ show, handleClose, handleSubmit, handleInputChange, currentCategory, editMode }) => (
+const CategoryModal = ({
+  show,
+  handleClose,
+  handleSubmit,
+  handleInputChange,
+  currentCategory,
+  editMode,
+}) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title>{editMode ? "Edit Category" : "Create Category"}</Modal.Title>
+      <Modal.Title>
+        {editMode ? "Edit Category" : "Create Category"}
+      </Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>

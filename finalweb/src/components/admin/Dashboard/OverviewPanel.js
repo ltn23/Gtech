@@ -22,9 +22,12 @@ const OverviewPanel = () => {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8000/api/dashboard/stats", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/dashboard/stats",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         setStats(response.data);
       } catch (err) {
         console.error("Failed to fetch stats", err);
@@ -40,16 +43,32 @@ const OverviewPanel = () => {
   return (
     <div className="row">
       <div className="col-md-3">
-        <StatBox icon="cart" label="Total Orders" value={stats.total_orders || 0} />
+        <StatBox
+          icon="cart"
+          label="Total Orders"
+          value={stats.total_orders || 0}
+        />
       </div>
       <div className="col-md-3">
-        <StatBox icon="dollar" label="Revenue This Month" value={`$${stats.monthly_revenue || 0}`} />
+        <StatBox
+          icon="dollar"
+          label="Revenue This Month"
+          value={`$${stats.monthly_revenue || 0}`}
+        />
       </div>
       <div className="col-md-3">
-        <StatBox icon="box" label="Products Available" value={stats.products_available || 0} />
+        <StatBox
+          icon="box"
+          label="Products Available"
+          value={stats.products_available || 0}
+        />
       </div>
       <div className="col-md-3">
-        <StatBox icon="user" label="Total Customers" value={stats.total_customers || 0} />
+        <StatBox
+          icon="user"
+          label="Total Customers"
+          value={stats.total_customers || 0}
+        />
       </div>
     </div>
   );

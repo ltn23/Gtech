@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate  } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./Login.css";
@@ -42,7 +42,6 @@ function Login() {
     setShow(false);
     navigate("/home");
   };
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -65,9 +64,7 @@ function Login() {
         console.log(response.data.message);
         window.location.href = "home";
       } else {
-        
         setErrorMessage(response.data.message || "Invalid credentials");
-        
       }
     } catch (error) {
       setErrorMessage("There was an error logging in. Please try again.");
@@ -82,12 +79,15 @@ function Login() {
   return (
     <Modal show={show} onHide={handleClose} centered className="login-modal">
       <Modal.Header closeButton>
-      <Modal.Title style={{ color: 'black', fontSize: '26px', fontWeight: 'bold' }}>Login</Modal.Title>
-
+        <Modal.Title
+          style={{ color: "black", fontSize: "26px", fontWeight: "bold" }}
+        >
+          Login
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleLogin}>
-        <div className="mt-3">
+          <div className="mt-3">
             <button
               type="button"
               className="google-login-button"
@@ -122,7 +122,6 @@ function Login() {
           <Button variant="primary" type="submit">
             Login
           </Button>
-          
         </Form>
       </Modal.Body>
       <Modal.Footer>

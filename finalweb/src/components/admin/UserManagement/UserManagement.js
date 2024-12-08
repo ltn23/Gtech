@@ -1,14 +1,25 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./UserManagement.css";
-import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import axios from 'axios';
+import axios from "axios";
 
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    variant: "success",
+  });
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentUser, setCurrentUser] = useState({
@@ -26,13 +37,15 @@ const UserManagement = () => {
 
   const fetchUsers = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/users', {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:8000/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(response.data);
     } catch (err) {
-      setError("Failed to fetch users. Please check your network or login again.");
+      setError(
+        "Failed to fetch users. Please check your network or login again."
+      );
     } finally {
       setLoading(false);
     }
@@ -40,21 +53,38 @@ const UserManagement = () => {
 
   const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });
-    setTimeout(() => setToast({ show: false, message: "", variant: "success" }), 3000);
+    setTimeout(
+      () => setToast({ show: false, message: "", variant: "success" }),
+      3000
+    );
   }, []);
 
   const handleShow = (user = {}) => {
     setCurrentUser(
       user.id
         ? user
-        : { name: "", email: "", phone: "", address: "", role: "customer", gender: "male" }
+        : {
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            role: "customer",
+            gender: "male",
+          }
     );
     setEditMode(!!user.id);
     setShowModal(true);
   };
 
   const handleClose = () => {
-    setCurrentUser({ name: "", email: "", phone: "", address: "", role: "customer", gender: "male" });
+    setCurrentUser({
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      role: "customer",
+      gender: "male",
+    });
     setEditMode(false);
     setShowModal(false);
   };
@@ -72,7 +102,7 @@ const UserManagement = () => {
       : "http://localhost:8000/api/users";
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const response = await axios({
         method,
         url,
@@ -89,7 +119,9 @@ const UserManagement = () => {
 
       fetchUsers();
       handleClose();
-      showToast(editMode ? "User updated successfully!" : "User created successfully!");
+      showToast(
+        editMode ? "User updated successfully!" : "User created successfully!"
+      );
     } catch (err) {
       setError("Failed to save user.");
     }
@@ -98,11 +130,14 @@ const UserManagement = () => {
   const handleDelete = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.delete(`http://localhost:8000/api/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
+        const token = localStorage.getItem("token");
+        const response = await axios.delete(
+          `http://localhost:8000/api/users/${userId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
         }
@@ -115,8 +150,18 @@ const UserManagement = () => {
     }
   };
 
-  if (loading) return <div className="text-center"><Spinner animation="border" variant="primary" /></div>;
-  if (error) return <div className="text-center"><p className="text-danger">{error}</p></div>;
+  if (loading)
+    return (
+      <div className="text-center">
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center">
+        <p className="text-danger">{error}</p>
+      </div>
+    );
 
   return (
     <div className="user-management container">
@@ -124,7 +169,11 @@ const UserManagement = () => {
       <Button variant="success" className="mb-3" onClick={() => handleShow()}>
         + Create User
       </Button>
-      <UserTable users={users} handleShow={handleShow} handleDelete={handleDelete} />
+      <UserTable
+        users={users}
+        handleShow={handleShow}
+        handleDelete={handleDelete}
+      />
       <UserModal
         show={showModal}
         handleClose={handleClose}
@@ -167,16 +216,28 @@ const UserTable = ({ users, handleShow, handleDelete }) => (
             <td>{user.phone}</td>
             <td>{user.address}</td>
             <td>
-              <span className={`badge ${user.role === "admin" ? "badge-danger" : "badge-info"}`}>
+              <span
+                className={`badge ${
+                  user.role === "admin" ? "badge-danger" : "badge-info"
+                }`}
+              >
                 {user.role}
               </span>
             </td>
             <td>{user.gender}</td>
             <td className="action-buttons">
-              <Button variant="outline-warning" size="sm" onClick={() => handleShow(user)}>
+              <Button
+                variant="outline-warning"
+                size="sm"
+                onClick={() => handleShow(user)}
+              >
                 <FaEdit className="icon" /> Edit
               </Button>
-              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(user.id)}>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleDelete(user.id)}
+              >
                 <FaTrash className="icon" /> Delete
               </Button>
             </td>
@@ -187,10 +248,19 @@ const UserTable = ({ users, handleShow, handleDelete }) => (
   </div>
 );
 
-const UserModal = ({ show, handleClose, handleSubmit, handleInputChange, currentUser, editMode }) => (
+const UserModal = ({
+  show,
+  handleClose,
+  handleSubmit,
+  handleInputChange,
+  currentUser,
+  editMode,
+}) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title style={{color: 'black'}}>{editMode ? "Edit User" : "Create User"}</Modal.Title>
+      <Modal.Title style={{ color: "black" }}>
+        {editMode ? "Edit User" : "Create User"}
+      </Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>

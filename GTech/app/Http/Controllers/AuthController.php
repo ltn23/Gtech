@@ -21,45 +21,44 @@ class AuthController extends BaseController
         $this->authService = $authService;
     }
 
-    // Điều hướng người dùng đến trang đăng nhập của Google
+
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    
-public function handleGoogleCallback()
-{
-    try {
-        $googleUser = Socialite::driver('google')->user();
 
-        // Kiểm tra xem người dùng đã tồn tại chưa
-        $user = User::where('email', $googleUser->getEmail())->first();
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
 
-        if (!$user) {
-            // Nếu người dùng chưa tồn tại, tạo mới với vai trò 'customer'
-            $user = User::create([
-                'name' => $googleUser->getName(),
-                'email' => $googleUser->getEmail(),
-                // 'password' => bcrypt(uniqid()), // Tạo mật khẩu ngẫu nhiên
-                'password' => Hash::make('123123'),
-                'role' => 'customer',
-            ]);
+
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if (!$user) {
+
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    // 'password' => bcrypt(uniqid()), 
+                    'password' => Hash::make('123123'),
+                    'role' => 'customer',
+                ]);
+            }
+
+
+            Auth::login($user);
+
+
+            $token = $user->createToken('API Token')->plainTextToken;
+
+
+            return redirect()->to("http://localhost:3000/login?token=$token&role={$user->role}");
+        } catch (\Exception $e) {
+            return redirect()->to("http://localhost:3000/login?error=Google login failed: " . $e->getMessage());
         }
-
-        // Đăng nhập người dùng
-        Auth::login($user);
-
-        // Tạo token đăng nhập cho API
-        $token = $user->createToken('API Token')->plainTextToken;
-
-        // Chuyển hướng người dùng về giao diện đăng nhập, kèm theo token và thông tin cần thiết
-        return redirect()->to("http://localhost:3000/login?token=$token&role={$user->role}");
-        
-    } catch (\Exception $e) {
-        return redirect()->to("http://localhost:3000/login?error=Google login failed: " . $e->getMessage());
     }
-}
 
 
 

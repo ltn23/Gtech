@@ -7,9 +7,9 @@ function Logout() {
     localStorage.clear();
     console.log("All localStorage data has been removed");
     setTimeout(() => {
-      navigate("/home"); // Hoặc "/login"
-    },1000);
-  },[navigate]);
+      navigate("/home");
+    }, 1000);
+  }, [navigate]);
 
   return <div></div>;
 }

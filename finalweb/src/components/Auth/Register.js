@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate  } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Modal, Button, Form, Spinner, Alert } from "react-bootstrap";
 import axios from "axios";
 import "./Register.css";
@@ -38,7 +38,7 @@ function Register() {
       setError("Password must be at least 6 characters long");
       return;
     }
-    // console.log();
+    
     if (!(password === passwordConfirmation)) {
       setIsLoading(false);
       setError("Password confirm does not match ...");
@@ -58,11 +58,9 @@ function Register() {
         setIsLoading(false);
         setSuccessMessage("Registration successful! Redirecting to login...");
         setTimeout(() => {
-          navigate("/login"); // Điều hướng sau khi đăng ký thành công
+          navigate("/login");
         }, 5000);
       } catch (error) {
-        // console.error("There was an error registering!", error);
-        // setError("Registration failed. Please try again.");
         if (error.response && error.response.data) {
           setError(error.response.data.message);
         } else {
@@ -75,11 +73,13 @@ function Register() {
   return (
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title className="register-title" style={{color: "black"}}>Register</Modal.Title>
+        <Modal.Title className="register-title" style={{ color: "black" }}>
+          Register
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      {error && <Alert variant="danger">{error}</Alert>}
-      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+        {error && <Alert variant="danger">{error}</Alert>}
+        {successMessage && <Alert variant="success">{successMessage}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicName">
             <Form.Label>Full Name</Form.Label>
@@ -128,9 +128,14 @@ function Register() {
               className="input-field"
             />
           </Form.Group>
-          <Button variant="primary" type="submit" className="primary-register" disabled={isLoading}>
+          <Button
+            variant="primary"
+            type="submit"
+            className="primary-register"
+            disabled={isLoading}
+          >
             {isLoading ? (
-              <Spinner animation="border" size="sm" /> // Hiển thị spinner khi đang xử lý
+              <Spinner animation="border" size="sm" /> 
             ) : (
               "Register"
             )}

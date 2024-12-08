@@ -46,33 +46,30 @@ const OrderManagement = () => {
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
-  
-      // Cập nhật trạng thái đơn hàng
+
       await axios.put(
         `http://localhost:8000/api/orders/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      
+
       if (newStatus === "completed") {
         const paymentResponse = await axios.put(
           `http://localhost:8000/api/payments/order/${orderId}`,
           { payment_status: "completed" },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-  
+
         console.log("Payment updated:", paymentResponse.data);
       }
-      
-  
+
       showToast(`Order status updated to ${newStatus}!`, "success");
-      fetchOrders(); 
+      fetchOrders();
     } catch (err) {
       console.error("Error:", err.response?.data || err.message);
       showToast("Failed to update order status.", "danger");
     }
   };
-  
 
   const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });
@@ -244,7 +241,9 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
   return (
     <Modal show={show} onHide={handleClose} size="lg" centered>
       <Modal.Header closeButton>
-        <Modal.Title className="modal-title" style={{color: "black"}}>Order Details</Modal.Title>
+        <Modal.Title className="modal-title" style={{ color: "black" }}>
+          Order Details
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {order ? (
@@ -257,9 +256,7 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
               </div>
               <div className="summary-row">
                 <span className="label">Order Status:</span>
-                <span
-                  className={`badge badge-${getBadgeColor(order.status)}`}
-                >
+                <span className={`badge badge-${getBadgeColor(order.status)}`}>
                   {order.status}
                 </span>
               </div>
@@ -304,7 +301,9 @@ const OrderDetailsModal = ({ show, handleClose, order }) => {
                           className="product-image"
                         />
                       </td>
-                      <td>{item.product ? item.product.name : "Unknown Product"}</td>
+                      <td>
+                        {item.product ? item.product.name : "Unknown Product"}
+                      </td>
                       <td>{item.quantity}</td>
                       <td>${item.price}</td>
                     </tr>

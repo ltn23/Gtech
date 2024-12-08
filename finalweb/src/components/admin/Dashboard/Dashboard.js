@@ -16,7 +16,6 @@ const Dashboard = () => {
           <ProductPerformance />
         </div>
       </div>
-    
     </div>
   );
 };

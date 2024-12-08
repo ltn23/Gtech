@@ -39,14 +39,12 @@ class ReviewController extends Controller
             $rating = $request->input('rating');
             $comment = $request->input('comment');
 
-            // Validate the request data
             $request->validate([
                 'product_id' => 'required|exists:products,id',
                 'rating' => 'required|integer|min:1|max:5',
                 'comment' => 'nullable|string',
             ]);
 
-            // Create a new review
             $review = Review::create([
                 'user_id' => $userId,
                 'product_id' => $productId,
@@ -54,7 +52,7 @@ class ReviewController extends Controller
                 'comment' => $comment,
             ]);
 
-            // Load user data to include it in the response
+            
             $review->load('user');
 
             return response()->json($review, 201);

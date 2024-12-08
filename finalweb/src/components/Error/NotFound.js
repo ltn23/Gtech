@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./NotFound.css"; 
+import "./NotFound.css";
 import { Container, Button } from "react-bootstrap";
 
 const NotFound = () => {

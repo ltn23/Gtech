@@ -50,7 +50,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [PaymentController::class, 'store']);
         Route::delete('{id}', [PaymentController::class, 'destroy']);
         Route::put('order/{orderId}', [PaymentController::class, 'updatePaymentStatus']);
-
     });
 });
 
@@ -62,7 +61,6 @@ Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/google', [AuthController::class, 'redirectToGoogle'])->middleware('web');
     Route::get('/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('web');
-
 });
 
 Route::prefix('products')->group(function () {
@@ -109,4 +107,3 @@ Route::post('/chat', [ChatbotController::class, 'handleChat']);
 Route::get('/dashboard/stats', [DashboardController::class, 'getStats']);
 Route::middleware('auth:sanctum')->get('/sales', [SalesController::class, 'index']);
 Route::middleware('auth:sanctum')->get('/product/top', [ProductController::class, 'topProduct']);
-

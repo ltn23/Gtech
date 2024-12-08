@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Checkout.css"; 
+import "./Checkout.css";
 import axios from "axios";
 
 const Checkout = () => {
@@ -14,17 +14,17 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [userDetails, setUserDetails] = useState({
     name: "",
-    email: "", 
+    email: "",
     phone: "",
     address: "",
-    city: "", 
-    country: "", 
+    city: "",
+    country: "",
   });
 
   const handlePaymentMethodChange = (e) => {
     setPaymentMethod(e.target.value);
   };
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails((prev) => ({ ...prev, [name]: value }));
@@ -33,7 +33,9 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (cartItems.length === 0) {
-      alert("Your shopping cart is empty. Please select a product to continue.");
+      alert(
+        "Your shopping cart is empty. Please select a product to continue."
+      );
       return;
     }
     let products = cartItems.map((item) => ({
@@ -45,13 +47,16 @@ const Checkout = () => {
     const orderData = {
       total_price: parseInt(total),
       products: products,
-
     };
 
     try {
-      const orderResponse = await axios.post("http://localhost:8000/api/orders", orderData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const orderResponse = await axios.post(
+        "http://localhost:8000/api/orders",
+        orderData,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
 
       const orderId = orderResponse.data.id;
 
@@ -66,7 +71,7 @@ const Checkout = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         alert("Order placed successfully!");
-        navigate("/home"); 
+        navigate("/home");
       }
     } catch (error) {
       console.error("Error placing order:", error);
@@ -102,10 +107,16 @@ const Checkout = () => {
               })),
             };
 
-            const orderResponse = await axios.post("http://localhost:8000/api/orders", orderData, {
-              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            });
-            
+            const orderResponse = await axios.post(
+              "http://localhost:8000/api/orders",
+              orderData,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+
             const orderId = orderResponse.data.id;
 
             const paymentData = {
@@ -114,9 +125,15 @@ const Checkout = () => {
               total_amount: parseInt(total),
             };
 
-            await axios.post("http://localhost:8000/api/payments", paymentData, {
-              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            });
+            await axios.post(
+              "http://localhost:8000/api/payments",
+              paymentData,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
             alert("Order and PayPal payment placed successfully!");
             navigate("/home");
           },
@@ -125,7 +142,7 @@ const Checkout = () => {
             alert("PayPal payment failed. Please try again.");
           },
         })
-        .render("#paypal-button-container"); 
+        .render("#paypal-button-container");
     }
   }, [paymentMethod]);
 
@@ -238,7 +255,9 @@ const Checkout = () => {
                 <div className="feed-item-list">
                   <div>
                     <h5 className="font-size-16 mb-1">Payment Info</h5>
-                    <p className="text-muted text-truncate mb-4">Choose your payment method:</p>
+                    <p className="text-muted text-truncate mb-4">
+                      Choose your payment method:
+                    </p>
                   </div>
                   <div>
                     <h5 className="font-size-14 mb-3">Payment method:</h5>
@@ -289,19 +308,23 @@ const Checkout = () => {
                   </button>
                 )}
               </form>
-              {paymentMethod === "paypal" && <div id="paypal-button-container"></div>}
+              {paymentMethod === "paypal" && (
+                <div id="paypal-button-container"></div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Order Summary Section */}
         <div className="col-xl-4">
           <div className="card checkout-order-summary">
             <div className="card-body">
               <h5 className="font-size-16 mb-3">Order Summary</h5>
               <hr />
               {cartItems.map((item) => (
-                <div key={item.id} className="d-flex justify-content-between align-items-center mb-3">
+                <div
+                  key={item.id}
+                  className="d-flex justify-content-between align-items-center mb-3"
+                >
                   <div className="d-flex flex-row align-items-center">
                     <img
                       src={item.product.image_url}
@@ -311,11 +334,15 @@ const Checkout = () => {
                     />
                     <div>
                       <h6 className="m-0">{item.product.name}</h6>
-                      <small className="text-muted">Quantity: {item.quantity}</small>
+                      <small className="text-muted">
+                        Quantity: {item.quantity}
+                      </small>
                     </div>
                   </div>
                   <div>
-                    <h6 className="m-0">${(item.product.price * item.quantity).toFixed(2)}</h6>
+                    <h6 className="m-0">
+                      ${(item.product.price * item.quantity).toFixed(2)}
+                    </h6>
                   </div>
                 </div>
               ))}

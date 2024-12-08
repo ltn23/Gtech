@@ -1,6 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./ProductManagement.css";
-import { Modal, Button, Form, Spinner, Toast, ToastContainer } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  Spinner,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 
@@ -9,7 +16,11 @@ const ProductManagement = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState({ show: false, message: "", variant: "success" });
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    variant: "success",
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -36,11 +47,13 @@ const ProductManagement = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const sortedProducts = response.data.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at); 
+        return new Date(b.created_at) - new Date(a.created_at);
       });
       setProducts(sortedProducts);
     } catch (err) {
-      setError("Failed to fetch products. Please check your network or login again.");
+      setError(
+        "Failed to fetch products. Please check your network or login again."
+      );
     } finally {
       setLoading(false);
     }
@@ -54,27 +67,50 @@ const ProductManagement = () => {
       });
       setCategories(response.data);
     } catch (err) {
-      setError("Failed to fetch categories. Please check your network or login again.");
+      setError(
+        "Failed to fetch categories. Please check your network or login again."
+      );
     }
   }, []);
 
   const showToast = useCallback((message, variant = "success") => {
     setToast({ show: true, message, variant });
-    setTimeout(() => setToast({ show: false, message: "", variant: "success" }), 3000);
+    setTimeout(
+      () => setToast({ show: false, message: "", variant: "success" }),
+      3000
+    );
   }, []);
 
   const handleShow = (product = {}) => {
     setCurrentProduct(
       product.id
         ? { ...product, image: null }
-        : { id: null, name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" }
+        : {
+            id: null,
+            name: "",
+            description: "",
+            price: 0,
+            stock_quantity: 0,
+            category_id: "",
+            image: null,
+            status: "available",
+          }
     );
     setEditMode(!!product.id);
     setShowModal(true);
   };
 
   const handleClose = () => {
-    setCurrentProduct({ id: null, name: "", description: "", price: 0, stock_quantity: 0, category_id: "", image: null, status: "available" });
+    setCurrentProduct({
+      id: null,
+      name: "",
+      description: "",
+      price: 0,
+      stock_quantity: 0,
+      category_id: "",
+      image: null,
+      status: "available",
+    });
     setEditMode(false);
     setShowModal(false);
   };
@@ -93,12 +129,15 @@ const ProductManagement = () => {
     formData.append("file", file);
     formData.append("upload_preset", "gtechnology");
 
-    const response = await axios.post("https://api.cloudinary.com/v1_1/dsh0cqmhc/image/upload", formData);
-    
+    const response = await axios.post(
+      "https://api.cloudinary.com/v1_1/dsh0cqmhc/image/upload",
+      formData
+    );
+
     if (response.status !== 200) {
       throw new Error("Failed to upload image");
     }
-    
+
     return response.data.secure_url;
   };
 
@@ -116,7 +155,9 @@ const ProductManagement = () => {
 
     const productData = {
       ...currentProduct,
-      image_url: currentProduct.image ? await uploadImageToCloudinary(currentProduct.image) : currentProduct.image_url,
+      image_url: currentProduct.image
+        ? await uploadImageToCloudinary(currentProduct.image)
+        : currentProduct.image_url,
     };
 
     if (editMode) {
@@ -124,12 +165,16 @@ const ProductManagement = () => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:8000/api/products`, productData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `http://localhost:8000/api/products`,
+        productData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (![200, 201].includes(response.status)) {
         throw new Error("Network response was not ok");
@@ -137,8 +182,11 @@ const ProductManagement = () => {
 
       fetchProducts();
       handleClose();
-      showToast(editMode ? "Product updated successfully!" : "Product created successfully!");
-
+      showToast(
+        editMode
+          ? "Product updated successfully!"
+          : "Product created successfully!"
+      );
     } catch (err) {
       setError("Failed to save product.");
     }
@@ -148,9 +196,12 @@ const ProductManagement = () => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.delete(`http://localhost:8000/api/products/${productId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.delete(
+          `http://localhost:8000/api/products/${productId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         if (response.status !== 200) {
           throw new Error("Network response was not ok");
@@ -163,8 +214,18 @@ const ProductManagement = () => {
     }
   };
 
-  if (loading) return <div className="text-center"><Spinner animation="border" variant="primary" /></div>;
-  if (error) return <div className="text-center"><p className="text-danger">{error}</p></div>;
+  if (loading)
+    return (
+      <div className="text-center">
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center">
+        <p className="text-danger">{error}</p>
+      </div>
+    );
 
   return (
     <div className="product-management container">
@@ -172,7 +233,11 @@ const ProductManagement = () => {
       <Button variant="success" className="mb-3" onClick={() => handleShow()}>
         + Create Product
       </Button>
-      <ProductTable products={products} handleShow={handleShow} handleDelete={handleDelete} />
+      <ProductTable
+        products={products}
+        handleShow={handleShow}
+        handleDelete={handleDelete}
+      />
       <ProductModal
         show={showModal}
         handleClose={handleClose}
@@ -184,8 +249,15 @@ const ProductManagement = () => {
         editMode={editMode}
       />
       <ToastContainer position="top-center">
-        <Toast onClose={() => setToast({ show: false })} show={toast.show} delay={3000} autohide>
-          <Toast.Body className={`bg-${toast.variant}`}>{toast.message}</Toast.Body>
+        <Toast
+          onClose={() => setToast({ show: false })}
+          show={toast.show}
+          delay={3000}
+          autohide
+        >
+          <Toast.Body className={`bg-${toast.variant}`}>
+            {toast.message}
+          </Toast.Body>
         </Toast>
       </ToastContainer>
     </div>
@@ -211,7 +283,11 @@ const ProductTable = ({ products, handleShow, handleDelete }) => (
         {products.map((product) => (
           <tr key={product.id}>
             <td>
-              <img src={product.image_url} alt={product.name} style={{ width: '100px', height: 'auto' }} />
+              <img
+                src={product.image_url}
+                alt={product.name}
+                style={{ width: "100px", height: "auto" }}
+              />
             </td>
             <td>{product.name}</td>
             <td>{product.description}</td>
@@ -220,10 +296,18 @@ const ProductTable = ({ products, handleShow, handleDelete }) => (
             <td>{product.category.name}</td>
             <td>{product.status}</td>
             <td className="action-buttons">
-              <Button variant="outline-warning" size="sm" onClick={() => handleShow(product)}>
+              <Button
+                variant="outline-warning"
+                size="sm"
+                onClick={() => handleShow(product)}
+              >
                 <FaEdit className="icon" /> Edit
               </Button>
-              <Button variant="outline-danger" size="sm" onClick={() => handleDelete(product.id)}>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleDelete(product.id)}
+              >
                 <FaTrash className="icon" /> Delete
               </Button>
             </td>
@@ -234,10 +318,21 @@ const ProductTable = ({ products, handleShow, handleDelete }) => (
   </div>
 );
 
-const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, handleImageChange, currentProduct, categories, editMode }) => (
+const ProductModal = ({
+  show,
+  handleClose,
+  handleSubmit,
+  handleInputChange,
+  handleImageChange,
+  currentProduct,
+  categories,
+  editMode,
+}) => (
   <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
-      <Modal.Title style={{color: 'black'}}>{editMode ? "Edit Product" : "Create Product"}</Modal.Title>
+      <Modal.Title style={{ color: "black" }}>
+        {editMode ? "Edit Product" : "Create Product"}
+      </Modal.Title>
     </Modal.Header>
     <Modal.Body>
       <Form onSubmit={handleSubmit}>
@@ -289,7 +384,7 @@ const ProductModal = ({ show, handleClose, handleSubmit, handleInputChange, hand
             value={currentProduct.stock_quantity}
             onChange={handleInputChange}
             required
-            min="0" 
+            min="0"
           />
         </Form.Group>
         <Form.Group controlId="formProductCategory">

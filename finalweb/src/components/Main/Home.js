@@ -50,7 +50,7 @@ function Home() {
           },
         });
         const sortedProducts = response.data.sort((a, b) => {
-          return new Date(b.created_at) - new Date(a.created_at); 
+          return new Date(b.created_at) - new Date(a.created_at);
         });
 
         setProducts(sortedProducts.slice(0, 5));
@@ -87,7 +87,7 @@ function Home() {
     navigate(`/search?query=${searchTerm}`);
   };
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearchSubmit();
     }
   };
@@ -251,7 +251,6 @@ function Home() {
                         }
                       >
                         <i className="fas fa-cogs fa-xl"></i>
-
                       </button>
                       <div className="text-dark">{category.name}</div>
                     </div>

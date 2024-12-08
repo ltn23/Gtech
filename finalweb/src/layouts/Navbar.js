@@ -24,8 +24,8 @@ const Navbar = ({ toggleSidebar }) => {
     const buttonText = e.target.textContent;
     if (buttonText === "Logout") {
       localStorage.clear();
-      setIsLoggedIn(false); // Update the state after logout
-      window.location.href = "/logout"; // Redirect after logout
+      setIsLoggedIn(false);
+      window.location.href = "/logout";
     }
   };
 
@@ -67,7 +67,7 @@ const Navbar = ({ toggleSidebar }) => {
               <Link
                 className="text-light nav-link px-3 py-2 rounded"
                 to=""
-                onClick={handleProfileClick} // Handle profile click
+                onClick={handleProfileClick}
                 style={{
                   backgroundColor: "#343a40",
                   transition: "all 0.3s ease",
@@ -98,7 +98,7 @@ const Navbar = ({ toggleSidebar }) => {
               {isLoggedIn ? "Logout" : "Login"}
             </Link>
           </li>
-          {!isLoggedIn && ( 
+          {!isLoggedIn && (
             <li className="nav-item">
               <Link
                 className="text-light nav-link px-3 py-2 rounded"

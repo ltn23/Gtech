@@ -56,51 +56,50 @@ class OrderController extends Controller
     // }
 
     public function store(Request $request)
-{
-    // Bắt đầu giao dịch
-    DB::beginTransaction();
-    try {
-        // Tạo đơn hàng
-        $order = Order::create([
-            'user_id' => $request->user()->id,
-            'status' => $request->status ?? 'pending',
-            'total_price' => $request->total_price,
-        ]);
+    {
 
-        // Lặp qua các sản phẩm trong đơn hàng
-        foreach ($request->products as $product) {
-            // Kiểm tra nếu số lượng trong kho đủ
-            $productRecord = Product::find($product['id']);
-            if ($productRecord->stock_quantity < $product['quantity']) {
-                // Rollback giao dịch nếu số lượng không đủ
-                DB::rollBack();
-                return response()->json(['message' => 'Không đủ số lượng sản phẩm trong kho'], 400);
-            }
+        DB::beginTransaction();
+        try {
 
-            // Tạo OrderItem
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $product['id'],
-                'quantity' => $product['quantity'],
-                'price' => $product['price'],
+            $order = Order::create([
+                'user_id' => $request->user()->id,
+                'status' => $request->status ?? 'pending',
+                'total_price' => $request->total_price,
             ]);
 
-            // Giảm số lượng sản phẩm trong kho
-            $productRecord->stock_quantity -= $product['quantity'];
-            $productRecord->save();
+
+            foreach ($request->products as $product) {
+
+                $productRecord = Product::find($product['id']);
+                if ($productRecord->stock_quantity < $product['quantity']) {
+
+                    DB::rollBack();
+                    return response()->json(['message' => 'Không đủ số lượng sản phẩm trong kho'], 400);
+                }
+
+
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $product['id'],
+                    'quantity' => $product['quantity'],
+                    'price' => $product['price'],
+                ]);
+
+
+                $productRecord->stock_quantity -= $product['quantity'];
+                $productRecord->save();
+            }
+
+
+            DB::commit();
+
+            return response()->json($order->load('orderItems.product'), 201);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            return response()->json(['message' => 'Đã xảy ra lỗi khi tạo đơn hàng'], 500);
         }
-
-        // Commit giao dịch sau khi hoàn tất
-        DB::commit();
-
-        return response()->json($order->load('orderItems.product'), 201);
-
-    } catch (\Exception $e) {
-        // Rollback nếu có lỗi
-        DB::rollBack();
-        return response()->json(['message' => 'Đã xảy ra lỗi khi tạo đơn hàng'], 500);
     }
-}
 
     /**
      * Display the specified resource.
@@ -169,21 +168,20 @@ class OrderController extends Controller
     }
 
     public function updateStatus(Request $request, $id)
-{
-    $order = Order::find($id);
+    {
+        $order = Order::find($id);
 
-    if (!$order) {
-        return response()->json(['message' => 'Order not found'], 404);
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $validatedData = $request->validate([
+            'status' => 'required|in:pending,shipping,completed,cancelled',
+        ]);
+
+        $order->status = $validatedData['status'];
+        $order->save();
+
+        return response()->json(['message' => 'Order status updated successfully', 'order' => $order]);
     }
-
-    $validatedData = $request->validate([
-        'status' => 'required|in:pending,shipping,completed,cancelled',
-    ]);
-
-    $order->status = $validatedData['status'];
-    $order->save();
-
-    return response()->json(['message' => 'Order status updated successfully', 'order' => $order]);
-}
-
 }

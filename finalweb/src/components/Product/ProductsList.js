@@ -29,7 +29,7 @@ const ProductsList = () => {
           }
         );
         const sortedProducts = response.data.sort((a, b) => {
-          return new Date(b.created_at) - new Date(a.created_at); // Hoặc sử dụng trường khác nếu cần
+          return new Date(b.created_at) - new Date(a.created_at);
         });
         setProducts(sortedProducts);
       } catch (err) {

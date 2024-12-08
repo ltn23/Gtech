@@ -47,7 +47,7 @@ const ProductDetails = () => {
         );
         console.log("Fetched reviews:", response.data);
         setReviews(response.data);
-        // Calculate average rating
+
         if (response.data.length > 0) {
           const totalRating = response.data.reduce(
             (acc, review) => acc + review.rating,
@@ -59,7 +59,9 @@ const ProductDetails = () => {
           setAverageRating(0);
         }
       } catch (err) {
-        toast.error("Please login before purchasing the product.", { position: "top-right" });
+        toast.error("Please login before purchasing the product.", {
+          position: "top-right",
+        });
       }
     };
 
@@ -103,8 +105,8 @@ const ProductDetails = () => {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      setReviews([...reviews, response.data]); // Add new review to the list
-      setNewReview({ rating: 0, comment: "" }); // Reset form
+      setReviews([...reviews, response.data]);
+      setNewReview({ rating: 0, comment: "" });
       toast.success("Review submitted successfully!", {
         position: "top-right",
       });
@@ -144,7 +146,6 @@ const ProductDetails = () => {
               </div>
             </div>
 
-            {/* Product Info Section */}
             <div className="col-md-6">
               <h2 className="product-name">{product.name}</h2>
               <div className="d-flex align-items-center mb-2">
@@ -170,7 +171,6 @@ const ProductDetails = () => {
             </div>
           </div>
 
-          {/* Feedback and Reviews Section */}
           <div className="row mt-5">
             {/* Customer Reviews Column */}
             <div className="col-md-6 reviews-section">
@@ -180,7 +180,6 @@ const ProductDetails = () => {
                 reviews.map((review) => (
                   <div key={review.id} className="review-item mb-3">
                     <strong>{review.user?.name || "Anonymous"}</strong>{" "}
-                    {/* Kiểm tra nếu user tồn tại */}
                     <span className="text-warning ms-2">
                       {Array.from({ length: review.rating }, (_, i) => (
                         <i key={i} className="fas fa-star"></i>
@@ -194,7 +193,6 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {/* Comment Section Column */}
             <div className="col-md-6 add-review">
               <h4>Leave a Comment</h4>
               <hr />

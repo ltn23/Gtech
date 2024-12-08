@@ -17,7 +17,7 @@ class AuthService
             ->where('email', '=', $data['email'])
             ->first();
 
-        // In ra giá trị của $user để kiểm tra
+
         if (!$user) {
             return [
                 'message' => 'User does not exist',
@@ -32,7 +32,7 @@ class AuthService
             ];
         }
 
-        // Nếu tìm thấy user và mật khẩu đúng, tiếp tục xử lý
+
         $userName = $user->name;
         $userEmail = $user->email;
         $token =  $user->createToken($userName, [$user], Carbon::tomorrow())->plainTextToken;
@@ -66,41 +66,40 @@ class AuthService
             'role' => $user->role,
         ];
     }
-// Đăng nhập qua Google
-public function handleGoogleLogin()
-{
-    return Socialite::driver('google')->redirect();
-}
-
-// Callback sau khi Google đăng nhập thành công
-public function handleGoogleCallback()
-{
-    // Lấy thông tin người dùng từ Google
-    $googleUser = Socialite::driver('google')->user();
-
-    // Kiểm tra xem người dùng đã tồn tại chưa
-    $user = User::where('email', $googleUser->getEmail())->first();
-
-    if (!$user) {
-        // Nếu người dùng chưa tồn tại, tạo mới với vai trò customer
-        $user = User::create([
-            'name' => $googleUser->getName(),
-            'email' => $googleUser->getEmail(),
-            'password' => bcrypt(uniqid()), // Tạo mật khẩu ngẫu nhiên
-            'role' => 'customer', // Gán vai trò customer
-        ]);
+    // Đăng nhập qua Google
+    public function handleGoogleLogin()
+    {
+        return Socialite::driver('google')->redirect();
     }
 
-    // Tạo token để đăng nhập
-    $token = $user->createToken($user->name)->plainTextToken;
 
-    return [
-        'message' => 'Google Login successful',
-        'token' => $token,
-        'name' => $user->name,
-        'email' => $user->email,
-        'role' => $user->role,
-    ];
-}
-    
+    public function handleGoogleCallback()
+    {
+
+        $googleUser = Socialite::driver('google')->user();
+
+
+        $user = User::where('email', $googleUser->getEmail())->first();
+
+        if (!$user) {
+
+            $user = User::create([
+                'name' => $googleUser->getName(),
+                'email' => $googleUser->getEmail(),
+                'password' => bcrypt(uniqid()),
+                'role' => 'customer',
+            ]);
+        }
+
+
+        $token = $user->createToken($user->name)->plainTextToken;
+
+        return [
+            'message' => 'Google Login successful',
+            'token' => $token,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ];
+    }
 }

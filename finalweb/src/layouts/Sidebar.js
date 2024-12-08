@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import './Sidebar.css';
 
 const Sidebar = ({ isSidebarOpen }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [setIsLoggedIn] = useState(false);
   const [role, setRole] = useState("guest");
   const [categories, setCategories] = useState([]);
   const [showCategories, setShowCategories] = useState(false);

@@ -6,6 +6,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+
 class PaymentController extends Controller
 {
     /**
@@ -28,54 +29,54 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-//     public function store(Request $request)
-// {
-//     // Validate the request
-//     $request->validate([
-//         'order_id' => 'required|exists:orders,id', 
-//         'payment_method' => 'required|in:paypal,cash',
-//         'total_amount' => 'required|numeric',
-//     ]);
+    //     public function store(Request $request)
+    // {
+    //     // Validate the request
+    //     $request->validate([
+    //         'order_id' => 'required|exists:orders,id', 
+    //         'payment_method' => 'required|in:paypal,cash',
+    //         'total_amount' => 'required|numeric',
+    //     ]);
 
-//     // Tạo payment
-//     try {
-//         $payment = Payment::create($request->all());
-//         return response()->json($payment, 201);
-//     } catch (\Exception $e) {
-//         // Log error và trả về phản hồi lỗi
-//         Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
-//         return response()->json(['message' => 'Failed to create payment'], 500);
-//     }
-// }
+    //     // Tạo payment
+    //     try {
+    //         $payment = Payment::create($request->all());
+    //         return response()->json($payment, 201);
+    //     } catch (\Exception $e) {
+    //         // Log error và trả về phản hồi lỗi
+    //         Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
+    //         return response()->json(['message' => 'Failed to create payment'], 500);
+    //     }
+    // }
 
-public function store(Request $request)
-{
-    // Validate the request
-    $request->validate([
-        'order_id' => 'required|exists:orders,id',
-        'payment_method' => 'required|in:paypal,cash',
-        'total_amount' => 'required|numeric',
-    ]);
+    public function store(Request $request)
+    {
 
-    // Set payment status based on payment method
-    $paymentStatus = $request->payment_method === 'paypal' ? 'completed' : 'pending';
-
-    // Create payment with conditional status
-    try {
-        $payment = Payment::create([
-            'order_id' => $request->order_id,
-            'payment_method' => $request->payment_method,
-            'total_amount' => $request->total_amount,
-            'payment_status' => $paymentStatus,
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'payment_method' => 'required|in:paypal,cash',
+            'total_amount' => 'required|numeric',
         ]);
 
-        return response()->json($payment, 201);
-    } catch (\Exception $e) {
-        // Log error and return failure response
-        Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
-        return response()->json(['message' => 'Failed to create payment'], 500);
+
+        $paymentStatus = $request->payment_method === 'paypal' ? 'completed' : 'pending';
+
+
+        try {
+            $payment = Payment::create([
+                'order_id' => $request->order_id,
+                'payment_method' => $request->payment_method,
+                'total_amount' => $request->total_amount,
+                'payment_status' => $paymentStatus,
+            ]);
+
+            return response()->json($payment, 201);
+        } catch (\Exception $e) {
+
+            Log::error('Payment creation failed:', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Failed to create payment'], 500);
+        }
     }
-}
 
 
 
@@ -128,21 +129,20 @@ public function store(Request $request)
     }
 
     public function updatePaymentStatus(Request $request, $orderId)
-{
-    $request->validate([
-        'payment_status' => 'required|in:pending,completed',
-    ]);
+    {
+        $request->validate([
+            'payment_status' => 'required|in:pending,completed',
+        ]);
 
-    $payment = Payment::where('order_id', $orderId)->first();
+        $payment = Payment::where('order_id', $orderId)->first();
 
-    if (!$payment) {
-        return response()->json(['message' => 'Payment not found'], 404);
+        if (!$payment) {
+            return response()->json(['message' => 'Payment not found'], 404);
+        }
+
+        $payment->payment_status = $request->payment_status;
+        $payment->save();
+
+        return response()->json(['message' => 'Payment status updated successfully', 'payment' => $payment]);
     }
-
-    $payment->payment_status = $request->payment_status;
-    $payment->save();
-
-    return response()->json(['message' => 'Payment status updated successfully', 'payment' => $payment]);
-}
-
 }

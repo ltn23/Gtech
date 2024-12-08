@@ -44,8 +44,6 @@ const SearchResults = () => {
 
   return (
     <div className="search-results-container">
-      
-
       <form className="search-bar" onSubmit={handleSearch}>
         <input
           type="text"

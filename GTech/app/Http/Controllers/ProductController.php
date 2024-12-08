@@ -11,29 +11,29 @@ use Illuminate\Routing\Controller;
 class ProductController extends BaseController
 {
     public function index(Request $request)
-{
-    
-    $query = Product::with('category');
-    // Search functionality
-    if ($request->has('search')) {
-        $search = $request->input('search');
-        $query->where('name', 'like', "%{$search}%");
+    {
+
+        $query = Product::with('category');
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+
+        if ($request->has('category')) {
+            $categoryId = $request->input('category');
+            $query->where('category_id', $categoryId);
+        }
+
+        $products = $query->get();
+
+        if ($request->has('search')) {
+            $products = $query->take(5)->get();
+        }
+
+        return response()->json($products);
     }
-
-    // Optional: Filter by category
-    if ($request->has('category')) {
-        $categoryId = $request->input('category');
-        $query->where('category_id', $categoryId);
-    }
-
-    $products = $query->get();
-
-    if ($request->has('search')) {
-        $products = $query->take(5)->get();
-    }
-
-    return response()->json($products);
-}
 
 
     /**
@@ -43,18 +43,18 @@ class ProductController extends BaseController
     {
         $requestData = $request->validated();
 
-        // Check if 'id' is present in request data to update existing product
+
         $product = isset($requestData['id']) ? Product::find($requestData['id']) : new Product();
-    
+
         if (!$product) {
             return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
         }
-    
-        // Update or create the product with validated data
+
+
         $product->fill($requestData);
         $product->save();
-    
-        // Response message based on whether it was an update or create
+
+
         $msg = isset($requestData['id']) ? "Product updated successfully." : "Product created successfully.";
         return response()->json(['success' => true, 'message' => $msg, 'data' => $product]);
     }
@@ -97,8 +97,8 @@ class ProductController extends BaseController
                 ')
                 ->groupBy('product_id')
                 ->orderByDesc('units_sold')
-                ->with('product:id,name') 
-                ->take(5) 
+                ->with('product:id,name')
+                ->take(5)
                 ->get();
 
             $products = $topProducts->map(function ($item) {

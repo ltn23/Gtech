@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -25,7 +26,7 @@ class UserController extends Controller
     }
     public function store(Request $request)
     {
-        // Validate the request data
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -45,13 +46,13 @@ class UserController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // Validate the request data
+
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
-            'phone' => 'sometimes|required|string|max:15', 
-            'address' => 'sometimes|required|string|max:255', 
-            'role' => 'sometimes|required|string|in:customer,admin', 
+            'phone' => 'sometimes|required|string|max:15',
+            'address' => 'sometimes|required|string|max:255',
+            'role' => 'sometimes|required|string|in:customer,admin',
             'gender' => 'sometimes|required|string|in:male,female',
         ]);
 
@@ -59,7 +60,7 @@ class UserController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // Find the user and update
+
         $user = User::findOrFail($id);
         $user->update($request->all());
 
@@ -68,11 +69,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        // Find the user and delete
+
         $user = User::findOrFail($id);
         $user->delete();
 
         return response()->json(['message' => 'User deleted successfully']);
     }
-    
 }
